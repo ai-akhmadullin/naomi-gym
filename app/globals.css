@@ -1,26 +1,55 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --font-geist: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+
+  --color-bg: #ffffff;
+  --color-bg-muted: #f4f6f5;
+  --color-text: #121417;
+  --color-text-muted: #5b6168;
+  --color-border: #d6dadd;
+  --color-brand: #0d7043;
+  --color-brand-strong: #0a5a36;
+  --color-footer: #101317;
+
+  --shadow-soft: 0 8px 28px rgba(10, 22, 15, 0.06);
+  --shadow-card: 0 12px 36px rgba(10, 22, 15, 0.2);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--color-bg);
+  --color-foreground: var(--color-text);
+  --font-sans: var(--font-geist);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  border-color: var(--color-border);
+}
+
+html {
+  min-height: 100%;
+  overflow-x: clip;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100svh;
+  margin: 0;
+  width: 100%;
+  overflow-x: clip;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-geist);
+}
+
+img,
+svg,
+video,
+canvas,
+iframe {
+  display: block;
+  max-width: 100%;
 }
