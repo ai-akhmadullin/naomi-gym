@@ -3,8 +3,7 @@ import { notFound } from "next/navigation";
 
 import { SiteHeader } from "@/components/layout/site-header";
 import { buttonStyles } from "@/components/ui/button";
-import { POLICY_LINKS } from "@/content/home";
-import { SECTION_CONTAINER_CLASS } from "@/lib/constants";
+import { POLICY_LINKS, SECTION_CONTAINER_CLASS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 const SLUG_MAP = {
@@ -40,7 +39,7 @@ export default async function PolicyPage({ params }: PageProps) {
 
   return (
     <>
-      <SiteHeader currentPath="/buy-membership" />
+      <SiteHeader currentPath={`/policies/${slug}`} />
       <main className="min-h-[calc(100dvh-6rem)] bg-(--color-bg-muted) py-20">
         <div className={cn(SECTION_CONTAINER_CLASS, "max-w-4xl") }>
           <article className="rounded-2xl border border-(--color-border) bg-white p-8 shadow-(--shadow-soft) sm:p-10">

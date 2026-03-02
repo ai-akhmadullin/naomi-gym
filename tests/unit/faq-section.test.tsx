@@ -8,7 +8,7 @@ describe("FaqSection", () => {
   it("toggles expanded accordion item", async () => {
     const user = userEvent.setup();
 
-    render(
+    const { container } = render(
       <FaqSection
         faqs={[
           { id: "one", question: "What are your operating hours?", answer: "Hours answer" },
@@ -20,12 +20,15 @@ describe("FaqSection", () => {
     const first = screen.getByRole("button", { name: "What are your operating hours?" });
     const second = screen.getByRole("button", { name: "Do you offer day passes?" });
 
+    expect(container.querySelector("section#faq")).toBeInTheDocument();
     expect(first).toHaveAttribute("aria-expanded", "false");
     expect(second).toHaveAttribute("aria-expanded", "false");
+    expect(screen.queryByRole("region", { name: "Do you offer day passes?" })).not.toBeInTheDocument();
 
     await user.click(second);
 
     expect(first).toHaveAttribute("aria-expanded", "false");
     expect(second).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByRole("region", { name: "Do you offer day passes?" })).toBeInTheDocument();
   });
 });

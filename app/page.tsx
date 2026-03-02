@@ -13,10 +13,10 @@ import {
   GALLERY_IMAGES,
   HERO_STATS,
   LOCATION_INFO,
-  POLICY_LINKS,
   REVIEWS,
   TRAINERS,
 } from "@/content/home";
+import { POLICY_LINKS } from "@/lib/constants";
 
 export default function HomePage() {
   return (

@@ -21,6 +21,7 @@ type MobileNavDrawerProps = {
 
 export function MobileNavDrawer({ links }: MobileNavDrawerProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const triggerButtonRef = useRef<HTMLButtonElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const drawerLinks = [...links, { label: "Buy membership", href: BUY_MEMBERSHIP_ROUTE }];
 
@@ -81,6 +82,7 @@ export function MobileNavDrawer({ links }: MobileNavDrawerProps) {
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <div className="md:hidden">
         <button
+          ref={triggerButtonRef}
           type="button"
           aria-label="Open navigation menu"
           aria-controls="mobile-menu"
@@ -107,6 +109,10 @@ export function MobileNavDrawer({ links }: MobileNavDrawerProps) {
             onOpenAutoFocus={(event) => {
               event.preventDefault();
               closeButtonRef.current?.focus();
+            }}
+            onCloseAutoFocus={(event) => {
+              event.preventDefault();
+              triggerButtonRef.current?.focus();
             }}
           >
             <div className="mb-4 flex items-center justify-between">

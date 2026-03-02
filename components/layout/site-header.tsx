@@ -7,7 +7,7 @@ import { BUY_MEMBERSHIP_ROUTE, NAV_ITEMS, SECTION_CONTAINER_CLASS, SITE_NAME } f
 import { cn } from "@/lib/utils";
 
 type SiteHeaderProps = {
-  currentPath: "/" | "/buy-membership";
+  currentPath: string;
 };
 
 type ResolvedLink = {
@@ -15,7 +15,7 @@ type ResolvedLink = {
   href: string;
 };
 
-function resolveLinks(currentPath: SiteHeaderProps["currentPath"]): ResolvedLink[] {
+function resolveLinks(currentPath: string): ResolvedLink[] {
   return NAV_ITEMS.map((item) => {
     if (item.kind === "route") {
       return { label: item.label, href: item.href };
@@ -33,7 +33,7 @@ export function SiteHeader({ currentPath }: SiteHeaderProps) {
   return (
     <header className="sticky top-0 z-40 border-b border-(--color-border) bg-white/95 backdrop-blur">
       <div className={cn(SECTION_CONTAINER_CLASS, "flex h-20 items-center justify-between gap-4 sm:h-24 sm:gap-6") }>
-        <Link href="/" className="min-w-0 flex items-center gap-3" aria-label="Naomi Gym home">
+        <Link href="/" className="min-w-0 flex items-center gap-3" aria-label={`${SITE_NAME} home`}>
           <span className="truncate text-2xl font-bold leading-none tracking-tight text-foreground sm:text-3xl lg:text-4xl">
             {SITE_NAME}
           </span>

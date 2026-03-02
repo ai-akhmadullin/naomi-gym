@@ -1,9 +1,9 @@
 import Link from "next/link";
 
-import { LOCATION_INFO } from "@/content/home";
 import { Icon } from "@/components/ui/icon";
 import {
   BUY_MEMBERSHIP_ROUTE,
+  CONTACT_ADDRESS_LINES,
   CONTACT_PHONE_DISPLAY,
   CONTACT_PHONE_RAW,
   NAV_ITEMS,
@@ -90,10 +90,12 @@ export function SiteFooter({ isHomePage = false, policyLinks }: SiteFooterProps)
           <ul className="space-y-4 text-base text-white/80 sm:text-lg">
             <li className="flex items-start gap-3">
               <Icon name="map-pin" className="mt-1 text-(--color-brand)" />
-              <span className="break-words">
-                {LOCATION_INFO.addressLines[0]},
-                <br />
-                {LOCATION_INFO.addressLines.slice(1).join(", ")}
+              <span className="wrap-break-word">
+                {CONTACT_ADDRESS_LINES.map((line) => (
+                  <span key={line} className="block">
+                    {line}
+                  </span>
+                ))}
               </span>
             </li>
             <li className="flex items-center gap-3">

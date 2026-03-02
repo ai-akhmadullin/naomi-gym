@@ -3,8 +3,7 @@
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { createCheckoutSessionStub } from "@/lib/utils";
+import { cn, createCheckoutSessionStub } from "@/lib/utils";
 import type { CheckoutResult } from "@/types/marketing";
 
 type CheckoutStubButtonProps = {
@@ -27,9 +26,17 @@ export function CheckoutStubButton({
     setIsLoading(true);
     setResult(null);
 
-    const checkoutResult = await createCheckoutSessionStub({ planId });
-    setResult(checkoutResult);
-    setIsLoading(false);
+    try {
+      const checkoutResult = await createCheckoutSessionStub({ planId });
+      setResult(checkoutResult);
+    } catch {
+      setResult({
+        status: "stub",
+        message: "Checkout is temporarily unavailable. Please try again in a moment.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (

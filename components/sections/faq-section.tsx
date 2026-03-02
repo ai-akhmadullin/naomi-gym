@@ -16,7 +16,7 @@ export function FaqSection({ faqs }: FaqSectionProps) {
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
-    <SectionShell id="policies" className="bg-(--color-bg-muted)">
+    <SectionShell id="faq" className="bg-(--color-bg-muted)">
       <SectionHeading
         title="Frequently Asked Questions"
         subtitle="Everything you need to know before joining"
@@ -26,12 +26,14 @@ export function FaqSection({ faqs }: FaqSectionProps) {
       <div className="mx-auto max-w-5xl space-y-4">
         {faqs.map((faq) => {
           const isOpen = openId === faq.id;
+          const buttonId = `${faq.id}-button`;
           const panelId = `${faq.id}-panel`;
 
           return (
             <Card key={faq.id} className="overflow-hidden">
               <h3>
                 <button
+                  id={buttonId}
                   type="button"
                   className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left text-lg font-semibold text-foreground sm:px-6 sm:py-5 sm:text-2xl"
                   aria-expanded={isOpen}
@@ -47,6 +49,9 @@ export function FaqSection({ faqs }: FaqSectionProps) {
               </h3>
               <div
                 id={panelId}
+                role="region"
+                aria-labelledby={buttonId}
+                aria-hidden={!isOpen}
                 className={`grid transition-all duration-300 ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
               >
                 <div className="overflow-hidden">
@@ -54,7 +59,7 @@ export function FaqSection({ faqs }: FaqSectionProps) {
                 </div>
               </div>
             </Card>
-          ); 
+          );
         })}
       </div>
     </SectionShell>

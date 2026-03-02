@@ -17,27 +17,37 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
   const [displayReviews, setDisplayReviews] = useState<Review[]>(reviews);
 
   useEffect(() => {
-    let isCancelled = false;
+    setDisplayReviews(reviews);
+  }, [reviews]);
+
+  useEffect(() => {
+    const controller = new AbortController();
 
     async function loadGoogleReviews() {
       try {
-        const response = await fetch("/api/reviews");
+        const response = await fetch("/api/reviews", {
+          signal: controller.signal,
+        });
         if (!response.ok) {
           return;
         }
 
         const data = (await response.json()) as { reviews?: Review[] };
-        if (!isCancelled && data.reviews && data.reviews.length > 0) {
+        if (Array.isArray(data.reviews) && data.reviews.length > 0) {
           setDisplayReviews(data.reviews);
         }
-      } catch {
+      } catch (error) {
+        if (error instanceof Error && error.name === "AbortError") {
+          return;
+        }
+
         // Keep initial local reviews as fallback when request fails.
       }
     }
 
     loadGoogleReviews();
     return () => {
-      isCancelled = true;
+      controller.abort();
     };
   }, []);
 

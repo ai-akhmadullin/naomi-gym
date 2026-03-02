@@ -1,4 +1,5 @@
-import type { FaqItem, GalleryImage, LocationInfo, PolicyLink, Review, Trainer } from "@/types/marketing";
+import { CONTACT_ADDRESS_LINES } from "@/lib/constants";
+import type { FaqItem, GalleryImage, LocationInfo, Review, Trainer } from "@/types/marketing";
 
 export const HERO_STATS = {
   membersLabel: "Active Members",
@@ -72,7 +73,7 @@ export const GALLERY_IMAGES: GalleryImage[] = [
 ];
 
 export const LOCATION_INFO: LocationInfo = {
-  addressLines: ["Lô 22 Đ. Lê Văn Hiến", "Khuê Mỹ, Ngũ Hành Sơn", "Đà Nẵng"],
+  addressLines: CONTACT_ADDRESS_LINES,
   openingHours: [
     {
       dayLabel: "Monday - Saturday",
@@ -162,15 +163,4 @@ export const FAQ_ITEMS: FaqItem[] = [
     answer:
       "Bring comfortable workout clothes, clean indoor shoes, and water. Our team can help you get started.",
   },
-];
-
-export const POLICY_LINKS: PolicyLink[] = [
-  { id: "privacy", label: "Privacy Policy", href: "/policies/privacy" },
-  { id: "terms", label: "Terms of Service", href: "/policies/terms" },
-  {
-    id: "cancellation",
-    label: "Cancellation Policy",
-    href: "/policies/cancellation",
-  },
-  { id: "conduct", label: "Code of Conduct", href: "/policies/conduct" },
 ];

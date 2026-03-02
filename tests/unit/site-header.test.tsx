@@ -14,7 +14,7 @@ describe("SiteHeader", () => {
   });
 
   it("rewrites section links to root anchors on non-home routes", () => {
-    render(<SiteHeader currentPath="/buy-membership" />);
+    render(<SiteHeader currentPath="/policies/privacy" />);
 
     expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute("href", "/#home");
     expect(screen.getByRole("link", { name: "Pricing" })).toHaveAttribute("href", "/#pricing");

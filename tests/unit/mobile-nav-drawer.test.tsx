@@ -17,7 +17,8 @@ describe("MobileNavDrawer", () => {
       />,
     );
 
-    await user.click(screen.getByRole("button", { name: "Open navigation menu" }));
+    const trigger = screen.getByRole("button", { name: "Open navigation menu" });
+    await user.click(trigger);
 
     const dialog = screen.getByRole("dialog");
     expect(dialog).toBeInTheDocument();
@@ -29,5 +30,7 @@ describe("MobileNavDrawer", () => {
     await waitFor(() => {
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     });
+
+    expect(trigger).toHaveFocus();
   });
 });

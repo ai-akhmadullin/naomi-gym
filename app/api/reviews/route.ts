@@ -32,11 +32,25 @@ type ReviewsApiResponse = {
 };
 
 const REVIEWS_CACHE_CONTROL = "public, s-maxage=21600, stale-while-revalidate=86400";
+const GOOGLE_REVIEWS_TIMEOUT_MS = 8_000;
 
 function normalizedRating(value?: number): 1 | 2 | 3 | 4 | 5 {
   const rounded = Math.round(value ?? 5);
   const clamped = Math.min(5, Math.max(1, rounded));
   return clamped as 1 | 2 | 3 | 4 | 5;
+}
+
+function createReviewId(review: GooglePlaceDetailsReview, index: number) {
+  const authorToken = review.authorAttribution?.displayName
+    ?.toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  const publishToken = review.publishTime
+    ?.toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
+  return `google-review-${authorToken || "google-user"}-${publishToken || index + 1}`;
 }
 
 function fallbackResponse(reason: string) {
@@ -70,6 +84,7 @@ export async function GET() {
         "X-Goog-Api-Key": apiKey,
         "X-Goog-FieldMask": "reviews.rating,reviews.text,reviews.originalText,reviews.publishTime,reviews.authorAttribution",
       },
+      signal: AbortSignal.timeout(GOOGLE_REVIEWS_TIMEOUT_MS),
       next: { revalidate: 60 * 60 * 6 },
     });
 
@@ -79,7 +94,7 @@ export async function GET() {
 
     const data = (await response.json()) as GooglePlaceDetailsResponse;
     const mappedReviews: Review[] = (data.reviews ?? []).map((review, index) => ({
-      id: `google-review-${review.publishTime ?? Date.now()}-${index}`,
+      id: createReviewId(review, index),
       memberName: review.authorAttribution?.displayName ?? "Google user",
       quote: review.text?.text?.trim() || review.originalText?.text?.trim() || "No written review provided.",
       rating: normalizedRating(review.rating),
@@ -108,6 +123,13 @@ export async function GET() {
       },
     });
   } catch (error) {
+    if (
+      error instanceof Error &&
+      (error.name === "AbortError" || error.name === "TimeoutError")
+    ) {
+      return fallbackResponse("Google request timed out");
+    }
+
     const reason = error instanceof Error ? error.message : "Unknown error";
     return fallbackResponse(`Unexpected error: ${reason}`);
   }

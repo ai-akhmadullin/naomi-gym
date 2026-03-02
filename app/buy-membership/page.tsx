@@ -3,8 +3,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { PlansGrid } from "@/components/buy-membership/plans-grid";
 import { ScrollToTopOnMount } from "@/components/ui/scroll-to-top-on-mount";
 import { PRICING_PLANS } from "@/content/membership";
-import { POLICY_LINKS } from "@/content/home";
-import { SECTION_CONTAINER_CLASS } from "@/lib/constants";
+import { POLICY_LINKS, SECTION_CONTAINER_CLASS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 export default function BuyMembershipPage() {
