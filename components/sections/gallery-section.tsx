@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { HorizontalScroller } from "@/components/ui/horizontal-scroller";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { SectionShell } from "@/components/ui/section-shell";
 import type { GalleryImage } from "@/types/marketing";
@@ -16,7 +17,7 @@ export function GallerySection({ images }: GallerySectionProps) {
         subtitle="Take a look at our modern, clean, and fully-equipped gym"
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <HorizontalScroller ariaLabel="Facility gallery" showScrollIndicator>
         {images.map((image) => (
           <article key={image.id} className="overflow-hidden rounded-2xl border border-(--color-border) bg-white">
             <Image
@@ -28,7 +29,7 @@ export function GallerySection({ images }: GallerySectionProps) {
             />
           </article>
         ))}
-      </div>
+      </HorizontalScroller>
     </SectionShell>
   );
 }

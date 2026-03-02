@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 
 import { Card } from "@/components/ui/card";
+import { HorizontalScroller } from "@/components/ui/horizontal-scroller";
 import { Icon } from "@/components/ui/icon";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { SectionShell } from "@/components/ui/section-shell";
@@ -59,9 +60,9 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
         align="center"
       />
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <HorizontalScroller ariaLabel="Member reviews" showScrollIndicator>
         {displayReviews.map((review) => (
-          <Card key={review.id} className="h-full p-5 sm:p-6">
+          <Card key={review.id} className="h-full p-5 shadow-none sm:p-6">
             <div className="mb-5 flex gap-2 text-(--color-brand)" aria-label={`${review.rating} out of 5 stars`}>
               {Array.from({ length: review.rating }).map((_, index) => (
                 <Icon key={`${review.id}-${index}`} name="star" className="h-5 w-5 sm:h-6 sm:w-6" />
@@ -107,7 +108,7 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
             </div>
           </Card>
         ))}
-      </div>
+      </HorizontalScroller>
     </SectionShell>
   );
 }
