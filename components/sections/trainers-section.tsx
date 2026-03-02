@@ -12,7 +12,7 @@ type TrainersSectionProps = {
 
 export function TrainersSection({ trainers }: TrainersSectionProps) {
   return (
-    <SectionShell id="trainers">
+    <SectionShell id="trainers" className="bg-(--color-bg-muted)">
       <SectionHeading title="Meet Our Trainers" subtitle="Expert coaches dedicated to helping you succeed" />
 
       <HorizontalScroller ariaLabel="Trainers" showScrollIndicator>
