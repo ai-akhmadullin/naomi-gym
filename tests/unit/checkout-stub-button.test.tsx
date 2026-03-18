@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import { CheckoutStubButton } from "@/components/buy-membership/checkout-stub-button";
+import { getDictionary } from "@/content/site";
 import * as utils from "@/lib/utils";
 
 describe("CheckoutStubButton", () => {
@@ -12,12 +13,14 @@ describe("CheckoutStubButton", () => {
 
   it("returns stub result message after click", async () => {
     const user = userEvent.setup();
+    const dictionary = getDictionary("en");
 
     render(
       <CheckoutStubButton
         planId="monthly"
         planName="Monthly"
         ctaLabel="Choose Monthly"
+        copy={dictionary.checkout}
         highlight
       />,
     );
@@ -33,12 +36,14 @@ describe("CheckoutStubButton", () => {
     vi.spyOn(utils, "createCheckoutSessionStub").mockRejectedValue(new Error("boom"));
 
     const user = userEvent.setup();
+    const dictionary = getDictionary("en");
 
     render(
       <CheckoutStubButton
         planId="daily"
         planName="Daily"
         ctaLabel="Choose Daily"
+        copy={dictionary.checkout}
       />,
     );
 

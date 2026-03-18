@@ -7,15 +7,25 @@ import { SectionShell } from "@/components/ui/section-shell";
 import type { Trainer } from "@/types/marketing";
 
 type TrainersSectionProps = {
+  title: string;
+  subtitle: string;
+  scrollerLabel: string;
+  experienceLabel: string;
   trainers: Trainer[];
 };
 
-export function TrainersSection({ trainers }: TrainersSectionProps) {
+export function TrainersSection({
+  title,
+  subtitle,
+  scrollerLabel,
+  experienceLabel,
+  trainers,
+}: TrainersSectionProps) {
   return (
     <SectionShell id="trainers" className="bg-(--color-bg-muted)">
-      <SectionHeading title="Meet Our Trainers" subtitle="Expert coaches dedicated to helping you succeed" />
+      <SectionHeading title={title} subtitle={subtitle} />
 
-      <HorizontalScroller ariaLabel="Trainers" showScrollIndicator>
+      <HorizontalScroller ariaLabel={scrollerLabel} showScrollIndicator>
         {trainers.map((trainer) => (
           <Card key={trainer.id} className="h-full overflow-hidden shadow-none">
             <Image
@@ -32,7 +42,7 @@ export function TrainersSection({ trainers }: TrainersSectionProps) {
               </div>
               <p className="text-lg text-(--color-text-muted)">{trainer.bio}</p>
               <p className="text-sm font-medium uppercase tracking-wide text-(--color-text-muted)">
-                {trainer.experienceYears}+ years experience
+                {experienceLabel.replace("{years}", String(trainer.experienceYears))}
               </p>
             </div>
           </Card>

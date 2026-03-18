@@ -5,7 +5,7 @@ import Link from "next/link";
 import type { MouseEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 
-import { BUY_MEMBERSHIP_ROUTE } from "@/lib/constants";
+import { getEquivalentLocalePath, getLocalePath, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 import { Icon } from "@/components/ui/icon";
@@ -16,14 +16,36 @@ type DrawerLink = {
 };
 
 type MobileNavDrawerProps = {
+  locale: Locale;
+  currentPath: string;
   links: DrawerLink[];
+  buyMembershipLabel: string;
+  languageSwitcherLabel: string;
+  localeNames: Record<Locale, string>;
+  openLabel: string;
+  closeLabel: string;
+  menuTitle: string;
+  menuDescription: string;
+  navLabel: string;
 };
 
-export function MobileNavDrawer({ links }: MobileNavDrawerProps) {
+export function MobileNavDrawer({
+  locale,
+  currentPath,
+  links,
+  buyMembershipLabel,
+  languageSwitcherLabel,
+  localeNames,
+  openLabel,
+  closeLabel,
+  menuTitle,
+  menuDescription,
+  navLabel,
+}: MobileNavDrawerProps) {
   const [isOpen, setIsOpen] = useState(false);
   const triggerButtonRef = useRef<HTMLButtonElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const drawerLinks = [...links, { label: "Buy membership", href: BUY_MEMBERSHIP_ROUTE }];
+  const drawerLinks = [...links, { label: buyMembershipLabel, href: getLocalePath(locale, "/buy-membership") }];
 
   useEffect(() => {
     if (!isOpen) {
@@ -80,11 +102,11 @@ export function MobileNavDrawer({ links }: MobileNavDrawerProps) {
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
-      <div className="md:hidden">
+      <div className="lg:hidden">
         <button
           ref={triggerButtonRef}
           type="button"
-          aria-label="Open navigation menu"
+          aria-label={openLabel}
           aria-controls="mobile-menu"
           aria-expanded={isOpen}
           className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-(--color-border) text-foreground"
@@ -116,16 +138,14 @@ export function MobileNavDrawer({ links }: MobileNavDrawerProps) {
             }}
           >
             <div className="mb-4 flex items-center justify-between">
-              <Dialog.Title className="text-lg font-semibold">Menu</Dialog.Title>
-              <Dialog.Description className="sr-only">
-                Mobile navigation links for Naomi Gym.
-              </Dialog.Description>
+              <Dialog.Title className="text-lg font-semibold">{menuTitle}</Dialog.Title>
+              <Dialog.Description className="sr-only">{menuDescription}</Dialog.Description>
 
               <Dialog.Close asChild>
                 <button
                   ref={closeButtonRef}
                   type="button"
-                  aria-label="Close navigation menu"
+                  aria-label={closeLabel}
                   className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-(--color-border)"
                 >
                   <Icon name="close" className="h-6 w-6" />
@@ -133,7 +153,7 @@ export function MobileNavDrawer({ links }: MobileNavDrawerProps) {
               </Dialog.Close>
             </div>
 
-            <nav aria-label="Mobile">
+            <nav aria-label={navLabel}>
               <ul className="space-y-2">
                 {drawerLinks.map((item) => (
                   <li key={item.href}>
@@ -148,6 +168,32 @@ export function MobileNavDrawer({ links }: MobileNavDrawerProps) {
                 ))}
               </ul>
             </nav>
+
+            <div className="mt-5 border-t border-(--color-border) pt-4">
+              <p className="mb-2 text-sm font-semibold text-(--color-text-muted)">{languageSwitcherLabel}</p>
+              <div className="flex gap-2">
+                {(Object.keys(localeNames) as Locale[]).map((targetLocale) => {
+                  const href = getEquivalentLocalePath(currentPath, targetLocale);
+                  const isActive = targetLocale === locale;
+
+                  return (
+                    <Link
+                      key={targetLocale}
+                      href={href}
+                      className={cn(
+                        "rounded-full px-3 py-2 text-sm font-semibold transition",
+                        isActive ? "bg-(--color-brand) text-white" : "bg-(--color-bg-muted) text-foreground",
+                      )}
+                      hrefLang={targetLocale}
+                      aria-current={isActive ? "page" : undefined}
+                      onClick={closeDrawer}
+                    >
+                      {targetLocale.toUpperCase()}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           </Dialog.Content>
         </Dialog.Portal>
       </div>

@@ -6,18 +6,18 @@ import { SectionShell } from "@/components/ui/section-shell";
 import type { GalleryImage } from "@/types/marketing";
 
 type GallerySectionProps = {
+  title: string;
+  subtitle: string;
+  scrollerLabel: string;
   images: GalleryImage[];
 };
 
-export function GallerySection({ images }: GallerySectionProps) {
+export function GallerySection({ title, subtitle, scrollerLabel, images }: GallerySectionProps) {
   return (
     <SectionShell id="gallery">
-      <SectionHeading
-        title="Our Facility"
-        subtitle="Take a look at our modern, clean, and fully-equipped gym"
-      />
+      <SectionHeading title={title} subtitle={subtitle} />
 
-      <HorizontalScroller ariaLabel="Facility gallery" showScrollIndicator>
+      <HorizontalScroller ariaLabel={scrollerLabel} showScrollIndicator>
         {images.map((image) => (
           <article key={image.id} className="overflow-hidden rounded-2xl border border-(--color-border) bg-white">
             <Image

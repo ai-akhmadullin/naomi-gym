@@ -10,6 +10,8 @@ describe("FaqSection", () => {
 
     const { container } = render(
       <FaqSection
+        title="FAQ"
+        subtitle="Common questions"
         faqs={[
           { id: "one", question: "What are your operating hours?", answer: "Hours answer" },
           { id: "two", question: "Do you offer day passes?", answer: "Day pass answer" },

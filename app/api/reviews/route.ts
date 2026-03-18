@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { REVIEWS } from "@/content/home";
+import { getDefaultReviews } from "@/content/site";
 import type { Review } from "@/types/marketing";
 
 type GooglePlaceDetailsReview = {
@@ -56,7 +56,7 @@ function createReviewId(review: GooglePlaceDetailsReview, index: number) {
 function fallbackResponse(reason: string) {
   const payload: ReviewsApiResponse = {
     source: "fallback",
-    reviews: REVIEWS,
+    reviews: getDefaultReviews(),
     reason,
   };
 

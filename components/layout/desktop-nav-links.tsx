@@ -105,7 +105,7 @@ export function DesktopNavLinks({ links, isHomeRoute }: DesktopNavLinksProps) {
   };
 
   return (
-    <ul className="flex items-center gap-7 lg:gap-9">
+    <ul className="flex items-center justify-center gap-4 xl:gap-5 2xl:gap-7">
       {links.map((item) => {
         const isActive = isHomeRoute && activeHref === item.href;
 
@@ -115,7 +115,7 @@ export function DesktopNavLinks({ links, isHomeRoute }: DesktopNavLinksProps) {
               href={item.href}
               onClick={(event) => onNavClick(item.href, event)}
               className={cn(
-                "text-lg font-semibold transition hover:text-(--color-brand)",
+                "whitespace-nowrap text-[1rem] font-semibold transition hover:text-(--color-brand) xl:text-[1.06rem] 2xl:text-lg",
                 isActive ? "text-(--color-brand)" : "text-foreground",
               )}
               aria-current={isActive ? "page" : undefined}

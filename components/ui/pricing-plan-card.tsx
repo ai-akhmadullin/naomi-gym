@@ -8,10 +8,11 @@ import { cn } from "@/lib/utils";
 type PricingPlanCardProps = {
   plan: PricingPlan;
   cta: ReactNode;
+  highlightLabel: string;
   headingTag?: "h2" | "h3";
 };
 
-export function PricingPlanCard({ plan, cta, headingTag = "h3" }: PricingPlanCardProps) {
+export function PricingPlanCard({ plan, cta, highlightLabel, headingTag = "h3" }: PricingPlanCardProps) {
   const HeadingTag = headingTag;
 
   return (
@@ -23,12 +24,12 @@ export function PricingPlanCard({ plan, cta, headingTag = "h3" }: PricingPlanCar
     >
       <div className="mb-5 flex flex-col gap-3 sm:mb-6 sm:flex-row sm:items-center sm:justify-between">
         <HeadingTag className="text-2xl font-bold sm:text-4xl">{plan.name}</HeadingTag>
-        {plan.highlight ? <Badge className="w-fit self-start">Most Popular</Badge> : null}
+        {plan.highlight ? <Badge className="w-fit self-start">{highlightLabel}</Badge> : null}
       </div>
 
       <p className="mb-6 text-4xl font-bold text-(--color-brand) sm:mb-8 sm:text-5xl">
         {plan.priceLabel}
-        <span className="text-lg font-medium text-(--color-text-muted) sm:text-xl">/{plan.billingPeriod}</span>
+        <span className="text-lg font-medium text-(--color-text-muted) sm:text-xl">/{plan.billingPeriodLabel}</span>
       </p>
 
       {cta}

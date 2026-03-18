@@ -10,7 +10,7 @@ export type PricingPlan = {
   id: string;
   name: string;
   priceLabel: string;
-  billingPeriod: "day" | "month";
+  billingPeriodLabel: string;
   highlight: boolean;
   ctaLabel: string;
 };
@@ -70,5 +70,6 @@ export type CheckoutIntent = {
 export type CheckoutResult = {
   status: "stub" | "ready";
   redirectUrl?: string;
+  messageKey?: "planRequired" | "preview";
   message?: string;
 };

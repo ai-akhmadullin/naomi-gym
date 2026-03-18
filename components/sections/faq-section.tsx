@@ -9,19 +9,17 @@ import { SectionShell } from "@/components/ui/section-shell";
 import type { FaqItem } from "@/types/marketing";
 
 type FaqSectionProps = {
+  title: string;
+  subtitle: string;
   faqs: FaqItem[];
 };
 
-export function FaqSection({ faqs }: FaqSectionProps) {
+export function FaqSection({ title, subtitle, faqs }: FaqSectionProps) {
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
     <SectionShell id="faq" className="bg-(--color-bg-muted)">
-      <SectionHeading
-        title="Frequently Asked Questions"
-        subtitle="Everything you need to know before joining"
-        align="center"
-      />
+      <SectionHeading title={title} subtitle={subtitle} align="center" />
 
       <div className="mx-auto max-w-5xl space-y-4">
         {faqs.map((faq) => {

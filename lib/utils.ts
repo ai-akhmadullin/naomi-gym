@@ -14,13 +14,12 @@ export async function createCheckoutSessionStub(
   if (!intent.planId) {
     return {
       status: "stub",
-      message: "Plan is required before checkout can begin.",
+      messageKey: "planRequired",
     };
   }
 
   return {
     status: "stub",
-    message:
-      "Checkout is currently in preview mode.",
+    messageKey: "preview",
   };
 }

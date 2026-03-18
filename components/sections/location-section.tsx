@@ -5,13 +5,29 @@ import { SectionShell } from "@/components/ui/section-shell";
 import type { LocationInfo } from "@/types/marketing";
 
 type LocationSectionProps = {
+  title: string;
+  subtitle: string;
+  addressLabel: string;
+  hoursLabel: string;
+  mapTitle: string;
+  directionsPrefix: string;
+  directionsLinkLabel: string;
   location: LocationInfo;
 };
 
-export function LocationSection({ location }: LocationSectionProps) {
+export function LocationSection({
+  title,
+  subtitle,
+  addressLabel,
+  hoursLabel,
+  mapTitle,
+  directionsPrefix,
+  directionsLinkLabel,
+  location,
+}: LocationSectionProps) {
   return (
     <SectionShell id="location" className="bg-(--color-bg-muted)">
-      <SectionHeading title="Visit Us" subtitle="Find Naomi Gym near An Thuong and My Khe area" />
+      <SectionHeading title={title} subtitle={subtitle} />
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
         <Card className="p-5 sm:p-8 lg:p-10">
@@ -19,7 +35,7 @@ export function LocationSection({ location }: LocationSectionProps) {
             <div className="space-y-3">
               <h3 className="flex items-center gap-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
                 <Icon name="map-pin" className="h-6 w-6 text-(--color-brand) sm:h-7 sm:w-7" />
-                Address
+                {addressLabel}
               </h3>
               <p className="pl-0 text-lg leading-relaxed text-(--color-text-muted) sm:pl-10 sm:text-2xl">
                 {location.addressLines.map((line) => (
@@ -33,7 +49,7 @@ export function LocationSection({ location }: LocationSectionProps) {
             <div className="space-y-3">
               <h3 className="flex items-center gap-3 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl">
                 <Icon name="clock" className="h-6 w-6 text-(--color-brand) sm:h-7 sm:w-7" />
-                Hours
+                {hoursLabel}
               </h3>
               <div className="pl-0 text-lg leading-relaxed text-(--color-text-muted) sm:pl-10 sm:text-xl lg:text-2xl">
                 <div className="space-y-4">
@@ -58,17 +74,17 @@ export function LocationSection({ location }: LocationSectionProps) {
         <div className="min-w-0 overflow-hidden rounded-2xl border border-(--color-border) bg-white shadow-(--shadow-soft)">
           <iframe
             src={location.mapEmbedUrl}
-            title="Naomi Gym location map"
+            title={mapTitle}
             allowFullScreen
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
             className="h-72 w-full sm:h-96 lg:h-[420px]"
           />
           <p className="px-4 py-4 text-sm text-(--color-text-muted) sm:px-5 sm:text-base">
-            Can&apos;t see the map? Open directions
+            {directionsPrefix}
             {" "}
             <a href={location.directionsUrl} className="font-semibold text-(--color-brand) underline underline-offset-2">
-              here
+              {directionsLinkLabel}
             </a>
             .
           </p>

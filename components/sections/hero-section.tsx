@@ -3,39 +3,54 @@ import Link from "next/link";
 
 import { buttonStyles } from "@/components/ui/button";
 import { SectionShell } from "@/components/ui/section-shell";
-import { BUY_MEMBERSHIP_ROUTE } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 type HeroSectionProps = {
+  titlePrefix: string;
+  titleHighlight: string;
+  description: string;
+  primaryCta: string;
+  primaryHref: string;
+  secondaryCta: string;
+  imageAlt: string;
   membersCount: string;
   membersLabel: string;
 };
 
-export function HeroSection({ membersCount, membersLabel }: HeroSectionProps) {
+export function HeroSection({
+  titlePrefix,
+  titleHighlight,
+  description,
+  primaryCta,
+  primaryHref,
+  secondaryCta,
+  imageAlt,
+  membersCount,
+  membersLabel,
+}: HeroSectionProps) {
   return (
     <SectionShell id="home" className="bg-(--color-bg-muted)">
       <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
         <div className="min-w-0">
           <h1 className="max-w-xl text-balance text-4xl font-bold leading-[1.05] tracking-tight text-foreground sm:text-6xl lg:text-8xl">
-            Train stronger at
-            <span className="block text-(--color-brand)">Naomi Gym</span>
+            {titlePrefix}
+            <span className="block text-(--color-brand)">{titleHighlight}</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-(--color-text-muted) sm:mt-8 sm:text-xl lg:max-w-2xl lg:text-2xl">
-            Transform your body and mind with our expert trainers and a supportive community.
-            Your fitness journey starts here.
+            {description}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-4">
             <Link
-              href={BUY_MEMBERSHIP_ROUTE}
+              href={primaryHref}
               className={buttonStyles({ variant: "primary", size: "lg", className: "w-full sm:w-auto" })}
             >
-              Buy Membership
+              {primaryCta}
             </Link>
             <a
               href="#pricing"
               className={buttonStyles({ variant: "secondary", size: "lg", className: "w-full sm:w-auto" })}
             >
-              View Pricing
+              {secondaryCta}
             </a>
           </div>
         </div>
@@ -44,7 +59,7 @@ export function HeroSection({ membersCount, membersLabel }: HeroSectionProps) {
           <div className="mx-auto max-w-xl overflow-hidden rounded-3xl border border-(--color-border)">
             <Image
               src="/images/hero/hero-main.svg"
-              alt="Membership card"
+              alt={imageAlt}
               width={800}
               height={560}
               className="h-auto w-full"

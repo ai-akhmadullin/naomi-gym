@@ -1,29 +1,17 @@
-import type { Metadata } from "next";
-
-import { SITE_DESCRIPTION, SITE_NAME } from "@/lib/constants";
-
 import "./globals.css";
 
-export const metadata: Metadata = {
-  title: {
-    default: SITE_NAME,
-    template: `%s | ${SITE_NAME}`,
-  },
-  description: SITE_DESCRIPTION,
-  openGraph: {
-    title: SITE_NAME,
-    description: SITE_DESCRIPTION,
-    type: "website",
-  },
-};
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params?: Promise<{ locale?: string }>;
 }>) {
+  const resolvedParams = params ? await params : undefined;
+  const lang = resolvedParams?.locale ?? "en";
+
   return (
-    <html lang="en">
+    <html lang={lang}>
       <body className="antialiased">{children}</body>
     </html>
   );

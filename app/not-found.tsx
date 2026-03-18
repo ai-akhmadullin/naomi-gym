@@ -12,10 +12,10 @@ export default function NotFound() {
           The page you requested does not exist yet. Return home or continue to membership options.
         </p>
         <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
-          <Link href="/buy-membership" className={buttonStyles({ variant: "secondary", size: "md" })}>
+          <Link href="/en/buy-membership" className={buttonStyles({ variant: "secondary", size: "md" })}>
             Buy Membership
           </Link>
-          <Link href="/" className={buttonStyles({ variant: "primary", size: "md" })}>
+          <Link href="/en" className={buttonStyles({ variant: "primary", size: "md" })}>
             Back to Home
           </Link>
         </div>

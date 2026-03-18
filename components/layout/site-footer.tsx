@@ -2,42 +2,61 @@ import Link from "next/link";
 
 import { Icon } from "@/components/ui/icon";
 import {
-  BUY_MEMBERSHIP_ROUTE,
   CONTACT_ADDRESS_LINES,
   CONTACT_PHONE_DISPLAY,
   CONTACT_PHONE_RAW,
-  NAV_ITEMS,
   SECTION_CONTAINER_CLASS,
   SOCIAL_FACEBOOK_URL,
   SOCIAL_INSTAGRAM_URL,
   SITE_NAME,
-  SITE_TAGLINE,
 } from "@/lib/constants";
+import { getLocalePath, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
-import type { PolicyLink } from "@/types/marketing";
+import type { NavItem, PolicyLink } from "@/types/marketing";
 
 type SiteFooterProps = {
+  locale: Locale;
   isHomePage?: boolean;
+  navItems: NavItem[];
   policyLinks: PolicyLink[];
+  siteTagline: string;
+  quickLinksTitle: string;
+  policiesTitle: string;
+  contactTitle: string;
+  facebookLabel: string;
+  instagramLabel: string;
+  buyMembershipLabel: string;
 };
 
-function resolveSectionHref(isHomePage: boolean, href: string) {
-  return isHomePage ? href : `/${href}`;
+function resolveSectionHref(locale: Locale, isHomePage: boolean, href: string) {
+  return isHomePage ? href : `${getLocalePath(locale)}${href}`;
 }
 
-export function SiteFooter({ isHomePage = false, policyLinks }: SiteFooterProps) {
+export function SiteFooter({
+  locale,
+  isHomePage = false,
+  navItems,
+  policyLinks,
+  siteTagline,
+  quickLinksTitle,
+  policiesTitle,
+  contactTitle,
+  facebookLabel,
+  instagramLabel,
+  buyMembershipLabel,
+}: SiteFooterProps) {
   return (
     <footer className="bg-(--color-footer) py-12 pb-[calc(3rem+env(safe-area-inset-bottom))] text-white sm:py-14 sm:pb-[calc(3.5rem+env(safe-area-inset-bottom))]">
       <div className={cn(SECTION_CONTAINER_CLASS, "grid gap-10 md:grid-cols-2 xl:grid-cols-4") }>
         <div>
           <p className="mb-4 text-2xl font-bold sm:mb-5 sm:text-3xl">{SITE_NAME}</p>
-          <p className="max-w-xs text-base leading-relaxed text-white/70 sm:text-lg">{SITE_TAGLINE}</p>
+          <p className="max-w-xs text-base leading-relaxed text-white/70 sm:text-lg">{siteTagline}</p>
           <div className="mt-6 flex gap-3">
             <a
               href={SOCIAL_FACEBOOK_URL}
               target="_blank"
               rel="noreferrer noopener"
-              aria-label="Facebook"
+              aria-label={facebookLabel}
               className="rounded-lg bg-white/8 p-2.5 text-white/80 hover:text-white sm:p-3"
             >
               <Icon name="facebook" />
@@ -46,7 +65,7 @@ export function SiteFooter({ isHomePage = false, policyLinks }: SiteFooterProps)
               href={SOCIAL_INSTAGRAM_URL}
               target="_blank"
               rel="noreferrer noopener"
-              aria-label="Instagram"
+              aria-label={instagramLabel}
               className="rounded-lg bg-white/8 p-2.5 text-white/80 hover:text-white sm:p-3"
             >
               <Icon name="instagram" />
@@ -55,25 +74,25 @@ export function SiteFooter({ isHomePage = false, policyLinks }: SiteFooterProps)
         </div>
 
         <div>
-          <h3 className="mb-4 text-2xl font-bold sm:text-3xl">Quick Links</h3>
+          <h3 className="mb-4 text-2xl font-bold sm:text-3xl">{quickLinksTitle}</h3>
           <ul className="space-y-3 text-base text-white/80 sm:text-lg">
-            {NAV_ITEMS.filter((item) => item.kind === "section").map((item) => (
+            {navItems.filter((item) => item.kind === "section").map((item) => (
               <li key={item.label}>
-                <Link href={resolveSectionHref(isHomePage, item.href)} className="hover:text-white">
+                <Link href={resolveSectionHref(locale, isHomePage, item.href)} className="hover:text-white">
                   {item.label}
                 </Link>
               </li>
             ))}
             <li>
-              <Link href={BUY_MEMBERSHIP_ROUTE} className="hover:text-white">
-                Buy Membership
+              <Link href={getLocalePath(locale, "/buy-membership")} className="hover:text-white">
+                {buyMembershipLabel}
               </Link>
             </li>
           </ul>
         </div>
 
         <div>
-          <h3 className="mb-4 text-2xl font-bold sm:text-3xl">Policies</h3>
+          <h3 className="mb-4 text-2xl font-bold sm:text-3xl">{policiesTitle}</h3>
           <ul className="space-y-3 text-base text-white/80 sm:text-lg">
             {policyLinks.map((policy) => (
               <li key={policy.id}>
@@ -86,7 +105,7 @@ export function SiteFooter({ isHomePage = false, policyLinks }: SiteFooterProps)
         </div>
 
         <div id="contact" className="scroll-mt-28">
-          <h3 className="mb-4 text-2xl font-bold sm:text-3xl">Contact</h3>
+          <h3 className="mb-4 text-2xl font-bold sm:text-3xl">{contactTitle}</h3>
           <ul className="space-y-4 text-base text-white/80 sm:text-lg">
             <li className="flex items-start gap-3">
               <Icon name="map-pin" className="mt-1 text-(--color-brand)" />

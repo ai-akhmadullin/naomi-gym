@@ -11,10 +11,24 @@ import { SectionShell } from "@/components/ui/section-shell";
 import type { Review } from "@/types/marketing";
 
 type ReviewsSectionProps = {
+  title: string;
+  subtitle: string;
+  scrollerLabel: string;
+  starsLabelTemplate: string;
+  readOnGoogleLabel: string;
+  googleReviewLabel: string;
   reviews: Review[];
 };
 
-export function ReviewsSection({ reviews }: ReviewsSectionProps) {
+export function ReviewsSection({
+  title,
+  subtitle,
+  scrollerLabel,
+  starsLabelTemplate,
+  readOnGoogleLabel,
+  googleReviewLabel,
+  reviews,
+}: ReviewsSectionProps) {
   const [displayReviews, setDisplayReviews] = useState<Review[]>(reviews);
 
   useEffect(() => {
@@ -54,16 +68,15 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
 
   return (
     <SectionShell id="reviews">
-      <SectionHeading
-        title="What Our Members Say"
-        subtitle="Honest feedback from people who train with us"
-        align="center"
-      />
+      <SectionHeading title={title} subtitle={subtitle} align="center" />
 
-      <HorizontalScroller ariaLabel="Member reviews" showScrollIndicator>
+      <HorizontalScroller ariaLabel={scrollerLabel} showScrollIndicator>
         {displayReviews.map((review) => (
           <Card key={review.id} className="h-full p-5 shadow-none sm:p-6">
-            <div className="mb-5 flex gap-2 text-(--color-brand)" aria-label={`${review.rating} out of 5 stars`}>
+            <div
+              className="mb-5 flex gap-2 text-(--color-brand)"
+              aria-label={starsLabelTemplate.replace("{rating}", String(review.rating))}
+            >
               {Array.from({ length: review.rating }).map((_, index) => (
                 <Icon key={`${review.id}-${index}`} name="star" className="h-5 w-5 sm:h-6 sm:w-6" />
               ))}
@@ -97,10 +110,10 @@ export function ReviewsSection({ reviews }: ReviewsSectionProps) {
                         rel="noreferrer noopener"
                         className="underline underline-offset-2 hover:text-(--color-brand)"
                       >
-                        Read on Google
+                        {readOnGoogleLabel}
                       </a>
                     ) : (
-                      "Google review"
+                      googleReviewLabel
                     )}
                   </p>
                 ) : null}

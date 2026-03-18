@@ -4,31 +4,37 @@ import { buttonStyles } from "@/components/ui/button";
 import { PricingPlanCard } from "@/components/ui/pricing-plan-card";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { SectionShell } from "@/components/ui/section-shell";
-import { BUY_MEMBERSHIP_ROUTE } from "@/lib/constants";
 import type { PricingPlan } from "@/types/marketing";
 
 type PricingSectionProps = {
+  title: string;
+  subtitle: string;
   plans: PricingPlan[];
+  highlightLabel: string;
+  buyMembershipHref: string;
 };
 
-export function PricingSection({ plans }: PricingSectionProps) {
+export function PricingSection({
+  title,
+  subtitle,
+  plans,
+  highlightLabel,
+  buyMembershipHref,
+}: PricingSectionProps) {
   return (
     <SectionShell id="pricing">
-      <SectionHeading
-        title="Membership Plans"
-        subtitle="Choose a plan that fits your routine"
-        align="center"
-      />
+      <SectionHeading title={title} subtitle={subtitle} align="center" />
 
       <div className="grid gap-6 lg:grid-cols-2">
         {plans.map((plan) => (
           <PricingPlanCard
             key={plan.id}
             plan={plan}
+            highlightLabel={highlightLabel}
             headingTag="h3"
             cta={
               <Link
-                href={BUY_MEMBERSHIP_ROUTE}
+                href={buyMembershipHref}
                 className={buttonStyles({
                   variant: plan.highlight ? "primary" : "secondary",
                   size: "md",

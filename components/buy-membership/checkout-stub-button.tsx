@@ -10,6 +10,13 @@ type CheckoutStubButtonProps = {
   planId: string;
   planName: string;
   ctaLabel: string;
+  copy: {
+    startCheckoutAriaLabelTemplate: string;
+    loadingLabel: string;
+    unavailableMessage: string;
+    planRequiredMessage: string;
+    previewMessage: string;
+  };
   highlight?: boolean;
 };
 
@@ -17,6 +24,7 @@ export function CheckoutStubButton({
   planId,
   planName,
   ctaLabel,
+  copy,
   highlight = false,
 }: CheckoutStubButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
@@ -32,12 +40,17 @@ export function CheckoutStubButton({
     } catch {
       setResult({
         status: "stub",
-        message: "Checkout is temporarily unavailable. Please try again in a moment.",
+        message: copy.unavailableMessage,
       });
     } finally {
       setIsLoading(false);
     }
   }
+
+  const statusMessage = result?.message
+    ?? (result?.messageKey === "planRequired"
+      ? copy.planRequiredMessage
+      : copy.previewMessage);
 
   return (
     <div>
@@ -49,13 +62,13 @@ export function CheckoutStubButton({
           !highlight && "bg-(--color-bg-muted)! hover:bg-(--color-brand)/15! border border-(--color-border)",
         )}
         onClick={onCheckout}
-        aria-label={`Start checkout for ${planName} plan`}
+        aria-label={copy.startCheckoutAriaLabelTemplate.replace("{planName}", planName)}
         disabled={isLoading}
       >
-        {isLoading ? "Preparing checkout..." : ctaLabel}
+        {isLoading ? copy.loadingLabel : ctaLabel}
       </Button>
       <p className="mt-3 min-h-12 text-sm text-(--color-text-muted)" role="status" aria-live="polite">
-        {result?.message ?? "Checkout is currently in preview mode."}
+        {statusMessage}
       </p>
     </div>
   );
