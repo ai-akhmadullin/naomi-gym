@@ -38,6 +38,7 @@ type ContactCopy = {
   messengerLabel: string;
   directionsLabel: string;
   reassurance: string;
+  privacyNote: string;
 };
 
 type OpenStatusCopy = {
@@ -52,11 +53,20 @@ type ContactSectionProps = {
   directionsUrl: string;
   locale: Locale;
   openStatus: OpenStatusCopy;
+  privacyHref: string;
+  privacyLabel: string;
 };
 
 type Status = "idle" | "sending" | "success" | "error";
 
-export function ContactSection({ copy, directionsUrl, locale, openStatus }: ContactSectionProps) {
+export function ContactSection({
+  copy,
+  directionsUrl,
+  locale,
+  openStatus,
+  privacyHref,
+  privacyLabel,
+}: ContactSectionProps) {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
 
@@ -195,6 +205,13 @@ export function ContactSection({ copy, directionsUrl, locale, openStatus }: Cont
 
               <p className="min-h-5 text-sm font-medium text-red-600" role="status" aria-live="polite">
                 {status === "error" ? error : ""}
+              </p>
+
+              <p className="text-xs leading-relaxed text-(--color-text-muted)">
+                {copy.privacyNote}{" "}
+                <a href={privacyHref} className="underline underline-offset-2 hover:text-(--color-brand)">
+                  {privacyLabel}
+                </a>
               </p>
             </form>
           )}

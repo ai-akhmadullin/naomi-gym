@@ -10,10 +10,5 @@ export default async function PolicyPage({ params }: PageProps) {
 }
 
 export function generateStaticParams() {
-  return [
-    { slug: "privacy" },
-    { slug: "terms" },
-    { slug: "cancellation" },
-    { slug: "conduct" },
-  ];
+  return [{ slug: "privacy" }];
 }

@@ -11,19 +11,18 @@ import {
   SOCIAL_INSTAGRAM_URL,
   SITE_NAME,
 } from "@/lib/constants";
-import { getLocalePath, type Locale } from "@/lib/i18n";
+import { getLocalePath, getPolicyPath, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
-import type { NavItem, PolicyLink } from "@/types/marketing";
+import type { NavItem } from "@/types/marketing";
 
 type SiteFooterProps = {
   locale: Locale;
   isHomePage?: boolean;
   navItems: NavItem[];
-  policyLinks: PolicyLink[];
   siteTagline: string;
   quickLinksTitle: string;
-  policiesTitle: string;
   contactTitle: string;
+  privacyLabel: string;
   facebookLabel: string;
   instagramLabel: string;
   joinLabel: string;
@@ -41,11 +40,10 @@ export function SiteFooter({
   locale,
   isHomePage = false,
   navItems,
-  policyLinks,
   siteTagline,
   quickLinksTitle,
-  policiesTitle,
   contactTitle,
+  privacyLabel,
   facebookLabel,
   instagramLabel,
   joinLabel,
@@ -89,7 +87,7 @@ export function SiteFooter({
         </div>
 
         {/* Columns */}
-        <div className="mt-14 grid gap-10 md:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
           <div>
             <div className="flex items-center gap-2.5">
               <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[image:var(--gradient-brand)] text-white">
@@ -144,19 +142,6 @@ export function SiteFooter({
           </div>
 
           <div>
-            <h3 className="text-base font-bold uppercase tracking-wide text-white/50">{policiesTitle}</h3>
-            <ul className="mt-4 space-y-3 text-base text-white/80">
-              {policyLinks.map((policy) => (
-                <li key={policy.id}>
-                  <Link href={policy.href} className="transition hover:text-(--color-brand-bright)">
-                    {policy.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
             <h3 className="text-base font-bold uppercase tracking-wide text-white/50">{contactTitle}</h3>
             <ul className="mt-4 space-y-4 text-base text-white/80">
               <li className="flex items-start gap-3">
@@ -179,8 +164,14 @@ export function SiteFooter({
           </div>
         </div>
 
-        <div className="mt-12 border-t border-white/10 pt-6 text-sm text-white/50">
-          © {year} {SITE_NAME}. {rightsLabel}
+        {/* Left-aligned so the fixed chat button (bottom-right) never covers the link. */}
+        <div className="mt-12 flex flex-col gap-x-5 gap-y-2 border-t border-white/10 pt-6 text-sm text-white/50 sm:flex-row sm:items-center">
+          <p>
+            © {year} {SITE_NAME}. {rightsLabel}
+          </p>
+          <Link href={getPolicyPath(locale, "privacy")} className="transition hover:text-white">
+            {privacyLabel}
+          </Link>
         </div>
       </div>
     </footer>

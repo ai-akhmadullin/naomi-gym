@@ -1,21 +1,15 @@
 import { CONTACT_ADDRESS_LINES } from "@/lib/constants";
-import { DEFAULT_LOCALE, type Locale, type PolicySlug } from "@/lib/i18n";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n";
 import type {
   Benefit,
   FaqItem,
   GalleryImage,
   LocationInfo,
   NavItem,
-  PolicyLink,
   PricingPlan,
   Review,
   Trainer,
 } from "@/types/marketing";
-
-type PolicyContent = {
-  title: string;
-  summary: string;
-};
 
 export type SiteDictionary = {
   metadata: {
@@ -52,7 +46,6 @@ export type SiteDictionary = {
   };
   footer: {
     quickLinksTitle: string;
-    policiesTitle: string;
     contactTitle: string;
     facebookLabel: string;
     instagramLabel: string;
@@ -162,15 +155,17 @@ export type SiteDictionary = {
       messengerLabel: string;
       directionsLabel: string;
       reassurance: string;
+      privacyNote: string;
     };
   };
   policies: {
-    links: PolicyLink[];
-    pages: Record<PolicySlug, PolicyContent>;
-    placeholder: string;
+    privacyLinkLabel: string;
     backToHome: string;
-    join: string;
-    availablePoliciesLabel: string;
+    privacy: {
+      title: string;
+      intro: string;
+      sections: Array<{ heading: string; body: string }>;
+    };
   };
   notFound: {
     title: string;
@@ -271,7 +266,6 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
     },
     footer: {
       quickLinksTitle: "Quick Links",
-      policiesTitle: "Policies",
       contactTitle: "Contact",
       facebookLabel: "Facebook",
       instagramLabel: "Instagram",
@@ -565,37 +559,39 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         messengerLabel: "Message on Facebook",
         directionsLabel: "Get directions",
         reassurance: "Free look around · No contract · Friendly staff",
+        privacyNote: "We'll only use your details to reply.",
       },
     },
     policies: {
-      links: [
-        { id: "privacy", label: "Privacy Policy", href: "" },
-        { id: "terms", label: "Terms of Service", href: "" },
-        { id: "cancellation", label: "Cancellation Policy", href: "" },
-        { id: "conduct", label: "Code of Conduct", href: "" },
-      ],
-      pages: {
-        privacy: {
-          title: "Privacy Policy",
-          summary: "How we collect, use, and protect your data.",
-        },
-        terms: {
-          title: "Terms of Service",
-          summary: "Member responsibilities and gym usage terms.",
-        },
-        cancellation: {
-          title: "Cancellation Policy",
-          summary: "Rules around membership changes, pauses, and cancellation windows.",
-        },
-        conduct: {
-          title: "Code of Conduct",
-          summary: "Behavior standards that keep our gym respectful and safe.",
-        },
-      },
-      placeholder: "This is a placeholder policy page for v1. Final legal copy will be added before launch.",
+      privacyLinkLabel: "Privacy Policy",
       backToHome: "Back to Home",
-      join: "Join Now",
-      availablePoliciesLabel: "Available policies:",
+      privacy: {
+        title: "Privacy Policy",
+        intro:
+          "This page explains what personal information Naomi Gym collects through this website, and how we use it. In short: we only collect what you choose to send us, and we use it only to reply to you.",
+        sections: [
+          {
+            heading: "What we collect",
+            body: "When you use the contact form on this website, we collect the name and the phone number or email you provide, together with any message you write. We don't ask you to create an account, and we don't collect any payment details on this website.",
+          },
+          {
+            heading: "How we use it",
+            body: "We use your details only to reply to your enquiry and to help you get started at the gym. We never sell your information, and we don't share it with third parties for marketing.",
+          },
+          {
+            heading: "Cookies & third parties",
+            body: "This website doesn't use advertising or tracking cookies. The embedded Google map and the links to our social pages are provided by those services under their own privacy terms.",
+          },
+          {
+            heading: "Keeping and deleting your data",
+            body: "We keep enquiry messages only as long as we need them to respond and follow up. If you'd like us to delete your details, just ask using the contact details on this site.",
+          },
+          {
+            heading: "Contact us",
+            body: "If you have any question about your personal data — or want it removed — please reach us using the phone number or Facebook page listed on this website.",
+          },
+        ],
+      },
     },
     notFound: {
       title: "Page not found",
@@ -651,7 +647,6 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
     },
     footer: {
       quickLinksTitle: "Liên kết nhanh",
-      policiesTitle: "Chính sách",
       contactTitle: "Liên hệ",
       facebookLabel: "Facebook",
       instagramLabel: "Instagram",
@@ -945,37 +940,39 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         messengerLabel: "Nhắn tin qua Facebook",
         directionsLabel: "Xem chỉ đường",
         reassurance: "Tham quan miễn phí · Không hợp đồng · Nhân viên thân thiện",
+        privacyNote: "Chúng tôi chỉ dùng thông tin của bạn để phản hồi.",
       },
     },
     policies: {
-      links: [
-        { id: "privacy", label: "Chính sách bảo mật", href: "" },
-        { id: "terms", label: "Điều khoản dịch vụ", href: "" },
-        { id: "cancellation", label: "Chính sách hủy gói", href: "" },
-        { id: "conduct", label: "Nội quy ứng xử", href: "" },
-      ],
-      pages: {
-        privacy: {
-          title: "Chính sách bảo mật",
-          summary: "Cách chúng tôi thu thập, sử dụng và bảo vệ dữ liệu của bạn.",
-        },
-        terms: {
-          title: "Điều khoản dịch vụ",
-          summary: "Trách nhiệm của hội viên và các điều khoản sử dụng phòng tập.",
-        },
-        cancellation: {
-          title: "Chính sách hủy gói",
-          summary: "Các quy định về thay đổi gói, tạm ngưng và hủy hội viên.",
-        },
-        conduct: {
-          title: "Nội quy ứng xử",
-          summary: "Những tiêu chuẩn ứng xử giúp phòng tập luôn an toàn và tôn trọng lẫn nhau.",
-        },
-      },
-      placeholder: "Đây là trang chính sách mẫu cho phiên bản đầu tiên. Nội dung pháp lý hoàn chỉnh sẽ được cập nhật trước khi ra mắt.",
+      privacyLinkLabel: "Chính sách bảo mật",
       backToHome: "Quay về trang chủ",
-      join: "Tham gia ngay",
-      availablePoliciesLabel: "Các chính sách hiện có:",
+      privacy: {
+        title: "Chính sách bảo mật",
+        intro:
+          "Trang này giải thích Naomi Gym thu thập những thông tin cá nhân nào qua website và sử dụng ra sao. Nói ngắn gọn: chúng tôi chỉ thu thập những gì bạn chủ động gửi và chỉ dùng để phản hồi bạn.",
+        sections: [
+          {
+            heading: "Chúng tôi thu thập gì",
+            body: "Khi bạn dùng biểu mẫu liên hệ trên website, chúng tôi thu thập tên và số điện thoại hoặc email bạn cung cấp, cùng nội dung tin nhắn bạn viết. Chúng tôi không yêu cầu bạn tạo tài khoản và không thu thập thông tin thanh toán trên website này.",
+          },
+          {
+            heading: "Chúng tôi dùng để làm gì",
+            body: "Chúng tôi chỉ dùng thông tin của bạn để phản hồi yêu cầu và hỗ trợ bạn bắt đầu tập. Chúng tôi không bao giờ bán thông tin và không chia sẻ cho bên thứ ba vì mục đích tiếp thị.",
+          },
+          {
+            heading: "Cookie & bên thứ ba",
+            body: "Website này không dùng cookie quảng cáo hay theo dõi. Bản đồ Google được nhúng và các liên kết mạng xã hội do các dịch vụ đó cung cấp theo điều khoản bảo mật riêng của họ.",
+          },
+          {
+            heading: "Lưu trữ và xóa dữ liệu",
+            body: "Chúng tôi chỉ lưu tin nhắn liên hệ trong thời gian cần thiết để phản hồi và theo dõi. Nếu muốn chúng tôi xóa thông tin của bạn, chỉ cần liên hệ qua thông tin trên website.",
+          },
+          {
+            heading: "Liên hệ",
+            body: "Nếu có bất kỳ câu hỏi nào về dữ liệu cá nhân — hoặc muốn xóa dữ liệu — vui lòng liên hệ qua số điện thoại hoặc trang Facebook được nêu trên website.",
+          },
+        ],
+      },
     },
     notFound: {
       title: "Không tìm thấy trang",

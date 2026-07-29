@@ -66,12 +66,6 @@ export type FaqItem = {
   answer: string;
 };
 
-export type PolicyLink = {
-  id: string;
-  label: string;
-  href: string;
-};
-
 // Re-exported here so content/types stay decoupled from the Icon component file.
 export type IconName =
   | "menu"

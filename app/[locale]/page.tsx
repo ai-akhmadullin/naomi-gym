@@ -12,7 +12,7 @@ import { PricingSection } from "@/components/sections/pricing-section";
 import { ReviewsSection } from "@/components/sections/reviews-section";
 import { TrainersSection } from "@/components/sections/trainers-section";
 import { getDictionary } from "@/content/site";
-import { assertLocale, getLocalePath, getPolicyPath, type PolicySlug } from "@/lib/i18n";
+import { assertLocale, getLocalePath, getPolicyPath } from "@/lib/i18n";
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -21,10 +21,6 @@ type PageProps = {
 export default async function LocalizedHomePage({ params }: PageProps) {
   const locale = assertLocale((await params).locale);
   const dictionary = getDictionary(locale);
-  const policyLinks = dictionary.policies.links.map((policy) => ({
-    ...policy,
-    href: getPolicyPath(locale, policy.id as PolicySlug),
-  }));
 
   return (
     <>
@@ -113,17 +109,18 @@ export default async function LocalizedHomePage({ params }: PageProps) {
           directionsUrl={dictionary.home.location.info.directionsUrl}
           locale={locale}
           openStatus={dictionary.openStatus}
+          privacyHref={getPolicyPath(locale, "privacy")}
+          privacyLabel={dictionary.policies.privacyLinkLabel}
         />
       </main>
       <SiteFooter
         locale={locale}
         isHomePage
         navItems={dictionary.navItems}
-        policyLinks={policyLinks}
         siteTagline={dictionary.siteTagline}
         quickLinksTitle={dictionary.footer.quickLinksTitle}
-        policiesTitle={dictionary.footer.policiesTitle}
         contactTitle={dictionary.footer.contactTitle}
+        privacyLabel={dictionary.policies.privacyLinkLabel}
         facebookLabel={dictionary.footer.facebookLabel}
         instagramLabel={dictionary.footer.instagramLabel}
         joinLabel={dictionary.footer.joinNow}

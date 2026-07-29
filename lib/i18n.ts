@@ -4,14 +4,9 @@ export const LOCALES = ["en", "vi"] as const;
 
 export type Locale = (typeof LOCALES)[number];
 
-export type PolicySlug = "privacy" | "terms" | "cancellation" | "conduct";
+export type PolicySlug = "privacy";
 
-export const POLICY_SLUGS: PolicySlug[] = [
-  "privacy",
-  "terms",
-  "cancellation",
-  "conduct",
-];
+export const POLICY_SLUGS: PolicySlug[] = ["privacy"];
 
 export const DEFAULT_LOCALE: Locale = "en";
 
