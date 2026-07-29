@@ -117,22 +117,51 @@ export function HorizontalScroller({
         role="region"
         aria-label={ariaLabel}
         className={cn(
-          "overflow-x-auto pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
+          // overflow-x:auto forces overflow-y to compute to auto as well, so this
+          // viewport clips on all four sides — the padding below is the gutter that
+          // keeps card shadows off those clip edges, since anything that reaches
+          // past them gets sliced into a hard line. Budget per side, worst case,
+          // against the MEASURED bleed of --shadow-lift (see globals.css; the
+          // painted blur reaches about a full blur radius, not half of one):
+          //   top     6 (hover:-translate-y-1.5) + 4 (focus ring + offset) = 10 -> pt-4
+          //   bottom 28 (--shadow-lift) - 6 (hover lift) + 4 (ring)        = 26 -> pb-8
+          //   left   13 (--shadow-lift) + 4 (ring)                         = 17 -> pl-5
+          // The negative margin pulls the viewport back out by the horizontal
+          // padding so the cards stay aligned with the rest of the section (and the
+          // item width is unchanged), and scroll-px keeps snap alignment on the
+          // padded edge. Revisit these if the shadow ramp in globals.css changes.
+          // pr-5 is deliberately paired with the trailing spacer below: browsers
+          // leave a scroll container's end padding out of the scrollable overflow
+          // area, so on its own it would vanish the moment the track is scrolled
+          // to the end. It only covers the non-scrollable case (all items fit).
+          // snap-x/snap-mandatory belong here rather than on the track: scroll
+          // snapping is a property of the scroll container, so on the track it is
+          // inert. With it on the viewport, a carousel always comes to rest on a
+          // card boundary — which also means no card is ever left half-clipped by
+          // the viewport edge. The item widths tile the viewport exactly at every
+          // breakpoint, so the last snap position lands on the trailing gutter.
+          "overflow-x-auto snap-x snap-mandatory px-5 -mx-5 scroll-px-5 pt-4 pb-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden",
           viewportClassName,
         )}
       >
-        <div
-          ref={contentRef}
-          className={cn(
-            "grid grid-flow-col auto-cols-[100%] gap-6 snap-x snap-mandatory md:auto-cols-[calc((100%-1.5rem)/2)] lg:auto-cols-[calc((100%-3rem)/3)]",
-            trackClassName,
-          )}
-        >
+        <div ref={contentRef} className={cn("flex gap-6", trackClassName)}>
           {items.map((item, index) => (
-            <div key={index} className={cn("min-w-0 snap-start", itemClassName)}>
+            <div
+              key={index}
+              className={cn(
+                "min-w-0 shrink-0 grow-0 basis-full snap-start md:basis-[calc((100%-1.5rem)/2)] lg:basis-[calc((100%-3rem)/3)]",
+                itemClassName,
+              )}
+            >
               {item}
             </div>
           ))}
+          {/* Trailing shadow gutter. The viewport's pr-5 is dropped from the
+              scrollable overflow area, so at the end of the scroll the last card's
+              shadow would be clipped into a hard vertical line. A real (if empty)
+              flex item is part of the content, so its width survives. -ms-6 cancels
+              the track gap in front of it, leaving exactly pl-5's worth of room. */}
+          <div aria-hidden="true" className="-ms-6 w-5 shrink-0" />
         </div>
       </div>
       {showScrollIndicator ? (
@@ -141,7 +170,7 @@ export function HorizontalScroller({
           aria-hidden="true"
           className={cn(
             "overflow-hidden rounded-full bg-(--color-border) transition-all duration-200",
-            isScrollable ? "mt-4 h-1.5 opacity-100" : "mt-0 h-0 opacity-0",
+            isScrollable ? "mt-1 h-1.5 opacity-100" : "mt-0 h-0 opacity-0",
           )}
         >
           <span

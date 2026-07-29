@@ -13,7 +13,7 @@ describe("SiteHeader", () => {
         locale="en"
         currentPath="/en"
         navItems={dictionary.navItems}
-        buyMembershipLabel={dictionary.header.buyMembership}
+        joinLabel={dictionary.header.joinNow}
         primaryNavLabel={dictionary.header.primaryNavLabel}
         languageSwitcherLabel={dictionary.header.languageSwitcherLabel}
         localeNames={dictionary.localeNames}
@@ -24,7 +24,7 @@ describe("SiteHeader", () => {
     expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute("href", "#home");
     expect(screen.getByRole("link", { name: "Pricing" })).toHaveAttribute("href", "#pricing");
     expect(screen.getByRole("link", { name: "Contact" })).toHaveAttribute("href", "#contact");
-    expect(screen.getByRole("link", { name: /buy membership/i })).toHaveAttribute("href", "/en/buy-membership");
+    expect(screen.getByRole("link", { name: /join now/i })).toHaveAttribute("href", "#contact");
   });
 
   it("rewrites section links to root anchors on non-home routes", () => {
@@ -33,7 +33,7 @@ describe("SiteHeader", () => {
         locale="en"
         currentPath="/en/policies/privacy"
         navItems={dictionary.navItems}
-        buyMembershipLabel={dictionary.header.buyMembership}
+        joinLabel={dictionary.header.joinNow}
         primaryNavLabel={dictionary.header.primaryNavLabel}
         languageSwitcherLabel={dictionary.header.languageSwitcherLabel}
         localeNames={dictionary.localeNames}

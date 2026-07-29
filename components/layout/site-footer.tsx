@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { buttonStyles } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import {
   CONTACT_ADDRESS_LINES,
@@ -25,7 +26,11 @@ type SiteFooterProps = {
   contactTitle: string;
   facebookLabel: string;
   instagramLabel: string;
-  buyMembershipLabel: string;
+  joinLabel: string;
+  ctaTitle: string;
+  ctaText: string;
+  ctaButton: string;
+  rightsLabel: string;
 };
 
 function resolveSectionHref(locale: Locale, isHomePage: boolean, href: string) {
@@ -43,87 +48,139 @@ export function SiteFooter({
   contactTitle,
   facebookLabel,
   instagramLabel,
-  buyMembershipLabel,
+  joinLabel,
+  ctaTitle,
+  ctaText,
+  ctaButton,
+  rightsLabel,
 }: SiteFooterProps) {
+  const joinHref = resolveSectionHref(locale, isHomePage, "#contact");
+  const year = new Date().getFullYear();
+
   return (
-    <footer className="bg-(--color-footer) py-12 pb-[calc(3rem+env(safe-area-inset-bottom))] text-white sm:py-14 sm:pb-[calc(3.5rem+env(safe-area-inset-bottom))]">
-      <div className={cn(SECTION_CONTAINER_CLASS, "grid gap-10 md:grid-cols-2 xl:grid-cols-4") }>
-        <div>
-          <p className="mb-4 text-2xl font-bold sm:mb-5 sm:text-3xl">{SITE_NAME}</p>
-          <p className="max-w-xs text-base leading-relaxed text-white/70 sm:text-lg">{siteTagline}</p>
-          <div className="mt-6 flex gap-3">
+    <footer className="bg-[image:var(--gradient-ink)] text-white">
+      <div
+        className={cn(
+          SECTION_CONTAINER_CLASS,
+          // Extra bottom space on mobile so the sticky Join bar never covers content.
+          "pt-14 pb-[calc(7rem+env(safe-area-inset-bottom))] lg:pb-[calc(2.5rem+env(safe-area-inset-bottom))]",
+        )}
+      >
+        {/* CTA band */}
+        <div className="relative overflow-hidden rounded-[2rem] bg-[image:var(--gradient-brand)] px-6 py-10 shadow-(--shadow-card) sm:px-12 sm:py-12">
+          <div className="bg-grid pointer-events-none absolute inset-0 opacity-20" aria-hidden="true" />
+          <div className="relative flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <h2 className="font-display text-3xl font-extrabold leading-tight text-white sm:text-4xl">{ctaTitle}</h2>
+              <p className="mt-2 max-w-xl text-base text-white/85 sm:text-lg">{ctaText}</p>
+            </div>
             <a
-              href={SOCIAL_FACEBOOK_URL}
-              target="_blank"
-              rel="noreferrer noopener"
-              aria-label={facebookLabel}
-              className="rounded-lg bg-white/8 p-2.5 text-white/80 hover:text-white sm:p-3"
+              href={joinHref}
+              className={buttonStyles({
+                variant: "secondary",
+                size: "lg",
+                className: "shrink-0 whitespace-nowrap !text-(--color-brand)",
+              })}
             >
-              <Icon name="facebook" />
-            </a>
-            <a
-              href={SOCIAL_INSTAGRAM_URL}
-              target="_blank"
-              rel="noreferrer noopener"
-              aria-label={instagramLabel}
-              className="rounded-lg bg-white/8 p-2.5 text-white/80 hover:text-white sm:p-3"
-            >
-              <Icon name="instagram" />
+              {ctaButton}
+              <Icon name="arrow-right" className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />
             </a>
           </div>
         </div>
 
-        <div>
-          <h3 className="mb-4 text-2xl font-bold sm:text-3xl">{quickLinksTitle}</h3>
-          <ul className="space-y-3 text-base text-white/80 sm:text-lg">
-            {navItems.filter((item) => item.kind === "section").map((item) => (
-              <li key={item.label}>
-                <Link href={resolveSectionHref(locale, isHomePage, item.href)} className="hover:text-white">
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <Link href={getLocalePath(locale, "/buy-membership")} className="hover:text-white">
-                {buyMembershipLabel}
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <h3 className="mb-4 text-2xl font-bold sm:text-3xl">{policiesTitle}</h3>
-          <ul className="space-y-3 text-base text-white/80 sm:text-lg">
-            {policyLinks.map((policy) => (
-              <li key={policy.id}>
-                <Link href={policy.href} className="hover:text-white">
-                  {policy.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        <div id="contact" className="scroll-mt-28">
-          <h3 className="mb-4 text-2xl font-bold sm:text-3xl">{contactTitle}</h3>
-          <ul className="space-y-4 text-base text-white/80 sm:text-lg">
-            <li className="flex items-start gap-3">
-              <Icon name="map-pin" className="mt-1 text-(--color-brand)" />
-              <span className="wrap-break-word">
-                {CONTACT_ADDRESS_LINES.map((line) => (
-                  <span key={line} className="block">
-                    {line}
-                  </span>
-                ))}
+        {/* Columns */}
+        <div className="mt-14 grid gap-10 md:grid-cols-2 xl:grid-cols-4">
+          <div>
+            <div className="flex items-center gap-2.5">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[image:var(--gradient-brand)] text-white">
+                <Icon name="dumbbell" className="h-5 w-5" />
               </span>
-            </li>
-            <li className="flex items-center gap-3">
-              <Icon name="phone" className="text-(--color-brand)" />
-              <a href={`tel:${CONTACT_PHONE_RAW}`} className="hover:text-white">
-                {CONTACT_PHONE_DISPLAY}
+              <p className="font-display text-2xl font-extrabold">{SITE_NAME}</p>
+            </div>
+            <p className="mt-4 max-w-xs text-base leading-relaxed text-white/65">{siteTagline}</p>
+            <div className="mt-6 flex gap-3">
+              <a
+                href={SOCIAL_FACEBOOK_URL}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label={facebookLabel}
+                className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white/8 text-white/80 transition hover:bg-(--color-brand) hover:text-white"
+              >
+                <Icon name="facebook" />
               </a>
-            </li>
-          </ul>
+              <a
+                href={SOCIAL_INSTAGRAM_URL}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label={instagramLabel}
+                className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white/8 text-white/80 transition hover:bg-(--color-brand) hover:text-white"
+              >
+                <Icon name="instagram" />
+              </a>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-base font-bold uppercase tracking-wide text-white/50">{quickLinksTitle}</h3>
+            <ul className="mt-4 space-y-3 text-base text-white/80">
+              {navItems
+                .filter((item) => item.kind === "section")
+                .map((item) => (
+                  <li key={item.label}>
+                    <Link
+                      href={resolveSectionHref(locale, isHomePage, item.href)}
+                      className="transition hover:text-(--color-brand-bright)"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              <li>
+                <a href={joinHref} className="font-semibold text-white transition hover:text-(--color-brand-bright)">
+                  {joinLabel}
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-base font-bold uppercase tracking-wide text-white/50">{policiesTitle}</h3>
+            <ul className="mt-4 space-y-3 text-base text-white/80">
+              {policyLinks.map((policy) => (
+                <li key={policy.id}>
+                  <Link href={policy.href} className="transition hover:text-(--color-brand-bright)">
+                    {policy.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-base font-bold uppercase tracking-wide text-white/50">{contactTitle}</h3>
+            <ul className="mt-4 space-y-4 text-base text-white/80">
+              <li className="flex items-start gap-3">
+                <Icon name="map-pin" className="mt-1 shrink-0 text-(--color-brand-bright)" />
+                <span className="wrap-break-word">
+                  {CONTACT_ADDRESS_LINES.map((line) => (
+                    <span key={line} className="block">
+                      {line}
+                    </span>
+                  ))}
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <Icon name="phone" className="shrink-0 text-(--color-brand-bright)" />
+                <a href={`tel:${CONTACT_PHONE_RAW}`} className="transition hover:text-white">
+                  {CONTACT_PHONE_DISPLAY}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-12 border-t border-white/10 pt-6 text-sm text-white/50">
+          © {year} {SITE_NAME}. {rightsLabel}
         </div>
       </div>
     </footer>

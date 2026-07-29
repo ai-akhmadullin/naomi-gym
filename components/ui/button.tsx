@@ -7,9 +7,9 @@ type ButtonSize = "sm" | "md" | "lg";
 
 const VARIANT_CLASSES: Record<ButtonVariant, string> = {
   primary:
-    "bg-[var(--color-brand)] text-white hover:bg-[var(--color-brand-strong)] focus-visible:ring-[var(--color-brand)]",
+    "bg-[image:var(--gradient-brand)] text-white shadow-[var(--shadow-brand)] hover:-translate-y-0.5 hover:shadow-[var(--shadow-brand-lift)] focus-visible:ring-[var(--color-brand)]",
   secondary:
-    "bg-white text-[var(--color-brand)] hover:bg-[var(--color-brand)]/10 focus-visible:ring-[var(--color-brand)]",
+    "border border-[var(--color-border)] bg-white text-[var(--color-text)] shadow-[var(--shadow-soft)] hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--color-brand)_45%,transparent)] hover:text-[var(--color-brand)] focus-visible:ring-[var(--color-brand)]",
   ghost:
     "bg-transparent text-[var(--color-text)] hover:bg-[var(--color-bg-muted)] focus-visible:ring-[var(--color-brand)]",
   outline:
@@ -19,7 +19,7 @@ const VARIANT_CLASSES: Record<ButtonVariant, string> = {
 const SIZE_CLASSES: Record<ButtonSize, string> = {
   sm: "h-10 px-4 text-sm",
   md: "h-11 px-5 text-sm sm:h-12 sm:px-6 sm:text-base",
-  lg: "h-12 px-6 text-base sm:h-14 sm:px-8 sm:text-xl",
+  lg: "h-13 px-6 text-base sm:h-15 sm:px-9 sm:text-lg",
 };
 
 type ButtonStyleOptions = {
@@ -34,7 +34,7 @@ export function buttonStyles({
   className,
 }: ButtonStyleOptions = {}) {
   return cn(
-    "inline-flex items-center justify-center rounded-xl text-center font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)] disabled:cursor-not-allowed disabled:opacity-60",
+    "group inline-flex items-center justify-center gap-2 rounded-full text-center font-semibold transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg)] active:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0",
     VARIANT_CLASSES[variant],
     SIZE_CLASSES[size],
     className,

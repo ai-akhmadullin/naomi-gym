@@ -10,12 +10,12 @@ test("desktop nav section links update hash", async ({ page }) => {
   await expect(page).toHaveURL(/#reviews$/);
 });
 
-test("buy membership button routes to buy page", async ({ page }) => {
+test("join button scrolls to the contact section", async ({ page }) => {
   await page.goto("/en");
 
-  await page.getByRole("link", { name: "Buy Membership" }).first().click();
-  await expect(page).toHaveURL("/en/buy-membership");
-  await expect(page.getByRole("heading", { name: "Choose Your Membership" })).toBeVisible();
+  await page.getByRole("link", { name: /join now/i }).first().click();
+  await expect(page).toHaveURL(/#contact$/);
+  await expect(page.getByRole("heading", { name: "Ready to train? Come say hi." })).toBeVisible();
 });
 
 test("mobile drawer links navigate to section hash", async ({ page }) => {

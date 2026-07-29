@@ -5,9 +5,10 @@ import Link from "next/link";
 import type { MouseEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 
-import { getEquivalentLocalePath, getLocalePath, type Locale } from "@/lib/i18n";
+import { getEquivalentLocalePath, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
+import { buttonStyles } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 
 type DrawerLink = {
@@ -19,7 +20,8 @@ type MobileNavDrawerProps = {
   locale: Locale;
   currentPath: string;
   links: DrawerLink[];
-  buyMembershipLabel: string;
+  joinLabel: string;
+  joinHref: string;
   languageSwitcherLabel: string;
   localeNames: Record<Locale, string>;
   openLabel: string;
@@ -33,7 +35,8 @@ export function MobileNavDrawer({
   locale,
   currentPath,
   links,
-  buyMembershipLabel,
+  joinLabel,
+  joinHref,
   languageSwitcherLabel,
   localeNames,
   openLabel,
@@ -45,7 +48,6 @@ export function MobileNavDrawer({
   const [isOpen, setIsOpen] = useState(false);
   const triggerButtonRef = useRef<HTMLButtonElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const drawerLinks = [...links, { label: buyMembershipLabel, href: getLocalePath(locale, "/buy-membership") }];
 
   useEffect(() => {
     if (!isOpen) {
@@ -109,22 +111,22 @@ export function MobileNavDrawer({
           aria-label={openLabel}
           aria-controls="mobile-menu"
           aria-expanded={isOpen}
-          className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-(--color-border) text-foreground"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-(--color-border) text-foreground"
           onClick={openDrawer}
         >
           <Icon name="menu" className="h-6 w-6" />
         </button>
 
         <Dialog.Portal>
-          <Dialog.Overlay className="fixed inset-0 z-40 bg-black/50 backdrop-blur-[1px] transition-opacity duration-200 data-[state=open]:opacity-100 data-[state=closed]:opacity-0" />
+          <Dialog.Overlay className="fixed inset-0 z-40 bg-black/50 backdrop-blur-[2px] transition-opacity duration-200 data-[state=open]:opacity-100 data-[state=closed]:opacity-0" />
 
           <Dialog.Content
             id="mobile-menu"
             aria-modal="true"
             className={cn(
-              "fixed right-[calc(env(safe-area-inset-right)+0.50rem)] top-[calc(env(safe-area-inset-top)+0.50rem)] z-50",
-              "flex max-h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-1.5rem)] w-[66%] max-w-60 flex-col overflow-y-auto",
-              "rounded-2xl border border-(--color-border) bg-white p-4 shadow-2xl",
+              "fixed right-[calc(env(safe-area-inset-right)+0.5rem)] top-[calc(env(safe-area-inset-top)+0.5rem)] z-50",
+              "flex max-h-[calc(100dvh-env(safe-area-inset-top)-env(safe-area-inset-bottom)-1.5rem)] w-[72%] max-w-72 flex-col overflow-y-auto",
+              "rounded-3xl border border-(--color-border) bg-white p-4 shadow-2xl",
               "transition-transform duration-200 ease-out",
               "data-[state=open]:translate-x-0 data-[state=closed]:translate-x-full",
             )}
@@ -138,7 +140,7 @@ export function MobileNavDrawer({
             }}
           >
             <div className="mb-4 flex items-center justify-between">
-              <Dialog.Title className="text-lg font-semibold">{menuTitle}</Dialog.Title>
+              <Dialog.Title className="font-display text-lg font-bold">{menuTitle}</Dialog.Title>
               <Dialog.Description className="sr-only">{menuDescription}</Dialog.Description>
 
               <Dialog.Close asChild>
@@ -146,7 +148,7 @@ export function MobileNavDrawer({
                   ref={closeButtonRef}
                   type="button"
                   aria-label={closeLabel}
-                  className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-(--color-border)"
+                  className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-(--color-border)"
                 >
                   <Icon name="close" className="h-6 w-6" />
                 </button>
@@ -154,12 +156,12 @@ export function MobileNavDrawer({
             </div>
 
             <nav aria-label={navLabel}>
-              <ul className="space-y-2">
-                {drawerLinks.map((item) => (
+              <ul className="space-y-1">
+                {links.map((item) => (
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className="block rounded-lg px-3 py-2 text-lg font-semibold text-foreground hover:bg-(--color-bg-muted)"
+                      className="block rounded-xl px-3 py-2.5 text-lg font-semibold text-foreground hover:bg-(--color-bg-muted) hover:text-(--color-brand)"
                       onClick={(event) => onLinkClick(item.href, event)}
                     >
                       {item.label}
@@ -168,6 +170,15 @@ export function MobileNavDrawer({
                 ))}
               </ul>
             </nav>
+
+            <Link
+              href={joinHref}
+              className={buttonStyles({ variant: "primary", size: "md", className: "mt-4 w-full" })}
+              onClick={(event) => onLinkClick(joinHref, event)}
+            >
+              {joinLabel}
+              <Icon name="arrow-right" className="h-4 w-4" />
+            </Link>
 
             <div className="mt-5 border-t border-(--color-border) pt-4">
               <p className="mb-2 text-sm font-semibold text-(--color-text-muted)">{languageSwitcherLabel}</p>

@@ -4,6 +4,7 @@ import { DesktopNavLinks } from "@/components/layout/desktop-nav-links";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { MobileNavDrawer } from "@/components/layout/mobile-nav-drawer";
 import { buttonStyles } from "@/components/ui/button";
+import { Icon } from "@/components/ui/icon";
 import { SECTION_CONTAINER_CLASS, SITE_NAME } from "@/lib/constants";
 import { getLocalePath, type Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -13,7 +14,7 @@ type SiteHeaderProps = {
   locale: Locale;
   currentPath: string;
   navItems: NavItem[];
-  buyMembershipLabel: string;
+  joinLabel: string;
   primaryNavLabel: string;
   languageSwitcherLabel: string;
   localeNames: Record<Locale, string>;
@@ -48,7 +49,7 @@ export function SiteHeader({
   locale,
   currentPath,
   navItems,
-  buyMembershipLabel,
+  joinLabel,
   primaryNavLabel,
   languageSwitcherLabel,
   localeNames,
@@ -56,20 +57,23 @@ export function SiteHeader({
 }: SiteHeaderProps) {
   const navLinks = resolveLinks(locale, currentPath, navItems);
   const homePath = getLocalePath(locale);
-  const buyMembershipHref = getLocalePath(locale, "/buy-membership");
   const isHomeRoute = currentPath === homePath;
+  const joinHref = isHomeRoute ? "#contact" : `${homePath}#contact`;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-(--color-border) bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-(--color-border)/70 bg-white/80 shadow-[0_1px_0_rgba(8,30,19,0.04),0_8px_24px_-16px_rgba(8,30,19,0.18)] backdrop-blur-md">
       <div
         className={cn(
           SECTION_CONTAINER_CLASS,
-          "flex h-20 items-center justify-between gap-4 sm:h-24 sm:gap-6",
+          "flex h-18 items-center justify-between gap-4 sm:h-20 sm:gap-6",
           "lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center",
         )}
       >
-        <Link href={homePath} className="flex shrink-0 items-center gap-3" aria-label={`${SITE_NAME} home`}>
-          <span className="whitespace-nowrap text-[1.85rem] font-bold leading-none tracking-tight text-foreground sm:text-[2.2rem] xl:text-[2.45rem]">
+        <Link href={homePath} className="flex shrink-0 items-center gap-2.5" aria-label={`${SITE_NAME} home`}>
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[image:var(--gradient-brand)] text-white shadow-(--shadow-brand)">
+            <Icon name="dumbbell" className="h-5 w-5" />
+          </span>
+          <span className="font-display whitespace-nowrap text-xl font-extrabold tracking-tight text-foreground sm:text-2xl">
             {SITE_NAME}
           </span>
         </Link>
@@ -87,23 +91,27 @@ export function SiteHeader({
         </nav>
 
         <div className="hidden shrink-0 items-center lg:flex">
-          <Link
-            href={buyMembershipHref}
+          {/* Plain anchor: in-page hash scrolling is more reliable than next/link
+              for same-page anchors, and still navigates correctly from subpages. */}
+          <a
+            href={joinHref}
             className={buttonStyles({
               variant: "primary",
               size: "md",
-              className: "whitespace-nowrap rounded-2xl px-5 text-base lg:px-6 lg:text-lg",
+              className: "whitespace-nowrap",
             })}
           >
-            {buyMembershipLabel}
-          </Link>
+            {joinLabel}
+            <Icon name="arrow-right" className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </a>
         </div>
 
         <MobileNavDrawer
           locale={locale}
           currentPath={currentPath}
           links={navLinks}
-          buyMembershipLabel={buyMembershipLabel}
+          joinLabel={joinLabel}
+          joinHref={joinHref}
           languageSwitcherLabel={languageSwitcherLabel}
           localeNames={localeNames}
           openLabel={mobileNavCopy.openLabel}

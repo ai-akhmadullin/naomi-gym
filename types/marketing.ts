@@ -13,6 +13,15 @@ export type PricingPlan = {
   billingPeriodLabel: string;
   highlight: boolean;
   ctaLabel: string;
+  tagline?: string;
+  features?: string[];
+};
+
+export type Benefit = {
+  id: string;
+  icon: IconName;
+  title: string;
+  description: string;
 };
 
 export type Trainer = {
@@ -63,13 +72,31 @@ export type PolicyLink = {
   href: string;
 };
 
-export type CheckoutIntent = {
-  planId: string;
-};
-
-export type CheckoutResult = {
-  status: "stub" | "ready";
-  redirectUrl?: string;
-  messageKey?: "planRequired" | "preview";
-  message?: string;
-};
+// Re-exported here so content/types stay decoupled from the Icon component file.
+export type IconName =
+  | "menu"
+  | "close"
+  | "star"
+  | "chevron-down"
+  | "map-pin"
+  | "clock"
+  | "phone"
+  | "mail"
+  | "instagram"
+  | "facebook"
+  | "dumbbell"
+  | "layers"
+  | "heart-handshake"
+  | "sunrise"
+  | "sparkles"
+  | "users"
+  | "shield-check"
+  | "arrow-right"
+  | "check"
+  | "quote"
+  | "send"
+  | "message-circle"
+  | "whatsapp"
+  | "zalo"
+  | "chevron-left"
+  | "chevron-right";

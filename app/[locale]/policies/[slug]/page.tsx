@@ -47,7 +47,7 @@ export default async function LocalizedPolicyPage({ params }: PageProps) {
 
   const currentPath = getPolicyPath(locale, policySlug);
   const homePath = getLocalePath(locale);
-  const buyMembershipPath = getLocalePath(locale, "/buy-membership");
+  const joinHref = `${homePath}#contact`;
   const policyLinks = dictionary.policies.links.map((item) => ({
     ...item,
     href: getPolicyPath(locale, item.id as PolicySlug),
@@ -59,7 +59,7 @@ export default async function LocalizedPolicyPage({ params }: PageProps) {
         locale={locale}
         currentPath={currentPath}
         navItems={dictionary.navItems}
-        buyMembershipLabel={dictionary.header.buyMembership}
+        joinLabel={dictionary.header.joinNow}
         primaryNavLabel={dictionary.header.primaryNavLabel}
         languageSwitcherLabel={dictionary.header.languageSwitcherLabel}
         localeNames={dictionary.localeNames}
@@ -67,8 +67,8 @@ export default async function LocalizedPolicyPage({ params }: PageProps) {
       />
       <main className="min-h-[calc(100dvh-6rem)] bg-(--color-bg-muted) py-20">
         <div className={cn(SECTION_CONTAINER_CLASS, "max-w-4xl") }>
-          <article className="rounded-2xl border border-(--color-border) bg-white p-8 shadow-(--shadow-soft) sm:p-10">
-            <h1 className="text-5xl font-bold text-foreground">{policy.title}</h1>
+          <article className="rounded-3xl border border-(--color-border) bg-white p-8 shadow-(--shadow-soft) sm:p-10">
+            <h1 className="font-display text-4xl font-bold text-foreground sm:text-5xl">{policy.title}</h1>
             <p className="mt-4 text-2xl text-(--color-text-muted)">{policy.summary}</p>
             <p className="mt-8 text-lg leading-relaxed text-(--color-text-muted)">
               {dictionary.policies.placeholder}
@@ -78,8 +78,8 @@ export default async function LocalizedPolicyPage({ params }: PageProps) {
               <Link href={homePath} className={buttonStyles({ variant: "primary" })}>
                 {dictionary.policies.backToHome}
               </Link>
-              <Link href={buyMembershipPath} className={buttonStyles({ variant: "secondary" })}>
-                {dictionary.policies.viewMemberships}
+              <Link href={joinHref} className={buttonStyles({ variant: "secondary" })}>
+                {dictionary.policies.join}
               </Link>
             </div>
           </article>

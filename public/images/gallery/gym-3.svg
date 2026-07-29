@@ -1,13 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-label="Main Floor">
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="520" viewBox="0 0 680 520" role="img" aria-label="Facility area">
+
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#a0a6ad"/>
-      <stop offset="100%" stop-color="#70777f"/>
+    <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f9e84"/>
+      <stop offset="100%" stop-color="#0d7043"/>
     </linearGradient>
   </defs>
-  <rect width="1200" height="800" fill="url(#g)"/>
-  <circle cx="220" cy="180" r="130" fill="rgba(255,255,255,0.13)"/>
-  <circle cx="1020" cy="650" r="190" fill="rgba(255,255,255,0.1)"/>
-  <rect x="140" y="570" width="920" height="90" rx="18" fill="rgba(0,0,0,0.2)"/>
-  <text x="170" y="628" fill="white" font-size="56" font-family="Arial, Helvetica, sans-serif" font-weight="700">Main Floor</text>
+  <rect width="680" height="520" fill="url(#g2)"/>
+  <circle cx="590" cy="90" r="150" fill="rgba(255,255,255,0.08)"/>
+  <circle cx="80" cy="450" r="120" fill="rgba(255,255,255,0.06)"/>
+  <circle cx="340" cy="240" r="118" fill="rgba(255,255,255,0.10)"/>
+  <g transform="translate(276 176) scale(5.333333333333333)" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"><path d="m12 3 8.5 4.5-8.5 4.5L3.5 7.5 12 3Z M3.5 12l8.5 4.5 8.5-4.5 M3.5 16.5l8.5 4.5 8.5-4.5" /></g>
 </svg>

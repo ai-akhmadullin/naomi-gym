@@ -18,7 +18,8 @@ describe("MobileNavDrawer", () => {
           { label: "Home", href: "#home" },
           { label: "Pricing", href: "#pricing" },
         ]}
-        buyMembershipLabel={dictionary.header.buyMembership}
+        joinLabel={dictionary.header.joinNow}
+        joinHref="#contact"
         languageSwitcherLabel={dictionary.header.languageSwitcherLabel}
         localeNames={dictionary.localeNames}
         openLabel={dictionary.mobileNav.openLabel}

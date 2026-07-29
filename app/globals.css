@@ -1,25 +1,78 @@
 @import "tailwindcss";
 
 :root {
-  --font-geist: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
-
+  /* Surfaces */
   --color-bg: #ffffff;
-  --color-bg-muted: #f4f6f5;
-  --color-text: #121417;
-  --color-text-muted: #5b6168;
-  --color-border: #d6dadd;
+  --color-bg-muted: #f0f6f2;
+  --color-bg-subtle: #f7faf8;
+  --color-ink: #07150e;
+
+  /* Text */
+  --color-text: #0d1a13;
+  --color-text-muted: #586860;
+  --color-border: #e2ebe5;
+
+  /* Brand greens */
   --color-brand: #0d7043;
   --color-brand-strong: #0a5a36;
-  --color-footer: #101317;
+  --color-brand-bright: #14b866;
+  --color-accent: #c8f24a;
 
-  --shadow-soft: 0 8px 28px rgba(10, 22, 15, 0.06);
-  --shadow-card: 0 12px 36px rgba(10, 22, 15, 0.2);
+  /* Gradients */
+  --gradient-brand: linear-gradient(135deg, #14b866 0%, #0d7043 100%);
+  --gradient-brand-strong: linear-gradient(135deg, #11a35c 0%, #0a5a36 100%);
+  --gradient-ink: linear-gradient(160deg, #0c2419 0%, #07150e 100%);
+
+  /* Shadows — elevation ramp.
+     Each level stacks a tight contact shadow under wider, fainter ambient
+     layers, so the falloff reads as light instead of as one flat grey slab.
+     Every layer carries a negative spread, which keeps the shadow hugging its
+     element: the bleed past the element box stays small and, more importantly,
+     *known*, so a clipping ancestor can reserve exactly that much room instead
+     of slicing the shadow into a hard edge (see HorizontalScroller). Tinted
+     with the palette ink rather than neutral black so shadows stay green on
+     --color-bg-muted instead of turning grey.
+     soft -> lift is the resting/hover pair for cards; card is for large
+     surfaces (hero frame, CTA panels); brand -> brand-lift is the same pair in
+     brand green, for gradient buttons and icon tiles.
+     Blur radii are kept deliberately short. A wide, low-alpha blur spans only a
+     few 8-bit luminance steps over a long distance, so each step shows up as a
+     faint contour line on a flat background; a shorter, slightly darker blur
+     puts the same contrast into a narrower band and reads smooth. It also keeps
+     the bleed small enough for a scroll container to reserve room for.
+     Painted bleed past the box, top / bottom / sides — MEASURED, not derived
+     (Chrome's blur tail runs to roughly the full blur radius, not half of it):
+       soft  0 / 16 / 7      card        0 / 43 / 20
+       lift  0 / 28 / 13     brand       2 / 26 / 14   brand-lift 3 / 33 / 17 */
+  --shadow-soft:
+    0 1px 2px -1px rgba(9, 34, 22, 0.06),
+    0 4px 8px -4px rgba(9, 34, 22, 0.07),
+    0 10px 18px -9px rgba(9, 34, 22, 0.12);
+  --shadow-card:
+    0 2px 4px -2px rgba(9, 34, 22, 0.06),
+    0 10px 18px -8px rgba(9, 34, 22, 0.11),
+    0 24px 38px -18px rgba(9, 36, 23, 0.24);
+  --shadow-lift:
+    0 2px 4px -2px rgba(9, 34, 22, 0.07),
+    0 7px 12px -5px rgba(9, 34, 22, 0.12),
+    0 16px 24px -11px rgba(9, 36, 23, 0.22);
+  --shadow-brand:
+    0 1px 2px 0 rgba(10, 90, 54, 0.18),
+    0 5px 10px -3px rgba(13, 112, 67, 0.32),
+    0 12px 20px -8px rgba(13, 112, 67, 0.4);
+  --shadow-brand-lift:
+    0 1px 2px 0 rgba(10, 90, 54, 0.2),
+    0 7px 13px -4px rgba(13, 112, 67, 0.36),
+    0 16px 26px -11px rgba(13, 112, 67, 0.44);
+
+  --font-sans-fallback: "Plus Jakarta Sans", "Segoe UI", "Helvetica Neue", sans-serif;
 }
 
 @theme inline {
   --color-background: var(--color-bg);
   --color-foreground: var(--color-text);
-  --font-sans: var(--font-geist);
+  --font-sans: var(--font-jakarta), var(--font-sans-fallback);
+  --font-display: var(--font-heading), var(--font-sans-fallback);
 }
 
 *,
@@ -33,6 +86,7 @@ html {
   min-height: 100%;
   overflow-x: clip;
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -42,7 +96,9 @@ body {
   overflow-x: clip;
   background: var(--color-bg);
   color: var(--color-text);
-  font-family: var(--font-geist);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 img,
@@ -52,4 +108,100 @@ canvas,
 iframe {
   display: block;
   max-width: 100%;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-brand) 24%, transparent);
+}
+
+/* Brand-tinted scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--color-brand) 35%, transparent);
+  border: 3px solid var(--color-bg);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--color-brand) 55%, transparent);
+}
+
+/* ---- Utilities ---- */
+.text-gradient {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.bg-grid {
+  background-image: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--color-brand) 16%, transparent) 1px,
+    transparent 1.5px
+  );
+  background-size: 22px 22px;
+}
+
+/* ---- Scroll reveal ----
+   Fails open: visible by default. Only the JS-applied "armed" state hides the
+   element, and "shown" animates it back in. No JS == always visible. */
+.reveal[data-reveal="armed"] {
+  opacity: 0;
+  transform: translateY(26px);
+  will-change: opacity, transform;
+}
+.reveal[data-reveal="shown"] {
+  animation: reveal-up 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+.animate-float {
+  animation: float-soft 6s ease-in-out infinite;
+}
+
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal,
+  .reveal[data-reveal="armed"],
+  .reveal[data-reveal="shown"] {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .animate-float {
+    animation: none;
+  }
 }

@@ -16,16 +16,23 @@ export function SectionHeading({
   return (
     <div
       className={cn(
-        "mb-8 space-y-2.5 sm:mb-12 sm:space-y-3",
+        "mb-8 sm:mb-12",
         align === "center" && "mx-auto max-w-3xl text-center",
         className,
       )}
     >
-      <h2 className="text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+      <h2 className="font-display text-balance text-3xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-4xl lg:text-5xl">
         {title}
       </h2>
       {subtitle ? (
-        <p className="text-pretty text-lg leading-relaxed text-(--color-text-muted) sm:text-xl">{subtitle}</p>
+        <p
+          className={cn(
+            "mt-3 text-pretty text-lg leading-relaxed text-(--color-text-muted) sm:text-xl",
+            align === "center" && "mx-auto max-w-2xl",
+          )}
+        >
+          {subtitle}
+        </p>
       ) : null}
     </div>
   );

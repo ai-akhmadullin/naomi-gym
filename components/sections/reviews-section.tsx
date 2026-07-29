@@ -67,42 +67,43 @@ export function ReviewsSection({
   }, []);
 
   return (
-    <SectionShell id="reviews">
+    <SectionShell id="reviews" className="bg-(--color-bg-muted)">
       <SectionHeading title={title} subtitle={subtitle} align="center" />
 
       <HorizontalScroller ariaLabel={scrollerLabel} showScrollIndicator>
         {displayReviews.map((review) => (
-          <Card key={review.id} className="h-full p-5 shadow-none sm:p-6">
+          <Card key={review.id} hover className="flex h-full flex-col p-6 sm:p-7">
+            <Icon name="quote" className="h-9 w-9 text-(--color-brand)/25" />
             <div
-              className="mb-5 flex gap-2 text-(--color-brand)"
+              className="mt-3 mb-4 flex gap-1 text-(--color-brand)"
               aria-label={starsLabelTemplate.replace("{rating}", String(review.rating))}
             >
               {Array.from({ length: review.rating }).map((_, index) => (
-                <Icon key={`${review.id}-${index}`} name="star" className="h-5 w-5 sm:h-6 sm:w-6" />
+                <Icon key={`${review.id}-${index}`} name="star" className="h-5 w-5" />
               ))}
             </div>
-            <blockquote className="text-pretty text-lg leading-relaxed text-foreground [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:6] overflow-hidden sm:text-xl">
+            <blockquote className="text-pretty text-base leading-relaxed text-foreground [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:7] overflow-hidden sm:text-lg">
               {review.quote}
             </blockquote>
-            <div className="mt-6 flex items-center gap-4">
+            <div className="mt-6 flex items-center gap-4 border-t border-(--color-border) pt-5">
               {review.avatar ? (
                 <img
                   src={review.avatar}
                   alt={review.memberName}
-                  width={56}
-                  height={56}
-                  className="h-12 w-12 rounded-full border border-(--color-border) object-cover sm:h-14 sm:w-14"
+                  width={48}
+                  height={48}
+                  className="h-12 w-12 rounded-full border border-(--color-border) object-cover"
                   loading="lazy"
                 />
               ) : (
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-(--color-border) bg-(--color-bg-muted) text-lg font-semibold text-(--color-text-muted) sm:h-14 sm:w-14 sm:text-xl">
+                <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[image:var(--gradient-brand)] text-lg font-bold text-white">
                   {review.memberName.charAt(0).toUpperCase()}
                 </span>
               )}
               <div>
-                <p className="text-xl font-semibold text-foreground sm:text-2xl">{review.memberName}</p>
+                <p className="text-lg font-semibold text-foreground">{review.memberName}</p>
                 {review.source === "google" ? (
-                  <p className="text-base text-(--color-text-muted) sm:text-xl">
+                  <p className="text-sm text-(--color-text-muted)">
                     {review.sourceUrl ? (
                       <a
                         href={review.sourceUrl}
