@@ -32,9 +32,20 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, error: "Name and contact are required." }, { status: 400 });
   }
 
-  // Demo build: we simply acknowledge the enquiry. To make this live, forward the
-  // lead to wherever the gym wants it — email (Resend / Nodemailer), a Telegram or
-  // Zalo bot, a Google Sheet, or a CRM — using the values below.
+  // ⚠️ TODO(launch): this is a STUB — the enquiry is only logged to the server
+  // console and is NOT delivered to anyone. The gym owner will not see leads
+  // until this is wired up. Add ONE delivery channel below (all the data you
+  // need is in { name, contact, plan, message }):
+  //
+  //   • Telegram: fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, ...)
+  //       with chat_id = the owner's chat ID. Instant push to their phone.
+  //   • Email:    Resend (`resend.emails.send(...)`) or SMTP via Nodemailer.
+  //   • Sheet:    POST to a Google Apps Script web-app URL that appends a row.
+  //
+  // Put secrets in env vars (e.g. TELEGRAM_BOT_TOKEN / RESEND_API_KEY) and read
+  // them via process.env. IMPORTANT: if delivery FAILS, return a 500 (ok:false)
+  // so the form shows its error state — otherwise the visitor sees "Message
+  // sent!" while the lead was actually lost.
   console.info("[contact] new enquiry", { name, contact, plan, message });
 
   return NextResponse.json({ ok: true });
