@@ -15,7 +15,7 @@ export default function LocalizedNotFound({ params }: NotFoundProps) {
   const dictionary = getDictionary(locale);
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-(--color-bg-muted) px-6">
+    <main className="flex min-h-screen items-center justify-center bg-(--color-paper) px-6">
       <section className="max-w-xl rounded-3xl border border-(--color-border) bg-white p-10 text-center shadow-(--shadow-card)">
         <p className="text-sm font-bold uppercase tracking-[0.18em] text-(--color-brand)">404</p>
         <h1 className="mt-3 font-display text-4xl font-bold text-foreground">{dictionary.notFound.title}</h1>

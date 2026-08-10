@@ -1,27 +1,66 @@
 @import "tailwindcss";
 
 :root {
-  /* Surfaces */
+  /* ---- Surfaces ----
+     "paper" is a warm bone rather than the old mint tint. The whole palette was
+     previously green — page background, section background, card, badge, icon —
+     which left the eye nowhere to rest and made the brand green read as
+     wallpaper instead of as an accent. A neutral-warm ground puts the green
+     back to work. */
   --color-bg: #ffffff;
-  --color-bg-muted: #f0f6f2;
-  --color-bg-subtle: #f7faf8;
-  --color-ink: #07150e;
+  --color-paper: #f6f5f0;
+  --color-paper-deep: #efeee7;
+  --color-bg-subtle: #fbfaf7;
+  --color-ink: #071a11;
+  --color-ink-soft: #0e2b1d;
 
-  /* Text */
-  --color-text: #0d1a13;
-  --color-text-muted: #586860;
-  --color-border: #e2ebe5;
+  /* ---- Text ---- */
+  --color-text: #101c16;
+  --color-text-muted: #5c6a62;
+  --color-text-faint: #8a958e;
+  --color-border: #e5e2d8;
+  --color-border-strong: #d5d1c4;
 
-  /* Brand greens */
+  /* ---- Brand ---- */
   --color-brand: #0d7043;
   --color-brand-strong: #0a5a36;
   --color-brand-bright: #14b866;
+  --color-brand-tint: #e7f2ea;
+  /* The lime was declared but never used. It is the page's only non-green
+     accent and is rationed deliberately: hero underline, "most popular" flag,
+     dark-section highlights. Nothing else. */
   --color-accent: #c8f24a;
+  --color-accent-deep: #a8d422;
+  --color-accent-ink: #1a2a06;
 
-  /* Gradients */
+  /* ---- Gradients ---- */
   --gradient-brand: linear-gradient(135deg, #14b866 0%, #0d7043 100%);
   --gradient-brand-strong: linear-gradient(135deg, #11a35c 0%, #0a5a36 100%);
-  --gradient-ink: linear-gradient(160deg, #0c2419 0%, #07150e 100%);
+  --gradient-ink: linear-gradient(160deg, #0d2b1d 0%, #061710 100%);
+
+  /* ---- Type scale ----
+     Fluid, so the jump from mobile to desktop is a ramp instead of two or three
+     breakpoint steps. Ratio widens as the sizes grow: body barely moves, the
+     display sizes move a lot, which is what gives a page typographic contrast
+     rather than "everything is 18px or 40px". */
+  --step-xs: clamp(0.75rem, 0.735rem + 0.07vw, 0.8125rem);
+  --step-sm: clamp(0.875rem, 0.85rem + 0.12vw, 0.9375rem);
+  --step-0: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem);
+  --step-1: clamp(1.0625rem, 1.01rem + 0.28vw, 1.1875rem);
+  --step-2: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  --step-3: clamp(1.5rem, 1.32rem + 0.9vw, 2.125rem);
+  --step-4: clamp(2rem, 1.6rem + 2vw, 3.25rem);
+  --step-5: clamp(2.6rem, 1.75rem + 3.6vw, 4.5rem);
+
+  /* ---- Radii ----
+     Four steps with meaning: chips, controls, cards, panels. Previously every
+     card was rounded-3xl and every control a pill regardless of size, so radius
+     carried no information about an element's rank. */
+  --radius-xs: 0.5rem;
+  --radius-sm: 0.75rem;
+  --radius-md: 1.125rem;
+  --radius-lg: 1.5rem;
+  --radius-xl: 2rem;
 
   /* Shadows — elevation ramp.
      Each level stacks a tight contact shadow under wider, fainter ambient
@@ -31,7 +70,7 @@
      *known*, so a clipping ancestor can reserve exactly that much room instead
      of slicing the shadow into a hard edge (see HorizontalScroller). Tinted
      with the palette ink rather than neutral black so shadows stay green on
-     --color-bg-muted instead of turning grey.
+     --color-paper instead of turning grey.
      soft -> lift is the resting/hover pair for cards; card is for large
      surfaces (hero frame, CTA panels); brand -> brand-lift is the same pair in
      brand green, for gradient buttons and icon tiles.
@@ -66,6 +105,10 @@
     0 16px 26px -11px rgba(13, 112, 67, 0.44);
 
   --font-sans-fallback: "Plus Jakarta Sans", "Segoe UI", "Helvetica Neue", sans-serif;
+  /* Numerals and eyebrows use the system mono stack. It costs no extra font
+     download and buys the one thing this page had none of: typographic
+     contrast against the two rounded geometric sans faces. */
+  --font-mono-stack: ui-monospace, "SF Mono", "JetBrains Mono", "Roboto Mono", monospace;
 }
 
 @theme inline {
@@ -73,6 +116,7 @@
   --color-foreground: var(--color-text);
   --font-sans: var(--font-jakarta), var(--font-sans-fallback);
   --font-display: var(--font-heading), var(--font-sans-fallback);
+  --font-mono: var(--font-mono-stack);
 }
 
 *,
@@ -97,8 +141,16 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
+  font-size: var(--step-0);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Display type wants tighter tracking than a UI sans ships with; the larger the
+   size, the more it wants. Applied once here so no heading has to remember. */
+.font-display {
+  letter-spacing: -0.022em;
+  font-feature-settings: "ss01", "cv01";
 }
 
 img,
@@ -111,7 +163,8 @@ iframe {
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--color-brand) 24%, transparent);
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
 }
 
 /* Brand-tinted scrollbar */
@@ -145,22 +198,79 @@ iframe {
   background-size: 22px 22px;
 }
 
+/* Fine film grain. Flat CSS gradients over large areas band on 8-bit displays
+   and read as "vector"; a few percent of noise dithers the ramp and is the
+   cheapest way to make a screen surface feel like a printed one. The turbulence
+   is generated once as a data URI so it costs no request. */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Matches whatever radius the host carries. mix-blend-mode promotes this
+     pseudo-element to its own compositing layer, and a composited child inside
+     an `overflow: hidden` + `border-radius` parent is clipped by some GPU paths
+     to the border-box RECTANGLE rather than the rounded rect — which fills the
+     rounded corner back in with a small square of blended noise. Rounding the
+     layer itself makes the artifact impossible regardless of how the ancestor
+     clips. Software rasterisation (headless) does not reproduce it, so this
+     cannot be caught by a screenshot test. */
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.26;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+}
+.grain-dark::after {
+  mix-blend-mode: overlay;
+  opacity: 0.22;
+}
+
+/* Soft decorative glow.
+   A painted radial gradient, NOT a `filter: blur()` circle. Two reasons:
+   1. `filter` promotes the element to its own compositing layer, and a
+      composited child of an `overflow: hidden` + `border-radius` box can be
+      clipped to the border-box rectangle instead of the rounded one on some GPU
+      paths — the blur then paints a small square back into the rounded corner.
+   2. A blur is a real per-frame convolution over the layer; a gradient is one
+      cheap paint. Five of these were running at up to 34rem square.
+   Set the colour per instance with [--glow-tint:…]. */
+.glow {
+  --glow-tint: rgba(255, 255, 255, 0.3);
+  background-image: radial-gradient(closest-side, var(--glow-tint), transparent 100%);
+  pointer-events: none;
+}
+
+/* A hairline that fades out at both ends — used above section eyebrows and
+   between footer blocks. A full-width 1px rule reads as a table border; a faded
+   one reads as typesetting. */
+.rule-fade {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-border-strong) 12%,
+    var(--color-border-strong) 88%,
+    transparent
+  );
+}
+
 /* ---- Scroll reveal ----
    Fails open: visible by default. Only the JS-applied "armed" state hides the
    element, and "shown" animates it back in. No JS == always visible. */
 .reveal[data-reveal="armed"] {
   opacity: 0;
-  transform: translateY(26px);
+  transform: translateY(22px);
   will-change: opacity, transform;
 }
 .reveal[data-reveal="shown"] {
-  animation: reveal-up 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation: reveal-up 0.72s cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
 @keyframes reveal-up {
   from {
     opacity: 0;
-    transform: translateY(26px);
+    transform: translateY(22px);
   }
   to {
     opacity: 1;
@@ -181,6 +291,8 @@ iframe {
   animation: float-soft 6s ease-in-out infinite;
 }
 
+/* The marquee track renders its children twice; translating by exactly -50%
+   lands the copy where the original started, so the loop has no seam. */
 @keyframes marquee-x {
   from {
     transform: translateX(0);
@@ -188,6 +300,22 @@ iframe {
   to {
     transform: translateX(-50%);
   }
+}
+.animate-marquee {
+  animation: marquee-x 42s linear infinite;
+}
+
+/* Underline that draws itself in on hover, from the left. */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.link-underline:hover,
+.link-underline:focus-visible {
+  background-size: 100% 1px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -201,7 +329,8 @@ iframe {
     opacity: 1;
     transform: none;
   }
-  .animate-float {
+  .animate-float,
+  .animate-marquee {
     animation: none;
   }
 }

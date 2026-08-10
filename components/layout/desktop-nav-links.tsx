@@ -115,19 +115,21 @@ export function DesktopNavLinks({ links, isHomeRoute }: DesktopNavLinksProps) {
               href={item.href}
               onClick={(event) => onNavClick(item.href, event)}
               className={cn(
-                "relative whitespace-nowrap rounded-full px-3 py-2 text-[0.95rem] font-semibold transition-colors xl:text-base",
-                isActive
-                  ? "text-(--color-brand)"
-                  : "text-(--color-text-muted) hover:bg-(--color-bg-muted) hover:text-foreground",
+                "relative whitespace-nowrap rounded-full px-3 py-2 text-[0.95rem] font-semibold transition-colors",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-brand) focus-visible:ring-offset-2",
+                isActive ? "text-(--color-brand)" : "text-(--color-text-muted) hover:text-foreground",
               )}
               aria-current={isActive ? "page" : undefined}
             >
               {item.label}
+              {/* The marker scales from the centre rather than fading in, so
+                  moving between sections reads as one indicator travelling
+                  along the nav instead of separate dashes blinking on and off. */}
               <span
                 aria-hidden="true"
                 className={cn(
-                  "absolute inset-x-3 -bottom-0.5 h-0.5 rounded-full bg-[image:var(--gradient-brand)] transition-opacity duration-200",
-                  isActive ? "opacity-100" : "opacity-0",
+                  "absolute inset-x-3 -bottom-0.5 h-[2px] origin-center rounded-full bg-(--color-brand) transition-transform duration-300 ease-out",
+                  isActive ? "scale-x-100" : "scale-x-0",
                 )}
               />
             </Link>

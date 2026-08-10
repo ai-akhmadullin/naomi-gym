@@ -1,32 +1,165 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { useEffect, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 
 import { Card } from "@/components/ui/card";
 import { HorizontalScroller } from "@/components/ui/horizontal-scroller";
 import { Icon } from "@/components/ui/icon";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { SectionShell } from "@/components/ui/section-shell";
+import { cn } from "@/lib/utils";
 import type { Review } from "@/types/marketing";
 
 type ReviewsSectionProps = {
+  eyebrow?: string;
+  index?: string;
   title: string;
   subtitle: string;
   scrollerLabel: string;
   starsLabelTemplate: string;
   readOnGoogleLabel: string;
   googleReviewLabel: string;
+  allReviewsLabel: string;
+  allReviewsUrl: string;
   reviews: Review[];
 };
 
+/**
+ * A quote that fades out ONLY when it is actually cut off.
+ *
+ * The excerpt is a max-height plus a fade-to-transparent mask. Applying that
+ * mask unconditionally faded the last line of every review, including the
+ * three-line ones that fit with room to spare — so a complete sentence looked
+ * truncated and the card looked broken. CSS can't ask "did this overflow?", so
+ * the answer is measured: scrollHeight exceeding clientHeight means the box is
+ * clipping, and only then is the mask applied.
+ *
+ * Re-measured on resize because the same text wraps to a different number of
+ * lines as the card width changes, so a quote can cross the threshold in both
+ * directions without its content ever changing.
+ */
+function ClampedQuote({ className, children }: { className?: string; children: ReactNode }) {
+  const ref = useRef<HTMLParagraphElement>(null);
+  const [isClamped, setIsClamped] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) {
+      return;
+    }
+
+    const measure = () => setIsClamped(element.scrollHeight - element.clientHeight > 1);
+    measure();
+
+    // jsdom has no ResizeObserver; the initial measurement above still runs.
+    if (typeof ResizeObserver === "undefined") {
+      return;
+    }
+
+    const observer = new ResizeObserver(measure);
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [children]);
+
+  return (
+    <p
+      ref={ref}
+      className={cn(
+        className,
+        isClamped && "[mask-image:linear-gradient(to_bottom,black_74%,transparent)]",
+      )}
+    >
+      {children}
+    </p>
+  );
+}
+
+function Stars({ rating, className }: { rating: number; className?: string }) {
+  return (
+    <span className={cn("flex gap-0.5 text-(--color-brand)", className)} aria-hidden="true">
+      {Array.from({ length: 5 }).map((_, position) => (
+        <Icon
+          key={position}
+          name="star"
+          className={cn("h-4 w-4", position >= rating && "text-(--color-border-strong)")}
+        />
+      ))}
+    </span>
+  );
+}
+
+function Attribution({
+  review,
+  readOnGoogleLabel,
+  googleReviewLabel,
+  size = "md",
+}: {
+  review: Review;
+  readOnGoogleLabel: string;
+  googleReviewLabel: string;
+  size?: "md" | "lg";
+}) {
+  const avatarSize = size === "lg" ? "h-12 w-12" : "h-10 w-10";
+
+  return (
+    <div className="flex items-center gap-3.5">
+      {review.avatar ? (
+        <img
+          src={review.avatar}
+          alt=""
+          width={48}
+          height={48}
+          className={cn("shrink-0 rounded-full object-cover ring-1 ring-(--color-border)", avatarSize)}
+          loading="lazy"
+        />
+      ) : (
+        <span
+          className={cn(
+            "inline-flex shrink-0 items-center justify-center rounded-full bg-(--color-brand-tint) font-display font-bold text-(--color-brand)",
+            avatarSize,
+          )}
+          aria-hidden="true"
+        >
+          {review.memberName.charAt(0).toUpperCase()}
+        </span>
+      )}
+      <div className="min-w-0">
+        <p className={cn("font-semibold text-foreground", size === "lg" ? "text-[1.05rem]" : "text-[0.95rem]")}>
+          {review.memberName}
+        </p>
+        {review.source === "google" ? (
+          <p className="text-[0.8rem] text-(--color-text-faint)">
+            {review.sourceUrl ? (
+              <a
+                href={review.sourceUrl}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="link-underline hover:text-(--color-brand)"
+              >
+                {readOnGoogleLabel}
+              </a>
+            ) : (
+              googleReviewLabel
+            )}
+          </p>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 export function ReviewsSection({
+  eyebrow,
+  index,
   title,
   subtitle,
   scrollerLabel,
   starsLabelTemplate,
   readOnGoogleLabel,
   googleReviewLabel,
+  allReviewsLabel,
+  allReviewsUrl,
   reviews,
 }: ReviewsSectionProps) {
   const [displayReviews, setDisplayReviews] = useState<Review[]>(reviews);
@@ -66,63 +199,104 @@ export function ReviewsSection({
     };
   }, []);
 
-  return (
-    <SectionShell id="reviews" className="bg-(--color-bg-muted)">
-      <SectionHeading title={title} subtitle={subtitle} align="center" />
+  const [featured, ...rest] = displayReviews;
 
-      <HorizontalScroller ariaLabel={scrollerLabel} showScrollIndicator>
-        {displayReviews.map((review) => (
-          <Card key={review.id} hover className="flex h-full flex-col p-6 sm:p-7">
-            <Icon name="quote" className="h-9 w-9 text-(--color-brand)/25" />
-            <div
-              className="mt-3 mb-4 flex gap-1 text-(--color-brand)"
-              aria-label={starsLabelTemplate.replace("{rating}", String(review.rating))}
-            >
-              {Array.from({ length: review.rating }).map((_, index) => (
-                <Icon key={`${review.id}-${index}`} name="star" className="h-5 w-5" />
-              ))}
-            </div>
-            <blockquote className="text-pretty text-base leading-relaxed text-foreground [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:7] overflow-hidden sm:text-lg">
-              {review.quote}
+  return (
+    <SectionShell id="reviews" tone="paper" space="md">
+      <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+        <SectionHeading
+          eyebrow={eyebrow}
+          index={index}
+          title={title}
+          subtitle={subtitle}
+          flush
+          className="max-w-2xl"
+        />
+
+        {/* A link out, not a score.
+            This slot held a computed average — "5.0" over the handful of reviews
+            the page happens to display. Every stored review is genuinely
+            five-star, so the figure was arithmetically true and still misleading:
+            the gym's actual Google rating is lower and is visible in the map
+            embed one section above, so a reader who checked would find the site
+            flattering itself. Sending them to the real listing makes the same
+            point and cannot go stale. */}
+        <a
+          href={allReviewsUrl}
+          target="_blank"
+          rel="noreferrer noopener"
+          className="group inline-flex shrink-0 items-center gap-2.5 self-start text-[0.95rem] font-semibold text-(--color-brand) lg:self-auto"
+        >
+          {/* No stars here either. A row of five filled stars beside the label
+              implies a five-star rating just as plainly as the number did. */}
+          <span className="link-underline">{allReviewsLabel}</span>
+          <Icon
+            name="arrow-right"
+            className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+          />
+        </a>
+      </div>
+
+      {featured ? (
+        <figure className="relative mt-12 overflow-hidden rounded-[var(--radius-xl)] border border-(--color-border) bg-white p-8 shadow-(--shadow-soft) sm:p-12">
+          <Icon
+            name="quote"
+            aria-hidden="true"
+            className="absolute -right-4 -top-4 h-32 w-32 text-(--color-brand)/[0.06]"
+          />
+          <div className="relative z-10">
+            <Stars
+              rating={featured.rating}
+              className="h-5"
+            />
+            <span className="sr-only">{starsLabelTemplate.replace("{rating}", String(featured.rating))}</span>
+            {/* Long reviews are excerpted by height and faded out, NOT by
+                -webkit-line-clamp. Clamping appends a "…", and an ellipsis
+                landing mid-sentence inside a fade reads as a rendering fault;
+                a clean fade reads as a deliberate pull-quote. The max-height is
+                expressed in em so it tracks the font size across breakpoints —
+                6 lines at leading 1.45. */}
+            <blockquote className="relative mt-6 max-w-4xl">
+              <ClampedQuote className="max-h-[8.7em] overflow-hidden text-pretty font-display text-[length:var(--step-2)] font-semibold leading-[1.45] tracking-[-0.02em] text-foreground">
+                {featured.quote}
+              </ClampedQuote>
             </blockquote>
-            <div className="mt-6 flex items-center gap-4 border-t border-(--color-border) pt-5">
-              {review.avatar ? (
-                <img
-                  src={review.avatar}
-                  alt={review.memberName}
-                  width={48}
-                  height={48}
-                  className="h-12 w-12 rounded-full border border-(--color-border) object-cover"
-                  loading="lazy"
-                />
-              ) : (
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-[image:var(--gradient-brand)] text-lg font-bold text-white">
-                  {review.memberName.charAt(0).toUpperCase()}
-                </span>
-              )}
-              <div>
-                <p className="text-lg font-semibold text-foreground">{review.memberName}</p>
-                {review.source === "google" ? (
-                  <p className="text-sm text-(--color-text-muted)">
-                    {review.sourceUrl ? (
-                      <a
-                        href={review.sourceUrl}
-                        target="_blank"
-                        rel="noreferrer noopener"
-                        className="underline underline-offset-2 hover:text-(--color-brand)"
-                      >
-                        {readOnGoogleLabel}
-                      </a>
-                    ) : (
-                      googleReviewLabel
-                    )}
-                  </p>
-                ) : null}
-              </div>
-            </div>
-          </Card>
-        ))}
-      </HorizontalScroller>
+            <figcaption className="mt-8">
+              <Attribution
+                review={featured}
+                readOnGoogleLabel={readOnGoogleLabel}
+                googleReviewLabel={googleReviewLabel}
+                size="lg"
+              />
+            </figcaption>
+          </div>
+        </figure>
+      ) : null}
+
+      {rest.length > 0 ? (
+        <div className="mt-5">
+          <HorizontalScroller ariaLabel={scrollerLabel} showScrollIndicator>
+            {rest.map((review) => (
+              <Card key={review.id} hover className="flex h-full flex-col p-6">
+                <Stars rating={review.rating} />
+                <span className="sr-only">{starsLabelTemplate.replace("{rating}", String(review.rating))}</span>
+                <blockquote className="mt-4">
+                  <ClampedQuote className="max-h-[11.5em] overflow-hidden text-pretty text-[0.98rem] leading-[1.65] text-(--color-text-muted)">
+                    {review.quote}
+                  </ClampedQuote>
+                </blockquote>
+                <div className="mt-auto pt-6">
+                  <Attribution
+                    review={review}
+                    readOnGoogleLabel={readOnGoogleLabel}
+                    googleReviewLabel={googleReviewLabel}
+                  />
+                </div>
+              </Card>
+            ))}
+          </HorizontalScroller>
+        </div>
+      ) : null}
     </SectionShell>
   );
 }

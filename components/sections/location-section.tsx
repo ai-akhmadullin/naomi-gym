@@ -11,13 +11,13 @@ import type { LocationInfo } from "@/types/marketing";
 type LocationSectionProps = {
   locale: Locale;
   openStatus: { openNow: string; closed: string; closesAt: string; opensAt: string };
+  eyebrow?: string;
+  index?: string;
   title: string;
   subtitle: string;
   addressLabel: string;
   hoursLabel: string;
   mapTitle: string;
-  directionsPrefix: string;
-  directionsLinkLabel: string;
   getDirectionsLabel: string;
   location: LocationInfo;
 };
@@ -25,67 +25,83 @@ type LocationSectionProps = {
 export function LocationSection({
   locale,
   openStatus,
+  eyebrow,
+  index,
   title,
   subtitle,
   addressLabel,
   hoursLabel,
   mapTitle,
-  directionsPrefix,
-  directionsLinkLabel,
   getDirectionsLabel,
   location,
 }: LocationSectionProps) {
   return (
-    <SectionShell id="location">
+    <SectionShell id="location" tone="white" space="md">
       <Reveal>
-        <SectionHeading title={title} subtitle={subtitle} />
+        <SectionHeading eyebrow={eyebrow} index={index} title={title} subtitle={subtitle} />
       </Reveal>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-6">
         <Reveal className="h-full">
-          <Card className="flex h-full flex-col gap-8 p-6 sm:p-8">
-            <div className="flex gap-4">
-              <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[image:var(--gradient-brand)] text-white shadow-(--shadow-brand)">
-                <Icon name="map-pin" className="h-6 w-6" />
+          <Card className="flex h-full flex-col p-7 sm:p-8">
+            {/* Labels are set as small caps rather than as another row of
+                display headings. Address and Hours are field labels, not
+                section titles — giving them h3-sized display type competed with
+                the section heading directly above them. */}
+            <div className="flex items-start gap-4">
+              <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--radius-sm)] bg-(--color-brand-tint) text-(--color-brand)">
+                <Icon name="map-pin" className="h-5 w-5" />
               </span>
-              <div>
-                <h3 className="font-display text-xl font-bold text-foreground sm:text-2xl">{addressLabel}</h3>
-                <p className="mt-2 text-lg leading-relaxed text-(--color-text-muted)">
+              <div className="min-w-0">
+                <h3 className="text-[0.7rem] font-bold uppercase tracking-[0.16em] text-(--color-text-faint)">
+                  {addressLabel}
+                </h3>
+                <address className="mt-2 not-italic text-[length:var(--step-1)] font-medium leading-relaxed text-foreground">
                   {location.addressLines.map((line) => (
                     <span key={line} className="block">
                       {line}
                     </span>
                   ))}
-                </p>
+                </address>
               </div>
             </div>
 
-            <div className="flex gap-4">
-              <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-(--color-brand)/10 text-(--color-brand)">
-                <Icon name="clock" className="h-6 w-6" />
+            <div className="rule-fade my-7" aria-hidden="true" />
+
+            <div className="flex items-start gap-4">
+              <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-[var(--radius-sm)] bg-(--color-brand-tint) text-(--color-brand)">
+                <Icon name="clock" className="h-5 w-5" />
               </span>
               <div className="min-w-0 flex-1">
-                <h3 className="font-display text-xl font-bold text-foreground sm:text-2xl">{hoursLabel}</h3>
-                <div className="mt-1.5">
+                <h3 className="text-[0.7rem] font-bold uppercase tracking-[0.16em] text-(--color-text-faint)">
+                  {hoursLabel}
+                </h3>
+                <div className="mt-2">
                   <OpenNowBadge locale={locale} copy={openStatus} variant="text" />
                 </div>
-                <div className="mt-4 space-y-3">
+                <dl className="mt-5 space-y-3.5">
                   {location.openingHours.map((entry) => (
                     <div
                       key={entry.dayLabel}
-                      className="flex flex-col gap-0.5 border-b border-(--color-border) pb-3 last:border-0 last:pb-0 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
+                      className="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
                     >
-                      <p className="font-semibold text-foreground">{entry.dayLabel}</p>
-                      <div className="space-y-0.5 text-(--color-text-muted) sm:text-right">
+                      <dt className="text-[0.95rem] text-(--color-text-muted)">{entry.dayLabel}</dt>
+                      {/* Leader dots pull the eye across the gap to the time.
+                          Without them the two columns read as unrelated lists. */}
+                      <span
+                        aria-hidden="true"
+                        className="hidden flex-1 translate-y-[-0.28em] border-b border-dotted border-(--color-border-strong) sm:block"
+                      />
+                      <dd className="space-y-0.5 text-[0.95rem] font-semibold tabular-nums text-foreground sm:text-right">
                         {entry.ranges.map((range) => (
                           <span key={range} className="block">
                             {range}
                           </span>
                         ))}
-                      </div>
+                      </dd>
                     </div>
                   ))}
-                </div>
+                </dl>
               </div>
             </div>
 
@@ -93,36 +109,29 @@ export function LocationSection({
               href={location.directionsUrl}
               target="_blank"
               rel="noreferrer noopener"
-              className={buttonStyles({ variant: "secondary", size: "md", className: "mt-auto w-fit" })}
+              className={buttonStyles({ variant: "secondary", size: "md", className: "mt-9 w-full sm:w-fit" })}
             >
-              <Icon name="map-pin" className="h-5 w-5" />
+              <Icon name="map-pin" className="h-4.5 w-4.5" />
               {getDirectionsLabel}
             </a>
           </Card>
         </Reveal>
 
-        <Reveal delay={120} className="min-w-0">
-          <div className="overflow-hidden rounded-3xl border border-(--color-border) bg-white shadow-(--shadow-soft)">
+        <Reveal delay={110} className="min-w-0">
+          {/* The map fills the panel. It previously sat above a caption reading
+              "Can't see the map? Open directions here." — a developer's fallback
+              note rendered as permanent UI, which tells every visitor the
+              feature might be broken. The same link now lives on the button in
+              the card beside it, where it belongs. */}
+          <div className="h-full overflow-hidden rounded-[var(--radius-lg)] border border-(--color-border) bg-white shadow-(--shadow-soft)">
             <iframe
               src={location.mapEmbedUrl}
               title={mapTitle}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              className="h-80 w-full sm:h-96 lg:h-[480px]"
+              className="h-80 w-full sm:h-96 lg:h-full lg:min-h-[30rem]"
             />
-            <p className="px-5 py-4 text-sm text-(--color-text-muted)">
-              {directionsPrefix}{" "}
-              <a
-                href={location.directionsUrl}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="font-semibold text-(--color-brand) underline underline-offset-2"
-              >
-                {directionsLinkLabel}
-              </a>
-              .
-            </p>
           </div>
         </Reveal>
       </div>

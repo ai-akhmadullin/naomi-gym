@@ -21,6 +21,8 @@ type GalleryLightboxCopy = {
 };
 
 type GallerySectionProps = {
+  eyebrow?: string;
+  index?: string;
   title: string;
   subtitle: string;
   scrollerLabel: string;
@@ -28,7 +30,15 @@ type GallerySectionProps = {
   lightbox: GalleryLightboxCopy;
 };
 
-export function GallerySection({ title, subtitle, scrollerLabel, images, lightbox }: GallerySectionProps) {
+export function GallerySection({
+  eyebrow,
+  index,
+  title,
+  subtitle,
+  scrollerLabel,
+  images,
+  lightbox,
+}: GallerySectionProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const isOpen = activeIndex !== null;
 
@@ -62,18 +72,21 @@ export function GallerySection({ title, subtitle, scrollerLabel, images, lightbo
   const active = activeIndex !== null ? images[activeIndex] : null;
 
   return (
-    <SectionShell id="gallery" className="bg-(--color-bg-muted)">
+    /* The page's dark act. Six frames of flat graphic art sat on a light tinted
+       background before, where they read as broken images; on ink they read as
+       an art-directed strip. It also breaks a run of seven light sections. */
+    <SectionShell id="gallery" tone="ink" space="md">
       <Reveal>
-        <SectionHeading title={title} subtitle={subtitle} />
+        <SectionHeading eyebrow={eyebrow} index={index} title={title} subtitle={subtitle} tone="dark" />
       </Reveal>
 
-      <HorizontalScroller ariaLabel={scrollerLabel} showScrollIndicator>
-        {images.map((image, index) => (
+      <HorizontalScroller ariaLabel={scrollerLabel} showScrollIndicator indicatorTone="dark">
+        {images.map((image, position) => (
           <figure key={image.id} className="group relative">
             <button
               type="button"
-              onClick={() => setActiveIndex(index)}
-              className="relative block w-full cursor-zoom-in overflow-hidden rounded-3xl border border-(--color-border) bg-white shadow-(--shadow-soft) transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-brand) focus-visible:ring-offset-2 group-hover:-translate-y-1 group-hover:shadow-(--shadow-lift)"
+              onClick={() => setActiveIndex(position)}
+              className="relative block w-full cursor-zoom-in overflow-hidden rounded-[var(--radius-lg)] border border-white/10 transition-[transform,border-color] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-accent) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-ink) group-hover:-translate-y-1 group-hover:border-white/25"
               aria-label={image.alt}
             >
               <Image
@@ -81,10 +94,13 @@ export function GallerySection({ title, subtitle, scrollerLabel, images, lightbo
                 alt={image.alt}
                 width={680}
                 height={520}
-                className="aspect-4/3 h-auto w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                className="aspect-4/3 h-auto w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
               />
-              <span className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-              <span className="absolute bottom-4 left-4 inline-flex items-center rounded-full bg-white/90 px-3 py-1 text-xs font-bold uppercase tracking-wide text-(--color-brand) backdrop-blur">
+              <span
+                aria-hidden="true"
+                className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"
+              />
+              <span className="absolute bottom-4 left-4 inline-flex items-center rounded-full bg-black/35 px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-white backdrop-blur-sm">
                 {image.category}
               </span>
             </button>

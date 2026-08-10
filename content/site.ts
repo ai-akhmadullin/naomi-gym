@@ -50,9 +50,6 @@ export type SiteDictionary = {
     facebookLabel: string;
     instagramLabel: string;
     joinNow: string;
-    ctaTitle: string;
-    ctaText: string;
-    ctaButton: string;
     rightsLabel: string;
   };
   home: {
@@ -63,10 +60,13 @@ export type SiteDictionary = {
       description: string;
       primaryCta: string;
       secondaryCta: string;
-      imageAlt: string;
-      membersCount: string;
-      membersLabel: string;
-      highlights: string[];
+      /** Figure + caption pairs for the strip beneath the headline. */
+      stats: Array<{ value: string; label: string }>;
+    };
+    /** Short proof phrases for the scrolling band under the hero. */
+    ticker: {
+      label: string;
+      items: string[];
     };
     benefits: {
       eyebrow: string;
@@ -110,8 +110,6 @@ export type SiteDictionary = {
       addressLabel: string;
       hoursLabel: string;
       mapTitle: string;
-      directionsPrefix: string;
-      directionsLinkLabel: string;
       getDirectionsLabel: string;
       info: LocationInfo;
     };
@@ -123,6 +121,8 @@ export type SiteDictionary = {
       starsLabelTemplate: string;
       readOnGoogle: string;
       googleReview: string;
+      /** Label for the link out to the full Google listing. */
+      allReviewsLabel: string;
       list: Review[];
     };
     faq: {
@@ -222,18 +222,18 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
   en: {
     metadata: {
       description:
-        "Naomi Gym is Da Nang's friendly, great-value gym near An Thuong and My Khe — two full floors of equipment, expert coaching, and a welcoming community. Day pass 40k, monthly 300k.",
+        "Naomi Gym is a two-floor gym on Lê Văn Hiến in Khuê Mỹ, Đà Nẵng. Free weights, racks and machines, open from 5 AM. Day pass 40,000đ, monthly 300,000đ, no contract.",
     },
     localeNames: {
       en: "English",
       vi: "Tiếng Việt",
     },
-    siteTagline: "Train stronger, live better",
+    siteTagline: "Two floors on Lê Văn Hiến, Đà Nẵng",
     navItems: [
       { label: "Home", href: "#home", kind: "section" },
       { label: "Pricing", href: "#pricing", kind: "section" },
-      { label: "Trainers", href: "#trainers", kind: "section" },
       { label: "Gallery", href: "#gallery", kind: "section" },
+      { label: "Trainers", href: "#trainers", kind: "section" },
       { label: "Location", href: "#location", kind: "section" },
       { label: "Reviews", href: "#reviews", kind: "section" },
       { label: "Contact", href: "#contact", kind: "section" },
@@ -270,9 +270,6 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
       facebookLabel: "Facebook",
       instagramLabel: "Instagram",
       joinNow: "Join Now",
-      ctaTitle: "Your first workout is on us",
-      ctaText: "Come try Naomi Gym — no sign-up fee, no contract. Just bring water and good energy.",
-      ctaButton: "Join Now",
       rightsLabel: "All rights reserved.",
     },
     home: {
@@ -281,67 +278,82 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         titlePrefix: "Train stronger at",
         titleHighlight: "Naomi Gym",
         description:
-          "Two full floors of weights and machines, friendly hands-on coaching, and a community that actually trains. Day pass 40k, full month just 300k — no contract.",
+          "Two floors of free weights, racks and machines in Khuê Mỹ, open from 5 AM. A day pass is 40k and a month is 300k, paid at the desk — no contract and no joining fee.",
         primaryCta: "Join Now",
         secondaryCta: "View Plans",
-        imageAlt: "Naomi Gym training floor",
-        membersCount: "200+",
-        membersLabel: "Active members",
-        highlights: ["Open from 5 AM", "Day pass just 40k", "No contract"],
+        stats: [
+          { value: "40k", label: "Day pass" },
+          { value: "300k", label: "Per month" },
+          { value: "2", label: "Training floors" },
+          { value: "5 AM", label: "Doors open" },
+        ],
+      },
+      ticker: {
+        label: "What you get at Naomi Gym",
+        items: [
+          "Open from 5 AM",
+          "Two floors",
+          "Day pass 40k",
+          "Month 300k",
+          "No contract",
+          "Free help with your form",
+          "Squat racks & bumper plates",
+          "Walk in, no booking",
+        ],
       },
       benefits: {
-        eyebrow: "Why Naomi Gym",
-        title: "A real gym, not a showroom",
-        subtitle: "Everything you need to train hard — and nothing you'd overpay for.",
+        eyebrow: "The gym",
+        title: "What's on the two floors",
+        subtitle: "The equipment, the hours and the things worth knowing before you come.",
         items: [
           {
             id: "benefit-floors",
             icon: "layers",
-            title: "Two floors of training",
+            title: "Two floors",
             description:
-              "Free weights and machines downstairs, a full legs and functional-training floor upstairs — plenty of room to move.",
+              "Free weights and machines on the ground floor. Legs machines and functional training upstairs.",
           },
           {
             id: "benefit-kit",
             icon: "dumbbell",
-            title: "Built for lifters",
+            title: "Racks, platforms, bumper plates",
             description:
-              "Squat racks, deadlift platforms, bumper plates, benches, cables and a boxing bag. Real iron, no frills.",
+              "Squat racks, deadlift platforms, bumper plates, benches, cables and a heavy bag — all of it in working order.",
           },
           {
             id: "benefit-value",
             icon: "sparkles",
-            title: "Unbeatable value",
+            title: "No contract, no joining fee",
             description:
-              "40k for a day pass, 300k for a whole month — no joining fee, no lock-in contract. Just pay at the gym.",
+              "40k buys a day, 300k buys a month. You pay at the desk on the day, so there is nothing to sign and nothing to cancel.",
           },
           {
             id: "benefit-coaching",
             icon: "heart-handshake",
-            title: "Friendly, helpful staff",
+            title: "Free help with your form",
             description:
-              "Members love the welcome here — the owner is often around and happy to help with your form, for free.",
+              "The owner is usually on the floor and will talk you through a lift if you ask. There's no charge for it.",
           },
           {
             id: "benefit-hours",
             icon: "sunrise",
-            title: "Open early, 7 days",
+            title: "Open early, seven days",
             description:
-              "Doors open at 5 AM Monday to Saturday, with hours on Sunday too — train before work or before the beach.",
+              "5 AM to 8:30 PM Monday to Saturday, so you can train before work. Sunday runs in two blocks, morning and afternoon.",
           },
           {
             id: "benefit-space",
             icon: "users",
-            title: "Spacious & rarely crowded",
+            title: "Rarely crowded",
             description:
-              "Spread over two airy floors, it rarely feels busy — there's almost always a free rack, bench or machine.",
+              "Two floors means there's almost always a free rack or bench. Mornings and after 7:30 PM are the quietest.",
           },
         ],
       },
       pricing: {
         eyebrow: "Memberships",
-        title: "Simple pricing, no surprises",
-        subtitle: "Pay at the gym. Start today, cancel any time — there's no contract to sign.",
+        title: "40k a day, 300k a month",
+        subtitle: "Both are paid at the desk when you arrive. There is no contract, no joining fee and nothing to cancel.",
         highlightLabel: "Most Popular",
         note: "No sign-up fee · No contract · Pay at the gym",
         plans: [
@@ -352,12 +364,11 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
             billingPeriodLabel: "day",
             highlight: false,
             ctaLabel: "Get a day pass",
-            tagline: "Drop in any day",
+            tagline: "Good for one day",
             features: [
-              "Full access to both floors",
-              "All equipment included",
-              "No commitment",
-              "Perfect for travellers",
+              "Both floors and all the equipment",
+              "Pay at the desk when you arrive",
+              "Nothing to sign",
             ],
           },
           {
@@ -367,12 +378,12 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
             billingPeriodLabel: "month",
             highlight: true,
             ctaLabel: "Become a member",
-            tagline: "Our most popular plan",
+            tagline: "30 days from the day you pay",
             features: [
               "Everything in the day pass",
-              "Best value — save vs. day passes",
-              "Train any time we're open",
-              "Free form help from our coach",
+              "Cheaper than 8 day passes",
+              "No contract — it just runs out",
+              "Free help with your form",
             ],
           },
         ],
@@ -380,7 +391,7 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
       trainers: {
         eyebrow: "The team",
         title: "Meet Our Trainers",
-        subtitle: "Expert coaches dedicated to helping you succeed",
+        subtitle: "Who's on the floor and what they work on.",
         scrollerLabel: "Trainers",
         experienceLabel: "{years}+ years experience",
         list: [
@@ -389,7 +400,6 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
             name: "Marcus Thompson",
             specialty: "Strength Training",
             bio: "10+ years helping athletes and enthusiasts build strength and power.",
-            image: "/images/trainers/marcus.svg",
             experienceYears: 10,
           },
           {
@@ -397,7 +407,6 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
             name: "Sarah Chen",
             specialty: "Yoga & Flexibility",
             bio: "Certified yoga instructor focused on mindful movement and recovery.",
-            image: "/images/trainers/sarah.svg",
             experienceYears: 8,
           },
           {
@@ -405,15 +414,14 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
             name: "Jordan Hayes",
             specialty: "HIIT & Cardio",
             bio: "High-energy coach dedicated to helping members push past limits.",
-            image: "/images/trainers/jordan.svg",
             experienceYears: 7,
           },
         ],
       },
       gallery: {
-        eyebrow: "Inside the gym",
-        title: "Our Facility",
-        subtitle: "Take a look at our modern, clean, and fully-equipped gym",
+        eyebrow: "The space",
+        title: "Inside the gym",
+        subtitle: "A look at both floors and the equipment on them.",
         scrollerLabel: "Facility gallery",
         images: [
           {
@@ -463,12 +471,10 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
       location: {
         eyebrow: "Find us",
         title: "Visit Us",
-        subtitle: "Find Naomi Gym near An Thuong and My Khe area",
+        subtitle: "We're on Lê Văn Hiến in Khuê Mỹ, south of An Thượng.",
         addressLabel: "Address",
         hoursLabel: "Hours",
         mapTitle: "Naomi Gym location map",
-        directionsPrefix: "Can't see the map? Open directions",
-        directionsLinkLabel: "here",
         getDirectionsLabel: "Get directions",
         info: {
           addressLines: CONTACT_ADDRESS_LINES,
@@ -490,23 +496,33 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
       reviews: {
         eyebrow: "Reviews",
         title: "What Our Members Say",
-        subtitle: "Honest feedback from people who train with us",
+        subtitle: "Unedited Google reviews from people who train here.",
         scrollerLabel: "Member reviews",
         starsLabelTemplate: "{rating} out of 5 stars",
         readOnGoogle: "Read on Google",
         googleReview: "Google review",
+        allReviewsLabel: "See all reviews on Google",
         list: SHARED_REVIEWS,
       },
       faq: {
         eyebrow: "Good to know",
         title: "Frequently Asked Questions",
-        subtitle: "Everything you need to know before joining",
+        subtitle: "The things people ask at the desk.",
         items: [
           {
             id: "faq-plans",
             question: "What membership options do you offer?",
             answer:
               "We keep it simple: a day pass (40,000 VND/day) and a monthly membership (300,000 VND/month). No joining fee and no contract.",
+          },
+          {
+            /* Two of the five reviews on this page raise the lack of air
+               conditioning. Answering it here costs nothing and stops it being
+               a surprise on someone's first visit. */
+            id: "faq-air-con",
+            question: "Is there air conditioning?",
+            answer:
+              "No — the gym runs on fans with the windows and doors open. You will sweat, so bring water.",
           },
           {
             id: "faq-hours",
@@ -518,13 +534,13 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
             id: "faq-location",
             question: "Where is Naomi Gym located?",
             answer:
-              "You can find us at Lo 22 Le Van Hien, Khue My, Ngu Hanh Son, Da Nang — close to the An Thuong and My Khe beach area.",
+              "Lô 22 Lê Văn Hiến, Khuê Mỹ, Ngũ Hành Sơn, Đà Nẵng. It's on the main road south of An Thượng — a long walk or a short ride from the beach.",
           },
           {
             id: "faq-crowded",
             question: "When is the gym less crowded?",
             answer:
-              "For quieter sessions, come in the morning or later evening. Peak times are usually late afternoon and early evening.",
+              "Mornings and after about 7:30 PM are the quietest. Late afternoon and early evening are the busiest, though with two floors you can usually still get a rack.",
           },
           {
             id: "faq-first-visit",
@@ -538,7 +554,7 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         eyebrow: "Join us",
         title: "Ready to train? Come say hi.",
         subtitle:
-          "Drop by for your first session, or send a quick message and we'll get you set up. No sign-up fees, no pressure.",
+          "Walk in any time we're open — you don't need to book. Or send a message and we'll reply.",
         nameLabel: "Your name",
         namePlaceholder: "e.g. Alex",
         contactLabel: "Phone or email",
@@ -558,7 +574,7 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         callLabel: "Call us",
         messengerLabel: "Message on Facebook",
         directionsLabel: "Get directions",
-        reassurance: "Free look around · No contract · Friendly staff",
+        reassurance: "Look around first · No contract · Pay at the desk",
         privacyNote: "We'll only use your details to reply.",
       },
     },
@@ -603,18 +619,18 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
   vi: {
     metadata: {
       description:
-        "Naomi Gym là phòng tập thân thiện, giá tốt ở Đà Nẵng gần An Thượng và Mỹ Khê — hai tầng đầy đủ thiết bị, huấn luyện tận tâm và cộng đồng thân thiện. Vé ngày 40k, gói tháng 300k.",
+        "Naomi Gym là phòng tập hai tầng trên đường Lê Văn Hiến, Khuê Mỹ, Đà Nẵng. Tạ tự do, giàn tập và máy, mở cửa từ 5 giờ sáng. Vé ngày 40.000đ, tháng 300.000đ, không hợp đồng.",
     },
     localeNames: {
       en: "English",
       vi: "Tiếng Việt",
     },
-    siteTagline: "Tập mạnh hơn, sống khỏe hơn",
+    siteTagline: "Hai tầng trên đường Lê Văn Hiến, Đà Nẵng",
     navItems: [
       { label: "Trang chủ", href: "#home", kind: "section" },
       { label: "Gói tập", href: "#pricing", kind: "section" },
-      { label: "Huấn luyện viên", href: "#trainers", kind: "section" },
       { label: "Không gian", href: "#gallery", kind: "section" },
+      { label: "Huấn luyện viên", href: "#trainers", kind: "section" },
       { label: "Địa điểm", href: "#location", kind: "section" },
       { label: "Đánh giá", href: "#reviews", kind: "section" },
       { label: "Liên hệ", href: "#contact", kind: "section" },
@@ -651,9 +667,6 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
       facebookLabel: "Facebook",
       instagramLabel: "Instagram",
       joinNow: "Tham gia ngay",
-      ctaTitle: "Buổi tập đầu tiên, chúng tôi mời bạn",
-      ctaText: "Đến trải nghiệm Naomi Gym — không phí đăng ký, không hợp đồng. Chỉ cần mang theo nước và năng lượng tích cực.",
-      ctaButton: "Tham gia ngay",
       rightsLabel: "Bảo lưu mọi quyền.",
     },
     home: {
@@ -662,67 +675,82 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         titlePrefix: "Tập luyện mạnh mẽ hơn tại",
         titleHighlight: "Naomi Gym",
         description:
-          "Hai tầng đầy đủ tạ và máy tập, huấn luyện viên tận tâm hướng dẫn trực tiếp, cùng cộng đồng tập luyện thực thụ. Vé ngày 40k, cả tháng chỉ 300k — không hợp đồng.",
+          "Hai tầng tạ tự do, giàn tập và máy ở Khuê Mỹ, mở cửa từ 5 giờ sáng. Vé ngày 40k, tháng 300k, trả tại quầy — không hợp đồng, không phí đăng ký.",
         primaryCta: "Tham gia ngay",
         secondaryCta: "Xem bảng giá",
-        imageAlt: "Khu tập luyện Naomi Gym",
-        membersCount: "200+",
-        membersLabel: "Hội viên đang tập",
-        highlights: ["Mở cửa từ 5 giờ sáng", "Vé ngày chỉ 40k", "Không hợp đồng"],
+        stats: [
+          { value: "40k", label: "Vé ngày" },
+          { value: "300k", label: "Mỗi tháng" },
+          { value: "2", label: "Tầng tập" },
+          { value: "5:00", label: "Giờ mở cửa" },
+        ],
+      },
+      ticker: {
+        label: "Những gì bạn có tại Naomi Gym",
+        items: [
+          "Mở cửa từ 5 giờ sáng",
+          "Hai tầng",
+          "Vé ngày 40k",
+          "Tháng 300k",
+          "Không hợp đồng",
+          "Chỉnh kỹ thuật miễn phí",
+          "Giàn squat & tạ bumper",
+          "Đến thẳng, không cần đặt",
+        ],
       },
       benefits: {
-        eyebrow: "Vì sao chọn Naomi Gym",
-        title: "Phòng tập thực thụ, không phải nơi sống ảo",
-        subtitle: "Đầy đủ mọi thứ để tập luyện nghiêm túc — và không có khoản nào khiến bạn trả thừa.",
+        eyebrow: "Phòng tập",
+        title: "Có gì trên hai tầng",
+        subtitle: "Thiết bị, giờ mở cửa và những điều nên biết trước khi đến.",
         items: [
           {
             id: "benefit-floors",
             icon: "layers",
-            title: "Hai tầng tập luyện",
+            title: "Hai tầng",
             description:
-              "Tạ tự do và máy tập ở tầng dưới, một tầng chân và functional đầy đủ ở tầng trên — rộng rãi để vận động.",
+              "Tạ tự do và máy tập ở tầng trệt. Máy tập chân và khu functional ở tầng trên.",
           },
           {
             id: "benefit-kit",
             icon: "dumbbell",
-            title: "Dành cho người tập tạ",
+            title: "Giàn squat, khu deadlift, tạ bumper",
             description:
-              "Squat rack, khu deadlift, bumper plate, ghế tập, cáp và bao cát boxing. Sắt thép thực thụ, không màu mè.",
+              "Squat rack, khu deadlift, tạ bumper, ghế tập, máy cáp và bao cát — tất cả đều còn hoạt động tốt.",
           },
           {
             id: "benefit-value",
             icon: "sparkles",
-            title: "Giá cực kỳ hợp lý",
+            title: "Không hợp đồng, không phí đăng ký",
             description:
-              "40k cho vé ngày, 300k cho cả tháng — không phí gia nhập, không hợp đồng. Chỉ cần thanh toán tại phòng tập.",
+              "40k một ngày, 300k một tháng. Bạn trả tại quầy đúng hôm đến tập, nên không có gì để ký và cũng không có gì để hủy.",
           },
           {
             id: "benefit-coaching",
             icon: "heart-handshake",
-            title: "Nhân viên thân thiện",
+            title: "Chỉnh kỹ thuật miễn phí",
             description:
-              "Hội viên rất thích sự thân thiện ở đây — chủ phòng thường có mặt và sẵn lòng chỉnh kỹ thuật miễn phí.",
+              "Chủ phòng thường có mặt ngay tại sàn tập và sẽ hướng dẫn bạn từng động tác nếu bạn hỏi. Hoàn toàn không tính phí.",
           },
           {
             id: "benefit-hours",
             icon: "sunrise",
-            title: "Mở sớm, 7 ngày/tuần",
+            title: "Mở sớm, bảy ngày một tuần",
             description:
-              "Mở cửa từ 5 giờ sáng Thứ Hai đến Thứ Bảy, Chủ Nhật cũng có giờ tập — tập trước giờ làm hoặc trước khi ra biển.",
+              "5:00 đến 20:30 từ Thứ Hai đến Thứ Bảy, đủ sớm để tập trước giờ làm. Chủ Nhật chia hai khung, sáng và chiều.",
           },
           {
             id: "benefit-space",
             icon: "users",
-            title: "Rộng rãi & ít khi đông",
+            title: "Hiếm khi đông",
             description:
-              "Trải trên hai tầng thoáng khí, hiếm khi đông — gần như luôn có rack, ghế hay máy trống cho bạn.",
+              "Hai tầng nên gần như lúc nào cũng còn giàn hoặc ghế trống. Vắng nhất là buổi sáng và sau 19:30.",
           },
         ],
       },
       pricing: {
         eyebrow: "Gói hội viên",
-        title: "Giá đơn giản, không bất ngờ",
-        subtitle: "Thanh toán tại phòng tập. Bắt đầu hôm nay, hủy bất cứ lúc nào — không cần ký hợp đồng.",
+        title: "40k một ngày, 300k một tháng",
+        subtitle: "Cả hai đều trả tại quầy khi bạn đến. Không hợp đồng, không phí đăng ký và không có gì phải hủy.",
         highlightLabel: "Được chọn nhiều",
         note: "Không phí đăng ký · Không hợp đồng · Thanh toán tại phòng tập",
         plans: [
@@ -733,12 +761,11 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
             billingPeriodLabel: "ngày",
             highlight: false,
             ctaLabel: "Lấy vé ngày",
-            tagline: "Ghé tập bất kỳ ngày nào",
+            tagline: "Dùng trong một ngày",
             features: [
-              "Sử dụng toàn bộ cả hai tầng",
-              "Bao gồm mọi thiết bị",
-              "Không ràng buộc",
-              "Lý tưởng cho khách du lịch",
+              "Cả hai tầng và toàn bộ thiết bị",
+              "Trả tại quầy khi bạn đến",
+              "Không phải ký gì cả",
             ],
           },
           {
@@ -748,12 +775,12 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
             billingPeriodLabel: "tháng",
             highlight: true,
             ctaLabel: "Trở thành hội viên",
-            tagline: "Gói được chọn nhiều nhất",
+            tagline: "30 ngày kể từ hôm bạn trả tiền",
             features: [
               "Mọi quyền lợi của vé ngày",
-              "Giá tốt nhất — tiết kiệm hơn vé ngày",
-              "Tập bất kỳ giờ mở cửa nào",
-              "Được HLV hướng dẫn kỹ thuật miễn phí",
+              "Rẻ hơn 8 lần mua vé ngày",
+              "Không hợp đồng — hết hạn là thôi",
+              "Chỉnh kỹ thuật miễn phí",
             ],
           },
         ],
@@ -761,7 +788,7 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
       trainers: {
         eyebrow: "Đội ngũ",
         title: "Đội ngũ huấn luyện viên",
-        subtitle: "Những người đồng hành giàu kinh nghiệm giúp bạn tiến bộ bền vững",
+        subtitle: "Ai có mặt tại sàn tập và họ phụ trách mảng nào.",
         scrollerLabel: "Huấn luyện viên",
         experienceLabel: "{years}+ năm kinh nghiệm",
         list: [
@@ -770,7 +797,6 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
             name: "Marcus Thompson",
             specialty: "Sức mạnh",
             bio: "Hơn 10 năm đồng hành cùng học viên xây dựng sức mạnh và hiệu suất vận động.",
-            image: "/images/trainers/marcus.svg",
             experienceYears: 10,
           },
           {
@@ -778,7 +804,6 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
             name: "Sarah Chen",
             specialty: "Yoga & độ linh hoạt",
             bio: "Huấn luyện viên yoga được chứng nhận, tập trung vào vận động chánh niệm và phục hồi.",
-            image: "/images/trainers/sarah.svg",
             experienceYears: 8,
           },
           {
@@ -786,15 +811,14 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
             name: "Jordan Hayes",
             specialty: "HIIT & tim mạch",
             bio: "Huấn luyện viên giàu năng lượng, luôn thúc đẩy học viên vượt qua giới hạn của mình.",
-            image: "/images/trainers/jordan.svg",
             experienceYears: 7,
           },
         ],
       },
       gallery: {
-        eyebrow: "Bên trong phòng tập",
-        title: "Không gian phòng tập",
-        subtitle: "Khám phá phòng gym sạch sẽ, hiện đại và đầy đủ thiết bị của chúng tôi",
+        eyebrow: "Không gian",
+        title: "Bên trong phòng tập",
+        subtitle: "Nhìn qua cả hai tầng và thiết bị trên mỗi tầng.",
         scrollerLabel: "Bộ sưu tập phòng tập",
         images: [
           {
@@ -844,12 +868,10 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
       location: {
         eyebrow: "Tìm chúng tôi",
         title: "Đến với chúng tôi",
-        subtitle: "Naomi Gym nằm gần khu An Thượng và bãi biển Mỹ Khê",
+        subtitle: "Chúng tôi ở đường Lê Văn Hiến, Khuê Mỹ, phía nam An Thượng.",
         addressLabel: "Địa chỉ",
         hoursLabel: "Giờ mở cửa",
         mapTitle: "Bản đồ Naomi Gym",
-        directionsPrefix: "Không xem được bản đồ? Mở chỉ đường",
-        directionsLinkLabel: "tại đây",
         getDirectionsLabel: "Xem chỉ đường",
         info: {
           addressLines: CONTACT_ADDRESS_LINES,
@@ -871,23 +893,30 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
       reviews: {
         eyebrow: "Đánh giá",
         title: "Khách tập nói gì về Naomi Gym",
-        subtitle: "Những chia sẻ thực tế từ người đang tập cùng chúng tôi",
+        subtitle: "Đánh giá Google nguyên văn từ những người đang tập ở đây.",
         scrollerLabel: "Đánh giá hội viên",
         starsLabelTemplate: "{rating} trên 5 sao",
         readOnGoogle: "Xem trên Google",
         googleReview: "Đánh giá Google",
+        allReviewsLabel: "Xem tất cả đánh giá trên Google",
         list: SHARED_REVIEWS,
       },
       faq: {
         eyebrow: "Thông tin hữu ích",
         title: "Câu hỏi thường gặp",
-        subtitle: "Những thông tin bạn cần biết trước khi đăng ký tập",
+        subtitle: "Những câu khách hay hỏi ngay tại quầy.",
         items: [
           {
             id: "faq-plans",
             question: "Phòng gym có những gói tập nào?",
             answer:
               "Rất đơn giản: vé ngày (40.000 VND/ngày) và gói tháng (300.000 VND/tháng). Không phí gia nhập và không hợp đồng.",
+          },
+          {
+            id: "faq-air-con",
+            question: "Phòng tập có máy lạnh không?",
+            answer:
+              "Không — phòng tập dùng quạt, cửa sổ và cửa chính đều mở. Bạn sẽ đổ mồ hôi, nhớ mang theo nước.",
           },
           {
             id: "faq-hours",
@@ -899,13 +928,13 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
             id: "faq-location",
             question: "Naomi Gym nằm ở đâu?",
             answer:
-              "Bạn có thể tìm thấy chúng tôi tại Lô 22 Lê Văn Hiến, Khuê Mỹ, Ngũ Hành Sơn, Đà Nẵng — gần khu An Thượng và biển Mỹ Khê.",
+              "Lô 22 Lê Văn Hiến, Khuê Mỹ, Ngũ Hành Sơn, Đà Nẵng. Nằm trên trục đường chính phía nam An Thượng — đi bộ thì hơi xa, chạy xe thì rất gần.",
           },
           {
             id: "faq-crowded",
             question: "Khi nào phòng tập vắng hơn?",
             answer:
-              "Nếu muốn tập thoải mái hơn, bạn nên đến vào buổi sáng hoặc tối muộn. Khung giờ đông nhất thường là chiều muộn và đầu buổi tối.",
+              "Vắng nhất là buổi sáng và sau khoảng 19:30. Đông nhất là chiều muộn và đầu buổi tối, nhưng vì có hai tầng nên bạn vẫn thường kiếm được giàn trống.",
           },
           {
             id: "faq-first-visit",
@@ -919,7 +948,7 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         eyebrow: "Tham gia",
         title: "Sẵn sàng tập luyện? Ghé chào chúng tôi nhé.",
         subtitle:
-          "Ghé buổi tập đầu tiên, hoặc gửi tin nhắn nhanh để được hỗ trợ. Không phí đăng ký, không áp lực.",
+          "Cứ đến bất cứ lúc nào chúng tôi mở cửa — không cần đặt trước. Hoặc nhắn tin, chúng tôi sẽ trả lời.",
         nameLabel: "Tên của bạn",
         namePlaceholder: "Ví dụ: An",
         contactLabel: "Số điện thoại hoặc email",
@@ -939,7 +968,7 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         callLabel: "Gọi cho chúng tôi",
         messengerLabel: "Nhắn tin qua Facebook",
         directionsLabel: "Xem chỉ đường",
-        reassurance: "Tham quan miễn phí · Không hợp đồng · Nhân viên thân thiện",
+        reassurance: "Tham quan trước · Không hợp đồng · Trả tại quầy",
         privacyNote: "Chúng tôi chỉ dùng thông tin của bạn để phản hồi.",
       },
     },

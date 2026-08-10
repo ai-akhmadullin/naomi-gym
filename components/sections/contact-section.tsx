@@ -16,6 +16,7 @@ import type { Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 type ContactCopy = {
+  eyebrow: string;
   title: string;
   subtitle: string;
   nameLabel: string;
@@ -49,6 +50,7 @@ type OpenStatusCopy = {
 };
 
 type ContactSectionProps = {
+  index?: string;
   copy: ContactCopy;
   directionsUrl: string;
   locale: Locale;
@@ -60,6 +62,7 @@ type ContactSectionProps = {
 type Status = "idle" | "sending" | "success" | "error";
 
 export function ContactSection({
+  index,
   copy,
   directionsUrl,
   locale,
@@ -114,23 +117,41 @@ export function ContactSection({
   // vertical padding for its height, so padding alone grows the text inputs but
   // not the select. min-height keeps all three control types the same size —
   // change the `min-h-*` value to make the fields taller or shorter.
-  const inputClasses =
-    "w-full min-h-13 rounded-xl border border-(--color-border) bg-white px-4 py-3 text-base text-foreground outline-none transition focus:border-(--color-brand) focus:ring-2 focus:ring-(--color-brand)/20 placeholder:text-(--color-text-muted)/70";
-  const labelClasses = "mb-1.5 block text-sm font-semibold text-foreground";
+  //
+  // The resting fill is paper, not white. White fields on a white card have to
+  // be outlined to exist at all, which turns the form into a stack of boxes;
+  // a tinted fill lets the border drop back and the field still reads as a
+  // field. Focus then lifts the field to white, so focus is a change in
+  // *surface*, not just a ring.
+  const inputClasses = cn(
+    "w-full min-h-12 rounded-[var(--radius-sm)] border border-(--color-border) bg-(--color-paper) px-4 py-3",
+    "text-[0.98rem] text-foreground outline-none transition-[background-color,border-color,box-shadow] duration-200",
+    "placeholder:text-(--color-text-faint)",
+    "focus:border-(--color-brand) focus:bg-white focus:ring-4 focus:ring-(--color-brand)/10",
+  );
+  const labelClasses = "mb-2 block text-[0.72rem] font-bold uppercase tracking-[0.14em] text-(--color-text-faint)";
 
   return (
-    <SectionShell id="contact" className="bg-(--color-bg-muted)">
-      <SectionHeading title={copy.title} subtitle={copy.subtitle} align="center" />
+    <SectionShell id="contact" tone="paper" space="md">
+      <SectionHeading
+        eyebrow={copy.eyebrow}
+        index={index}
+        title={copy.title}
+        subtitle={copy.subtitle}
+        align="center"
+      />
 
-      <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+      <div className="grid gap-5 lg:grid-cols-[1.25fr_0.75fr] lg:gap-6">
         {/* Form card */}
-        <div className="rounded-3xl border border-(--color-border) bg-white p-6 shadow-(--shadow-soft) sm:p-8">
+        <div className="rounded-[var(--radius-xl)] border border-(--color-border) bg-white p-7 shadow-(--shadow-soft) sm:p-9">
           {status === "success" ? (
             <div className="flex h-full min-h-80 flex-col items-center justify-center text-center">
-              <span className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-[image:var(--gradient-brand)] text-white shadow-(--shadow-brand)">
+              <span className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-(--color-brand) text-white shadow-(--shadow-brand)">
                 <Icon name="check" className="h-8 w-8" strokeWidth={3} />
               </span>
-              <h3 className="mt-5 font-display text-2xl font-bold text-foreground">{copy.successTitle}</h3>
+              <h3 className="mt-6 font-display text-[length:var(--step-2)] font-bold text-foreground">
+                {copy.successTitle}
+              </h3>
               <p className="mt-2 max-w-sm text-(--color-text-muted)">{copy.successMessage}</p>
             </div>
           ) : (
@@ -169,13 +190,28 @@ export function ContactSection({
                 <label htmlFor="contact-plan" className={labelClasses}>
                   {copy.planLabel}
                 </label>
-                <select id="contact-plan" name="plan" className={inputClasses} defaultValue={copy.planOptions[0]}>
-                  {copy.planOptions.map((option) => (
-                    <option key={option} value={option}>
-                      {option}
-                    </option>
-                  ))}
-                </select>
+                {/* appearance-none plus a drawn chevron: the native control
+                    renders an OS-styled arrow that matches nothing else on the
+                    page and changes shape per platform. */}
+                <div className="relative">
+                  <select
+                    id="contact-plan"
+                    name="plan"
+                    className={cn(inputClasses, "cursor-pointer appearance-none pr-11")}
+                    defaultValue={copy.planOptions[0]}
+                  >
+                    {copy.planOptions.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                  <Icon
+                    name="chevron-down"
+                    aria-hidden="true"
+                    className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-(--color-text-muted)"
+                  />
+                </div>
               </div>
 
               <div>
@@ -191,7 +227,7 @@ export function ContactSection({
                 />
               </div>
 
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div className="flex flex-col gap-4 pt-1 sm:flex-row sm:items-center">
                 <button
                   type="submit"
                   className={buttonStyles({ variant: "primary", size: "md", className: "w-full sm:w-auto" })}
@@ -200,16 +236,16 @@ export function ContactSection({
                   {status === "sending" ? copy.sendingLabel : copy.submitLabel}
                   {status !== "sending" ? <Icon name="send" className="h-4 w-4" /> : null}
                 </button>
-                <p className="text-sm text-(--color-text-muted)">{copy.reassurance}</p>
+                <p className="text-[0.85rem] text-(--color-text-muted)">{copy.reassurance}</p>
               </div>
 
               <p className="min-h-5 text-sm font-medium text-red-600" role="status" aria-live="polite">
                 {status === "error" ? error : ""}
               </p>
 
-              <p className="text-xs leading-relaxed text-(--color-text-muted)">
+              <p className="text-[0.78rem] leading-relaxed text-(--color-text-faint)">
                 {copy.privacyNote}{" "}
-                <a href={privacyHref} className="underline underline-offset-2 hover:text-(--color-brand)">
+                <a href={privacyHref} className="link-underline hover:text-(--color-brand)">
                   {privacyLabel}
                 </a>
               </p>
@@ -218,53 +254,66 @@ export function ContactSection({
         </div>
 
         {/* Quick contact panel */}
-        <div className="flex flex-col gap-4 rounded-3xl bg-[image:var(--gradient-ink)] p-6 text-white shadow-(--shadow-card) sm:p-8">
-          <div>
-            <h3 className="font-display text-2xl font-bold">{copy.sideTitle}</h3>
-            <p className="mt-2 text-white/70">{copy.sideText}</p>
-          </div>
+        <div className="grain grain-dark relative flex flex-col overflow-hidden rounded-[var(--radius-xl)] bg-[image:var(--gradient-ink)] p-7 text-white shadow-(--shadow-card) sm:p-8">
+          <div
+            aria-hidden="true"
+            className="glow absolute -left-20 -top-20 h-60 w-60 [--glow-tint:color-mix(in_srgb,var(--color-brand)_60%,transparent)]"
+          />
+          <div className="relative z-10 flex h-full flex-col">
+            <div>
+              <h3 className="font-display text-[length:var(--step-2)] font-bold leading-tight">{copy.sideTitle}</h3>
+              <p className="mt-2.5 text-[0.95rem] leading-relaxed text-white/60">{copy.sideText}</p>
+            </div>
 
-          <div className="mt-1 space-y-3">
-            <a
-              href={`tel:${CONTACT_PHONE_RAW}`}
-              className="flex items-center gap-4 rounded-2xl bg-white/10 px-4 py-3.5 transition hover:bg-white/15"
-            >
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[image:var(--gradient-brand)] text-white">
-                <Icon name="phone" className="h-5 w-5" />
-              </span>
-              <span>
-                <span className="block text-sm text-white/60">{copy.callLabel}</span>
-                <span className="font-semibold">{CONTACT_PHONE_DISPLAY}</span>
-              </span>
-            </a>
+            <div className="mt-7 space-y-2.5">
+              <a
+                href={`tel:${CONTACT_PHONE_RAW}`}
+                className="group flex items-center gap-4 rounded-[var(--radius-md)] bg-white/[0.06] px-4 py-3.5 transition-colors hover:bg-white/[0.12]"
+              >
+                <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-(--color-accent) text-(--color-accent-ink)">
+                  <Icon name="phone" className="h-4.5 w-4.5" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-[0.72rem] font-semibold uppercase tracking-[0.12em] text-white/45">
+                    {copy.callLabel}
+                  </span>
+                  <span className="block font-semibold tabular-nums">{CONTACT_PHONE_DISPLAY}</span>
+                </span>
+                {/* The two rows below carry this arrow; without it here the
+                    first row read as a heading rather than as the first of
+                    three identical actions. */}
+                <Icon
+                  name="arrow-right"
+                  className="ml-auto h-4 w-4 shrink-0 text-white/30 transition-transform group-hover:translate-x-0.5 group-hover:text-white/70"
+                />
+              </a>
 
-            <a
-              href={SOCIAL_FACEBOOK_URL}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="flex items-center gap-4 rounded-2xl bg-white/10 px-4 py-3.5 transition hover:bg-white/15"
-            >
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white">
-                <Icon name="message-circle" className="h-5 w-5" />
-              </span>
-              <span className="font-semibold">{copy.messengerLabel}</span>
-            </a>
+              {[
+                { label: copy.messengerLabel, href: SOCIAL_FACEBOOK_URL, icon: "message-circle" as const },
+                { label: copy.directionsLabel, href: directionsUrl, icon: "map-pin" as const },
+              ].map((action) => (
+                <a
+                  key={action.label}
+                  href={action.href}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="group flex items-center gap-4 rounded-[var(--radius-md)] bg-white/[0.06] px-4 py-3.5 transition-colors hover:bg-white/[0.12]"
+                >
+                  <span className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10 text-white">
+                    <Icon name={action.icon} className="h-4.5 w-4.5" />
+                  </span>
+                  <span className="font-semibold">{action.label}</span>
+                  <Icon
+                    name="arrow-right"
+                    className="ml-auto h-4 w-4 shrink-0 text-white/30 transition-transform group-hover:translate-x-0.5 group-hover:text-white/70"
+                  />
+                </a>
+              ))}
+            </div>
 
-            <a
-              href={directionsUrl}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="flex items-center gap-4 rounded-2xl bg-white/10 px-4 py-3.5 transition hover:bg-white/15"
-            >
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/15 text-white">
-                <Icon name="map-pin" className="h-5 w-5" />
-              </span>
-              <span className="font-semibold">{copy.directionsLabel}</span>
-            </a>
-          </div>
-
-          <div className="mt-auto border-t border-white/10 pt-4">
-            <OpenNowBadge locale={locale} copy={openStatus} tone="dark" />
+            <div className="mt-auto border-t border-white/10 pt-5">
+              <OpenNowBadge locale={locale} copy={openStatus} tone="dark" />
+            </div>
           </div>
         </div>
       </div>

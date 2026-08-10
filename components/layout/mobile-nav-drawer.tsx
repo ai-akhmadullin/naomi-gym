@@ -161,7 +161,7 @@ export function MobileNavDrawer({
                   <li key={item.href}>
                     <Link
                       href={item.href}
-                      className="block rounded-xl px-3 py-2.5 text-lg font-semibold text-foreground hover:bg-(--color-bg-muted) hover:text-(--color-brand)"
+                      className="block rounded-xl px-3 py-2.5 text-lg font-semibold text-foreground hover:bg-(--color-paper) hover:text-(--color-brand)"
                       onClick={(event) => onLinkClick(item.href, event)}
                     >
                       {item.label}
@@ -193,7 +193,7 @@ export function MobileNavDrawer({
                       href={href}
                       className={cn(
                         "rounded-full px-3 py-2 text-sm font-semibold transition",
-                        isActive ? "bg-(--color-brand) text-white" : "bg-(--color-bg-muted) text-foreground",
+                        isActive ? "bg-(--color-brand) text-white" : "bg-(--color-paper) text-foreground",
                       )}
                       hrefLang={targetLocale}
                       aria-current={isActive ? "page" : undefined}

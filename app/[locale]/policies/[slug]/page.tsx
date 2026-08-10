@@ -56,7 +56,7 @@ export default async function LocalizedPolicyPage({ params }: PageProps) {
         localeNames={dictionary.localeNames}
         mobileNavCopy={dictionary.mobileNav}
       />
-      <main className="min-h-[calc(100dvh-6rem)] bg-(--color-bg-muted) py-16 sm:py-20">
+      <main className="min-h-[calc(100dvh-6rem)] bg-(--color-paper) py-16 sm:py-20">
         <div className={cn(SECTION_CONTAINER_CLASS, "max-w-3xl")}>
           <article className="rounded-3xl border border-(--color-border) bg-white p-8 shadow-(--shadow-soft) sm:p-10">
             <h1 className="font-display text-4xl font-bold text-foreground sm:text-5xl">{privacy.title}</h1>

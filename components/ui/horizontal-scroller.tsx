@@ -11,6 +11,8 @@ type HorizontalScrollerProps = PropsWithChildren<{
   trackClassName?: string;
   itemClassName?: string;
   showScrollIndicator?: boolean;
+  /** Tunes the progress bar for placement on an ink section. */
+  indicatorTone?: "light" | "dark";
 }>;
 
 export function HorizontalScroller({
@@ -20,6 +22,7 @@ export function HorizontalScroller({
   trackClassName,
   itemClassName,
   showScrollIndicator = false,
+  indicatorTone = "light",
   children,
 }: HorizontalScrollerProps) {
   const items = Children.toArray(children);
@@ -169,13 +172,20 @@ export function HorizontalScroller({
           ref={indicatorTrackRef}
           aria-hidden="true"
           className={cn(
-            "overflow-hidden rounded-full bg-(--color-border) transition-all duration-200",
-            isScrollable ? "mt-1 h-1.5 opacity-100" : "mt-0 h-0 opacity-0",
+            // Capped width: stretched across the full section this read as a
+            // horizontal rule closing the section rather than as a scroll
+            // position for the track above it.
+            "max-w-56 overflow-hidden rounded-full transition-all duration-200",
+            indicatorTone === "dark" ? "bg-white/12" : "bg-(--color-border-strong)",
+            isScrollable ? "mt-3 h-[3px] opacity-100" : "mt-0 h-0 opacity-0",
           )}
         >
           <span
             ref={indicatorThumbRef}
-            className="block h-full rounded-full bg-(--color-brand) will-change-transform"
+            className={cn(
+              "block h-full rounded-full will-change-transform",
+              indicatorTone === "dark" ? "bg-(--color-accent)" : "bg-(--color-brand)",
+            )}
             style={{ width: "100%", transform: "translate3d(0, 0, 0)" }}
           />
         </div>

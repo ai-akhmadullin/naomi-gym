@@ -29,7 +29,13 @@ export type Trainer = {
   name: string;
   specialty: string;
   bio: string;
-  image: string;
+  /**
+   * Optional on purpose. With no photo the card renders a monogram panel;
+   * drop a real portrait in here and it takes over. The previous placeholder —
+   * a grey silhouette bust on a green gradient — was worse than no image at
+   * all, because it looked like a photo that had failed to load.
+   */
+  image?: string;
   experienceYears: number;
 };
 
@@ -40,12 +46,14 @@ export type GalleryImage = {
   category: string;
 };
 
+export type OpeningHoursEntry = {
+  dayLabel: string;
+  ranges: string[];
+};
+
 export type LocationInfo = {
   addressLines: string[];
-  openingHours: Array<{
-    dayLabel: string;
-    ranges: string[];
-  }>;
+  openingHours: OpeningHoursEntry[];
   mapEmbedUrl: string;
   directionsUrl: string;
 };

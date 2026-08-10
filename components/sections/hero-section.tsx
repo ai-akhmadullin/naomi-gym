@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import { buttonStyles } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { OpenNowBadge } from "@/components/ui/open-now-badge";
@@ -7,6 +5,8 @@ import { Reveal } from "@/components/ui/reveal";
 import { SECTION_CONTAINER_CLASS } from "@/lib/constants";
 import type { Locale } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+
+type HeroStat = { value: string; label: string };
 
 type HeroSectionProps = {
   locale: Locale;
@@ -18,12 +18,25 @@ type HeroSectionProps = {
   primaryCta: string;
   primaryHref: string;
   secondaryCta: string;
-  imageAlt: string;
-  membersCount: string;
-  membersLabel: string;
-  highlights: string[];
+  stats: HeroStat[];
 };
 
+/**
+ * One column, full width.
+ *
+ * The second column used to hold an "at a glance" panel — hours, both prices,
+ * the address. It was cut for two reasons. Every figure in it already appeared
+ * somewhere else on the page (the prices in the stat strip directly beneath it
+ * and again in Pricing, the hours and address again in Location), so it was
+ * restating rather than adding. And a dense box of 14px rows sitting beside an
+ * 88px headline put two different scales side by side, which is what made the
+ * two halves look like they belonged to different pages.
+ *
+ * What replaced it is nothing: the headline block now owns the full measure and
+ * the stat strip runs the whole width as a spec bar. Empty space on the right of
+ * a big left-aligned headline is a composition; a box of small type there is
+ * filler.
+ */
 export function HeroSection({
   locale,
   openStatus,
@@ -34,48 +47,86 @@ export function HeroSection({
   primaryCta,
   primaryHref,
   secondaryCta,
-  imageAlt,
-  membersCount,
-  membersLabel,
-  highlights,
+  stats,
 }: HeroSectionProps) {
   return (
-    <section id="home" className="relative scroll-mt-20 overflow-hidden bg-(--color-bg-muted)">
-      {/* Decorative background */}
+    <section
+      id="home"
+      className="grain relative scroll-mt-12 overflow-hidden bg-(--color-paper) lg:scroll-mt-6"
+    >
+      {/* Decorative ground. Two wide, low-opacity green washes plus a dotted
+          grid that is masked to fade out before it reaches any text — an
+          unmasked pattern behind body copy costs legibility for no gain. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="bg-grid absolute inset-0 opacity-50 [mask-image:radial-gradient(ellipse_at_top,black,transparent_72%)]" />
-        <div className="absolute -left-24 -top-24 h-96 w-96 rounded-full bg-(--color-brand)/15 blur-3xl" />
-        <div className="absolute -right-16 top-32 h-80 w-80 rounded-full bg-(--color-brand-bright)/15 blur-3xl" />
+        <div className="bg-grid absolute inset-0 opacity-[0.55] [mask-image:radial-gradient(ellipse_75%_60%_at_70%_0%,black,transparent_75%)]" />
+        {/* Tints run higher than the blurred circles these replace: a blur has a
+            solid core and falls off at the edge, while a radial gradient ramps
+            from the centre, so matching the perceived density needs more alpha
+            at the middle. */}
+        <div className="glow absolute -left-40 -top-40 h-[38rem] w-[38rem] [--glow-tint:color-mix(in_srgb,var(--color-brand)_30%,transparent)]" />
+        <div className="glow absolute -right-32 top-16 h-[32rem] w-[32rem] [--glow-tint:color-mix(in_srgb,var(--color-brand-bright)_30%,transparent)]" />
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-b from-transparent to-(--color-paper)" />
       </div>
 
-      <div className={cn(SECTION_CONTAINER_CLASS, "relative py-16 sm:py-20 lg:py-28")}>
-        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="min-w-0">
-            <Reveal>
+      <div
+        className={cn(
+          SECTION_CONTAINER_CLASS,
+          "relative z-10 pt-16 pb-16 sm:pt-24 sm:pb-20 lg:pt-32 lg:pb-24",
+        )}
+      >
+        <div className="min-w-0">
+          <Reveal>
               <div className="flex flex-wrap items-center gap-2.5">
-                <span className="inline-flex items-center gap-2 rounded-full border border-(--color-brand)/15 bg-white/70 px-4 py-1.5 text-sm font-semibold text-(--color-brand) backdrop-blur">
-                  <Icon name="map-pin" className="h-4 w-4" />
+                <span className="inline-flex items-center gap-2 rounded-full border border-(--color-border-strong) bg-white/80 px-3.5 py-1.5 text-[0.8rem] font-semibold text-(--color-text) shadow-[0_1px_2px_rgba(9,34,22,0.04)] backdrop-blur">
+                  <Icon name="map-pin" className="h-3.5 w-3.5 text-(--color-brand)" />
                   {eyebrow}
                 </span>
-                <OpenNowBadge locale={locale} copy={openStatus} className="bg-white/70 backdrop-blur" />
+                <OpenNowBadge
+                  locale={locale}
+                  copy={openStatus}
+                  className="border-(--color-border-strong) bg-white/80 backdrop-blur"
+                />
               </div>
             </Reveal>
 
-            <Reveal delay={80}>
-              <h1 className="mt-6 font-display text-5xl font-extrabold leading-[1.02] tracking-tight text-foreground sm:text-6xl lg:text-7xl">
-                {titlePrefix}
-                <span className="mt-1 block text-gradient">{titleHighlight}</span>
+            <Reveal delay={70}>
+              {/* leading-[1.04], not the ~0.95 this size would take in English:
+                  the Vietnamese headline stacks tone marks above and below, and
+                  tighter leading collides them between lines. */}
+              <h1 className="mt-7 max-w-5xl font-display text-[length:var(--step-5)] font-extrabold leading-[1.04] tracking-[-0.03em] text-balance text-foreground">
+                {titlePrefix}{" "}
+                {/* The brand name gets a drawn underline rather than a gradient
+                    fill. Gradient text was one more instance of the same green
+                    ramp that already covered the page; a single lime stroke is
+                    the one accent that is genuinely unique to this line. */}
+                <span className="relative inline-block whitespace-nowrap">
+                  <span className="relative z-10">{titleHighlight}</span>
+                  <svg
+                    aria-hidden="true"
+                    viewBox="0 0 300 22"
+                    preserveAspectRatio="none"
+                    className="absolute bottom-[-0.1em] left-[-1.5%] h-[0.26em] w-[103%] text-(--color-accent)"
+                  >
+                    <path
+                      d="M4 15.5C58 7.5 128 4.5 296 8.5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="11"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
               </h1>
             </Reveal>
 
-            <Reveal delay={140}>
-              <p className="mt-6 max-w-xl text-lg leading-relaxed text-(--color-text-muted) sm:text-xl">
+            <Reveal delay={130}>
+              <p className="mt-7 max-w-2xl text-pretty text-[length:var(--step-1)] leading-[1.65] text-(--color-text-muted)">
                 {description}
               </p>
             </Reveal>
 
-            <Reveal delay={200}>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4">
+            <Reveal delay={190}>
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
                 <a
                   href={primaryHref}
                   className={buttonStyles({ variant: "primary", size: "lg", className: "w-full sm:w-auto" })}
@@ -83,48 +134,55 @@ export function HeroSection({
                   {primaryCta}
                   <Icon name="arrow-right" className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />
                 </a>
+                {/* Secondary action is a text link, not a second button. Two
+                    equally-weighted buttons make the reader choose; one button
+                    and one link tells them which choice is the default. */}
                 <a
                   href="#pricing"
-                  className={buttonStyles({ variant: "secondary", size: "lg", className: "w-full sm:w-auto" })}
+                  className="group inline-flex items-center justify-center gap-2 px-2 py-2 text-[1.05rem] font-semibold text-(--color-text) transition-colors hover:text-(--color-brand) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-brand) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-paper) sm:w-auto"
                 >
-                  {secondaryCta}
+                  <span className="link-underline">{secondaryCta}</span>
+                  <Icon
+                    name="arrow-right"
+                    className="h-4 w-4 text-(--color-brand) transition-transform group-hover:translate-x-1"
+                  />
                 </a>
               </div>
             </Reveal>
 
-            <Reveal delay={260}>
-              <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-2.5">
-                {highlights.map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-sm font-medium text-foreground sm:text-base">
-                    <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-(--color-brand)/12 text-(--color-brand)">
-                      <Icon name="check" className="h-3.5 w-3.5" strokeWidth={3} />
+          {/* Numbers, not tick marks. The three green checks this replaces
+              repeated the lede almost word for word; a figure with a caption
+              carries the same claim and gives the block a second typographic
+              voice. Now that the hero is one column this runs the full measure
+              as a spec bar, which is what makes the width to the right of the
+              headline read as deliberate rather than as a gap. */}
+          <Reveal delay={250}>
+            <dl className="mt-14 grid grid-cols-2 border-t border-(--color-border-strong) sm:mt-16 sm:grid-cols-4">
+              {stats.map((stat, position) => (
+                <div
+                  key={stat.label}
+                  className={cn(
+                    "min-w-0 py-8 pr-6",
+                    // Hairlines between cells, but never on the cell that starts
+                    // a row: at sm the row starts every 4th cell, below sm every
+                    // 2nd. A rule on those would hang off the left edge.
+                    "border-(--color-border)",
+                    position % 2 !== 0 && "border-l pl-6",
+                    position % 4 !== 0 ? "sm:border-l sm:pl-8" : "sm:border-l-0 sm:pl-0",
+                  )}
+                >
+                  <dt className="sr-only">{stat.label}</dt>
+                  <dd>
+                    <span className="block font-display text-[length:var(--step-4)] font-extrabold leading-none tracking-[-0.04em] text-foreground tabular-nums">
+                      {stat.value}
                     </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-          </div>
-
-          <Reveal delay={160} className="relative min-w-0">
-            <div className="relative mx-auto max-w-xl">
-              <div className="animate-float overflow-hidden rounded-[2rem] border border-white/60 bg-white shadow-(--shadow-card) ring-1 ring-black/5">
-                <Image
-                  src="/images/hero/hero-main.svg"
-                  alt={imageAlt}
-                  width={800}
-                  height={600}
-                  className="h-auto w-full"
-                  priority
-                />
-              </div>
-
-              {/* Members stat */}
-              <div className="absolute -bottom-5 -left-3 z-10 rounded-2xl bg-[image:var(--gradient-brand)] p-4 text-white shadow-(--shadow-brand) sm:-left-6 sm:p-5">
-                <p className="font-display text-3xl font-bold leading-none sm:text-4xl">{membersCount}</p>
-                <p className="mt-1.5 text-sm font-medium text-white/90 sm:text-base">{membersLabel}</p>
-              </div>
-            </div>
+                    <span className="mt-3 block text-[0.78rem] font-semibold uppercase tracking-[0.12em] text-(--color-text-faint)">
+                      {stat.label}
+                    </span>
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </Reveal>
         </div>
       </div>

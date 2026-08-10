@@ -3,6 +3,7 @@ import Link from "next/link";
 import { DesktopNavLinks } from "@/components/layout/desktop-nav-links";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { MobileNavDrawer } from "@/components/layout/mobile-nav-drawer";
+import { StickyHeaderShell } from "@/components/layout/sticky-header-shell";
 import { buttonStyles } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import { SECTION_CONTAINER_CLASS, SITE_NAME } from "@/lib/constants";
@@ -61,7 +62,7 @@ export function SiteHeader({
   const joinHref = isHomeRoute ? "#contact" : `${homePath}#contact`;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-(--color-border)/70 bg-white/80 shadow-[0_1px_0_rgba(8,30,19,0.04),0_8px_24px_-16px_rgba(8,30,19,0.18)] backdrop-blur-md">
+    <StickyHeaderShell>
       <div
         className={cn(
           SECTION_CONTAINER_CLASS,
@@ -69,11 +70,15 @@ export function SiteHeader({
           "lg:grid lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center",
         )}
       >
-        <Link href={homePath} className="flex shrink-0 items-center gap-2.5" aria-label={`${SITE_NAME} home`}>
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[image:var(--gradient-brand)] text-white shadow-(--shadow-brand)">
+        <Link
+          href={homePath}
+          className="group flex shrink-0 items-center gap-2.5 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-brand) focus-visible:ring-offset-4"
+          aria-label={`${SITE_NAME} home`}
+        >
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius-xs)] bg-(--color-brand) text-white transition-transform duration-300 group-hover:-rotate-6">
             <Icon name="dumbbell" className="h-5 w-5" />
           </span>
-          <span className="font-display whitespace-nowrap text-xl font-extrabold tracking-tight text-foreground sm:text-2xl">
+          <span className="font-display whitespace-nowrap text-xl font-extrabold tracking-[-0.03em] text-foreground sm:text-[1.4rem]">
             {SITE_NAME}
           </span>
         </Link>
@@ -121,6 +126,6 @@ export function SiteHeader({
           navLabel={mobileNavCopy.navLabel}
         />
       </div>
-    </header>
+    </StickyHeaderShell>
   );
 }

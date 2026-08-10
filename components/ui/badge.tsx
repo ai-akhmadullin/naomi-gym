@@ -10,10 +10,10 @@ export function Badge({ className, variant = "soft", ...props }: BadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-semibold",
+        "inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[0.72rem] font-bold uppercase tracking-[0.1em]",
         variant === "soft"
-          ? "bg-(--color-brand)/10 text-(--color-brand)"
-          : "bg-[image:var(--gradient-brand)] text-white shadow-(--shadow-brand)",
+          ? "bg-(--color-brand-tint) text-(--color-brand)"
+          : "bg-(--color-accent) text-(--color-accent-ink)",
         className,
       )}
       {...props}

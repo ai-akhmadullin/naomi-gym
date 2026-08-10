@@ -42,6 +42,8 @@ describe("ReviewsSection", () => {
         starsLabelTemplate={dictionary.home.reviews.starsLabelTemplate}
         readOnGoogleLabel={dictionary.home.reviews.readOnGoogle}
         googleReviewLabel={dictionary.home.reviews.googleReview}
+        allReviewsLabel={dictionary.home.reviews.allReviewsLabel}
+        allReviewsUrl={dictionary.home.location.info.directionsUrl}
         reviews={FIRST_REVIEWS}
       />,
     );
@@ -57,6 +59,8 @@ describe("ReviewsSection", () => {
         starsLabelTemplate={dictionary.home.reviews.starsLabelTemplate}
         readOnGoogleLabel={dictionary.home.reviews.readOnGoogle}
         googleReviewLabel={dictionary.home.reviews.googleReview}
+        allReviewsLabel={dictionary.home.reviews.allReviewsLabel}
+        allReviewsUrl={dictionary.home.location.info.directionsUrl}
         reviews={SECOND_REVIEWS}
       />,
     );

@@ -7,6 +7,7 @@ import { ContactSection } from "@/components/sections/contact-section";
 import { FaqSection } from "@/components/sections/faq-section";
 import { GallerySection } from "@/components/sections/gallery-section";
 import { HeroSection } from "@/components/sections/hero-section";
+import { TickerBand } from "@/components/sections/ticker-band";
 import { LocationSection } from "@/components/sections/location-section";
 import { PricingSection } from "@/components/sections/pricing-section";
 import { ReviewsSection } from "@/components/sections/reviews-section";
@@ -45,17 +46,19 @@ export default async function LocalizedHomePage({ params }: PageProps) {
           primaryCta={dictionary.home.hero.primaryCta}
           primaryHref="#contact"
           secondaryCta={dictionary.home.hero.secondaryCta}
-          imageAlt={dictionary.home.hero.imageAlt}
-          membersCount={dictionary.home.hero.membersCount}
-          membersLabel={dictionary.home.hero.membersLabel}
-          highlights={dictionary.home.hero.highlights}
+          stats={dictionary.home.hero.stats}
         />
+        <TickerBand items={dictionary.home.ticker.items} label={dictionary.home.ticker.label} />
         <BenefitsSection
+          eyebrow={dictionary.home.benefits.eyebrow}
+          index="01"
           title={dictionary.home.benefits.title}
           subtitle={dictionary.home.benefits.subtitle}
           items={dictionary.home.benefits.items}
         />
         <PricingSection
+          eyebrow={dictionary.home.pricing.eyebrow}
+          index="02"
           title={dictionary.home.pricing.title}
           subtitle={dictionary.home.pricing.subtitle}
           plans={dictionary.home.pricing.plans}
@@ -63,48 +66,60 @@ export default async function LocalizedHomePage({ params }: PageProps) {
           note={dictionary.home.pricing.note}
           joinHref="#contact"
         />
-        <TrainersSection
-          title={dictionary.home.trainers.title}
-          subtitle={dictionary.home.trainers.subtitle}
-          scrollerLabel={dictionary.home.trainers.scrollerLabel}
-          experienceLabel={dictionary.home.trainers.experienceLabel}
-          trainers={dictionary.home.trainers.list}
-        />
         <GallerySection
+          eyebrow={dictionary.home.gallery.eyebrow}
+          index="03"
           title={dictionary.home.gallery.title}
           subtitle={dictionary.home.gallery.subtitle}
           scrollerLabel={dictionary.home.gallery.scrollerLabel}
           images={dictionary.home.gallery.images}
           lightbox={dictionary.home.gallery.lightbox}
         />
+        <TrainersSection
+          eyebrow={dictionary.home.trainers.eyebrow}
+          index="04"
+          title={dictionary.home.trainers.title}
+          subtitle={dictionary.home.trainers.subtitle}
+          scrollerLabel={dictionary.home.trainers.scrollerLabel}
+          experienceLabel={dictionary.home.trainers.experienceLabel}
+          trainers={dictionary.home.trainers.list}
+        />
         <LocationSection
           locale={locale}
           openStatus={dictionary.openStatus}
+          eyebrow={dictionary.home.location.eyebrow}
+          index="05"
           title={dictionary.home.location.title}
           subtitle={dictionary.home.location.subtitle}
           addressLabel={dictionary.home.location.addressLabel}
           hoursLabel={dictionary.home.location.hoursLabel}
           mapTitle={dictionary.home.location.mapTitle}
-          directionsPrefix={dictionary.home.location.directionsPrefix}
-          directionsLinkLabel={dictionary.home.location.directionsLinkLabel}
           getDirectionsLabel={dictionary.home.location.getDirectionsLabel}
           location={dictionary.home.location.info}
         />
         <ReviewsSection
+          eyebrow={dictionary.home.reviews.eyebrow}
+          index="06"
           title={dictionary.home.reviews.title}
           subtitle={dictionary.home.reviews.subtitle}
           scrollerLabel={dictionary.home.reviews.scrollerLabel}
           starsLabelTemplate={dictionary.home.reviews.starsLabelTemplate}
           readOnGoogleLabel={dictionary.home.reviews.readOnGoogle}
           googleReviewLabel={dictionary.home.reviews.googleReview}
+          allReviewsLabel={dictionary.home.reviews.allReviewsLabel}
+          allReviewsUrl={dictionary.home.location.info.directionsUrl}
           reviews={dictionary.home.reviews.list}
         />
         <FaqSection
+          eyebrow={dictionary.home.faq.eyebrow}
+          index="07"
           title={dictionary.home.faq.title}
           subtitle={dictionary.home.faq.subtitle}
+          callLabel={dictionary.quickActions.callLabel}
           faqs={dictionary.home.faq.items}
         />
         <ContactSection
+          index="08"
           copy={dictionary.home.contact}
           directionsUrl={dictionary.home.location.info.directionsUrl}
           locale={locale}
@@ -124,9 +139,6 @@ export default async function LocalizedHomePage({ params }: PageProps) {
         facebookLabel={dictionary.footer.facebookLabel}
         instagramLabel={dictionary.footer.instagramLabel}
         joinLabel={dictionary.footer.joinNow}
-        ctaTitle={dictionary.footer.ctaTitle}
-        ctaText={dictionary.footer.ctaText}
-        ctaButton={dictionary.footer.ctaButton}
         rightsLabel={dictionary.footer.rightsLabel}
       />
       <StickyJoinBar

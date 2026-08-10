@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { buttonStyles } from "@/components/ui/button";
 import { Icon } from "@/components/ui/icon";
 import {
   CONTACT_ADDRESS_LINES,
@@ -26,9 +25,6 @@ type SiteFooterProps = {
   facebookLabel: string;
   instagramLabel: string;
   joinLabel: string;
-  ctaTitle: string;
-  ctaText: string;
-  ctaButton: string;
   rightsLabel: string;
 };
 
@@ -47,9 +43,6 @@ export function SiteFooter({
   facebookLabel,
   instagramLabel,
   joinLabel,
-  ctaTitle,
-  ctaText,
-  ctaButton,
   rightsLabel,
 }: SiteFooterProps) {
   const joinHref = resolveSectionHref(locale, isHomePage, "#contact");
@@ -61,80 +54,60 @@ export function SiteFooter({
         className={cn(
           SECTION_CONTAINER_CLASS,
           // Extra bottom space on mobile so the sticky Join bar never covers content.
-          "pt-14 pb-[calc(7rem+env(safe-area-inset-bottom))] lg:pb-[calc(2.5rem+env(safe-area-inset-bottom))]",
+          "pt-16 pb-[calc(7rem+env(safe-area-inset-bottom))] lg:pb-[calc(2.5rem+env(safe-area-inset-bottom))]",
         )}
       >
-        {/* CTA band */}
-        <div className="relative overflow-hidden rounded-[2rem] bg-[image:var(--gradient-brand)] px-6 py-10 shadow-(--shadow-card) sm:px-12 sm:py-12">
-          <div className="bg-grid pointer-events-none absolute inset-0 opacity-20" aria-hidden="true" />
-          <div className="relative flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <h2 className="font-display text-3xl font-extrabold leading-tight text-white sm:text-4xl">{ctaTitle}</h2>
-              <p className="mt-2 max-w-xl text-base text-white/85 sm:text-lg">{ctaText}</p>
-            </div>
-            <a
-              href={joinHref}
-              className={buttonStyles({
-                variant: "secondary",
-                size: "lg",
-                className: "shrink-0 whitespace-nowrap !text-(--color-brand)",
-              })}
-            >
-              {ctaButton}
-              <Icon name="arrow-right" className="h-5 w-5 transition-transform group-hover:translate-x-0.5" />
-            </a>
-          </div>
-        </div>
-
         {/* Columns */}
-        <div className="mt-14 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Equal thirds. Weighting the brand column at 1.3fr gave it half again
+            as much width as its content (a wordmark, one line of tagline and two
+            icons) could fill, opening a ~370px void before "Quick links". */}
+        <div className="grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
           <div>
             <div className="flex items-center gap-2.5">
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-[image:var(--gradient-brand)] text-white">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-[var(--radius-xs)] bg-(--color-brand) text-white">
                 <Icon name="dumbbell" className="h-5 w-5" />
               </span>
-              <p className="font-display text-2xl font-extrabold">{SITE_NAME}</p>
+              <p className="font-display text-2xl font-extrabold tracking-[-0.02em]">{SITE_NAME}</p>
             </div>
-            <p className="mt-4 max-w-xs text-base leading-relaxed text-white/65">{siteTagline}</p>
-            <div className="mt-6 flex gap-3">
-              <a
-                href={SOCIAL_FACEBOOK_URL}
-                target="_blank"
-                rel="noreferrer noopener"
-                aria-label={facebookLabel}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white/8 text-white/80 transition hover:bg-(--color-brand) hover:text-white"
-              >
-                <Icon name="facebook" />
-              </a>
-              <a
-                href={SOCIAL_INSTAGRAM_URL}
-                target="_blank"
-                rel="noreferrer noopener"
-                aria-label={instagramLabel}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white/8 text-white/80 transition hover:bg-(--color-brand) hover:text-white"
-              >
-                <Icon name="instagram" />
-              </a>
+            <p className="mt-5 max-w-xs leading-relaxed text-white/55">{siteTagline}</p>
+            <div className="mt-7 flex gap-2.5">
+              {[
+                { href: SOCIAL_FACEBOOK_URL, label: facebookLabel, icon: "facebook" as const },
+                { href: SOCIAL_INSTAGRAM_URL, label: instagramLabel, icon: "instagram" as const },
+              ].map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  aria-label={social.label}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/12 text-white/70 transition-colors hover:border-(--color-accent) hover:bg-(--color-accent) hover:text-(--color-accent-ink)"
+                >
+                  <Icon name={social.icon} className="h-4.5 w-4.5" />
+                </a>
+              ))}
             </div>
           </div>
 
           <div>
-            <h3 className="text-base font-bold uppercase tracking-wide text-white/50">{quickLinksTitle}</h3>
-            <ul className="mt-4 space-y-3 text-base text-white/80">
+            <h3 className="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-white/40">{quickLinksTitle}</h3>
+            {/* Two columns: as one list this ran eight rows deep and left the
+                two neighbouring columns looking unfinished beside it. */}
+            <ul className="mt-5 grid grid-cols-2 gap-x-6 gap-y-3 text-[0.95rem] text-white/70 sm:grid-cols-1 lg:grid-cols-2">
               {navItems
                 .filter((item) => item.kind === "section")
                 .map((item) => (
                   <li key={item.label}>
                     <Link
                       href={resolveSectionHref(locale, isHomePage, item.href)}
-                      className="transition hover:text-(--color-brand-bright)"
+                      className="link-underline transition-colors hover:text-white"
                     >
                       {item.label}
                     </Link>
                   </li>
                 ))}
               <li>
-                <a href={joinHref} className="font-semibold text-white transition hover:text-(--color-brand-bright)">
+                <a href={joinHref} className="font-semibold text-(--color-accent) transition-opacity hover:opacity-80">
                   {joinLabel}
                 </a>
               </li>
@@ -142,10 +115,10 @@ export function SiteFooter({
           </div>
 
           <div>
-            <h3 className="text-base font-bold uppercase tracking-wide text-white/50">{contactTitle}</h3>
-            <ul className="mt-4 space-y-4 text-base text-white/80">
+            <h3 className="text-[0.7rem] font-bold uppercase tracking-[0.18em] text-white/40">{contactTitle}</h3>
+            <ul className="mt-5 space-y-4 text-[0.95rem] text-white/70">
               <li className="flex items-start gap-3">
-                <Icon name="map-pin" className="mt-1 shrink-0 text-(--color-brand-bright)" />
+                <Icon name="map-pin" className="mt-0.5 h-4.5 w-4.5 shrink-0 text-(--color-accent)" />
                 <span className="wrap-break-word">
                   {CONTACT_ADDRESS_LINES.map((line) => (
                     <span key={line} className="block">
@@ -155,8 +128,8 @@ export function SiteFooter({
                 </span>
               </li>
               <li className="flex items-center gap-3">
-                <Icon name="phone" className="shrink-0 text-(--color-brand-bright)" />
-                <a href={`tel:${CONTACT_PHONE_RAW}`} className="transition hover:text-white">
+                <Icon name="phone" className="h-4.5 w-4.5 shrink-0 text-(--color-accent)" />
+                <a href={`tel:${CONTACT_PHONE_RAW}`} className="tabular-nums transition-colors hover:text-white">
                   {CONTACT_PHONE_DISPLAY}
                 </a>
               </li>
@@ -165,11 +138,11 @@ export function SiteFooter({
         </div>
 
         {/* Left-aligned so the fixed chat button (bottom-right) never covers the link. */}
-        <div className="mt-12 flex flex-col gap-x-5 gap-y-2 border-t border-white/10 pt-6 text-sm text-white/50 sm:flex-row sm:items-center">
+        <div className="mt-14 flex flex-col gap-x-6 gap-y-2 border-t border-white/10 pt-7 text-[0.85rem] text-white/40 sm:flex-row sm:items-center">
           <p>
             © {year} {SITE_NAME}. {rightsLabel}
           </p>
-          <Link href={getPolicyPath(locale, "privacy")} className="transition hover:text-white">
+          <Link href={getPolicyPath(locale, "privacy")} className="link-underline transition-colors hover:text-white">
             {privacyLabel}
           </Link>
         </div>

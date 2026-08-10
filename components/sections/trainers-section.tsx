@@ -9,6 +9,8 @@ import { SectionShell } from "@/components/ui/section-shell";
 import type { Trainer } from "@/types/marketing";
 
 type TrainersSectionProps = {
+  eyebrow?: string;
+  index?: string;
   title: string;
   subtitle: string;
   scrollerLabel: string;
@@ -16,7 +18,19 @@ type TrainersSectionProps = {
   trainers: Trainer[];
 };
 
+/** First letter of each word, capped at two — "Sarah Chen" -> "SC". */
+function monogram(name: string) {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0]?.toUpperCase() ?? "")
+    .join("");
+}
+
 export function TrainersSection({
+  eyebrow,
+  index,
   title,
   subtitle,
   scrollerLabel,
@@ -24,33 +38,58 @@ export function TrainersSection({
   trainers,
 }: TrainersSectionProps) {
   return (
-    <SectionShell id="trainers">
+    <SectionShell id="trainers" tone="paper" space="md">
       <Reveal>
-        <SectionHeading title={title} subtitle={subtitle} />
+        <SectionHeading eyebrow={eyebrow} index={index} title={title} subtitle={subtitle} />
       </Reveal>
 
       <HorizontalScroller ariaLabel={scrollerLabel} showScrollIndicator>
         {trainers.map((trainer) => (
           <Card key={trainer.id} hover className="flex h-full flex-col overflow-hidden">
-            <div className="relative">
-              <Image
-                src={trainer.image}
-                alt={trainer.name}
-                width={1200}
-                height={900}
-                className="aspect-4/3 h-auto w-full object-cover"
+            <div className="grain grain-dark relative aspect-4/3 overflow-hidden bg-[image:var(--gradient-ink)]">
+              {trainer.image ? (
+                <Image
+                  src={trainer.image}
+                  alt={trainer.name}
+                  width={1200}
+                  height={900}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                /* No portrait: an oversized outlined monogram, cropped by the
+                   panel. Reads as deliberate graphic design rather than as a
+                   picture that failed to load — which is what the grey
+                   silhouette bust it replaces looked like. */
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 flex items-center justify-center"
+                >
+                  <span
+                    className="font-display text-[11rem] font-extrabold leading-none tracking-[-0.06em] text-transparent"
+                    style={{ WebkitTextStroke: "2px rgba(255,255,255,0.16)" }}
+                  >
+                    {monogram(trainer.name)}
+                  </span>
+                </span>
+              )}
+
+              {/* Bottom scrim: keeps the name legible over either treatment. */}
+              <div
+                aria-hidden="true"
+                className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-transparent"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
-              <span className="absolute left-4 top-4 inline-flex items-center rounded-full bg-white/90 px-3 py-1 text-xs font-bold uppercase tracking-wide text-(--color-brand) backdrop-blur">
+
+              <span className="absolute left-5 top-5 z-10 inline-flex items-center rounded-full bg-(--color-accent) px-3 py-1 text-[0.68rem] font-bold uppercase tracking-[0.1em] text-(--color-accent-ink)">
                 {trainer.specialty}
               </span>
-              <h3 className="absolute inset-x-4 bottom-4 font-display text-2xl font-bold text-white drop-shadow sm:text-3xl">
+              <h3 className="absolute inset-x-5 bottom-5 z-10 font-display text-[length:var(--step-3)] font-extrabold leading-[1.1] tracking-[-0.03em] text-white">
                 {trainer.name}
               </h3>
             </div>
-            <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
-              <p className="text-base leading-relaxed text-(--color-text-muted)">{trainer.bio}</p>
-              <p className="mt-auto inline-flex w-fit items-center gap-2 rounded-full bg-(--color-brand)/10 px-3 py-1 text-sm font-semibold text-(--color-brand)">
+
+            <div className="flex flex-1 flex-col gap-5 p-6">
+              <p className="text-[0.98rem] leading-[1.65] text-(--color-text-muted)">{trainer.bio}</p>
+              <p className="mt-auto inline-flex w-fit items-center gap-2 text-sm font-semibold text-(--color-brand)">
                 <Icon name="shield-check" className="h-4 w-4" />
                 {experienceLabel.replace("{years}", String(trainer.experienceYears))}
               </p>

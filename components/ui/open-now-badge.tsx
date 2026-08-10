@@ -89,7 +89,7 @@ export function OpenNowBadge({
         ? "border-white/15 bg-white/10 text-white"
         : "border-white/15 bg-white/10 text-amber-200"
       : status.open
-        ? "border-(--color-brand)/20 bg-(--color-brand)/8 text-(--color-brand)"
+        ? "border-(--color-brand)/20 bg-(--color-brand-tint) text-(--color-brand)"
         : "border-amber-300/50 bg-amber-50 text-amber-700";
 
   return (

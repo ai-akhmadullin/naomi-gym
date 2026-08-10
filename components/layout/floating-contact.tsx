@@ -62,7 +62,7 @@ export function FloatingContact({ copy }: { copy: FloatingContactCopy }) {
     { label: copy.zaloLabel, href: SOCIAL_ZALO_URL, icon: "zalo", bg: "bg-[#0068FF]", external: true },
     { label: copy.whatsappLabel, href: SOCIAL_WHATSAPP_URL, icon: "whatsapp", bg: "bg-[#25D366]", external: true },
     { label: copy.messengerLabel, href: SOCIAL_FACEBOOK_URL, icon: "facebook", bg: "bg-[#1877F2]", external: true },
-    { label: copy.callLabel, href: `tel:${CONTACT_PHONE_RAW}`, icon: "phone", bg: "bg-[image:var(--gradient-brand)]", external: false },
+    { label: copy.callLabel, href: `tel:${CONTACT_PHONE_RAW}`, icon: "phone", bg: "bg-(--color-brand)", external: false },
   ];
 
   return (
@@ -106,7 +106,7 @@ export function FloatingContact({ copy }: { copy: FloatingContactCopy }) {
         aria-label={open ? copy.closeLabel : copy.chatLabel}
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-[image:var(--gradient-brand)] text-white shadow-(--shadow-brand) transition-transform hover:scale-105 active:scale-95"
+        className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-(--color-brand) text-white shadow-(--shadow-brand) transition-transform duration-200 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-brand) focus-visible:ring-offset-2"
       >
         <Icon name={open ? "close" : "message-circle"} className="h-7 w-7" />
       </button>
