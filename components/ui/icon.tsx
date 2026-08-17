@@ -8,6 +8,12 @@ type IconProps = SVGProps<SVGSVGElement> & {
 };
 
 export function Icon({ name, className, ...props }: IconProps) {
+  // The default size must be conditional, not merely first: cn is a plain
+  // string joiner, so "h-5 w-5" and a caller's "h-3.5" would BOTH land in the
+  // class list and stylesheet order picks the winner — which in the generated
+  // CSS was h-5, silently rendering every smaller icon at 20px.
+  const callerSized = /(?:^|\s)[hw]-/.test(className ?? "");
+
   return (
     <svg
       viewBox="0 0 24 24"
@@ -17,7 +23,7 @@ export function Icon({ name, className, ...props }: IconProps) {
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
-      className={cn("h-5 w-5", className)}
+      className={cn(!callerSized && "h-5 w-5", className)}
       {...props}
     >
       {name === "menu" ? (

@@ -52,7 +52,7 @@ export function HeroSection({
   return (
     <section
       id="home"
-      className="grain relative scroll-mt-12 overflow-hidden bg-(--color-paper) lg:scroll-mt-6"
+      className="grain relative scroll-mt-16 overflow-hidden bg-(--color-paper) sm:scroll-mt-12 lg:scroll-mt-6"
     >
       {/* Decorative ground. Two wide, low-opacity green washes plus a dotted
           grid that is masked to fade out before it reaches any text — an
@@ -71,20 +71,37 @@ export function HeroSection({
       <div
         className={cn(
           SECTION_CONTAINER_CLASS,
-          "relative z-10 pt-16 pb-16 sm:pt-24 sm:pb-20 lg:pt-32 lg:pb-24",
+          "relative z-10 pt-10 pb-12 sm:pt-24 sm:pb-20 lg:pt-32 lg:pb-24",
         )}
       >
         <div className="min-w-0">
           <Reveal>
-              <div className="flex flex-wrap items-center gap-2.5">
-                <span className="inline-flex items-center gap-2 rounded-full border border-(--color-border-strong) bg-white/80 px-3.5 py-1.5 text-[0.8rem] font-semibold text-(--color-text) shadow-[0_1px_2px_rgba(9,34,22,0.04)] backdrop-blur">
+              {/* Typeset, not chipped: these were two white pills, which is the
+                  most template-looking element a hero can open with — and their
+                  different paddings never optically aligned when stacked. As an
+                  uppercase eyebrow plus a plain status line they read as part of
+                  the headline's typography instead of as UI floating above it. */}
+              <div className="flex flex-col items-start gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5 sm:gap-y-2">
+                <p className="inline-flex items-center gap-2 text-[0.75rem] font-bold uppercase tracking-[0.16em] text-(--color-text-muted)">
                   <Icon name="map-pin" className="h-3.5 w-3.5 text-(--color-brand)" />
                   {eyebrow}
-                </span>
+                </p>
+                <span
+                  aria-hidden="true"
+                  className="hidden h-3.5 w-px bg-(--color-border-strong) sm:block"
+                />
+                {/* Same micro-type as the location eyebrow — same size, case
+                    and tracking — so the two segments share one set of font
+                    metrics and sit on the same line by construction. */}
+                {/* ps-1.5 exists for the stacked (mobile) state: the status
+                    dot is 8px wide against the 14px map pin above it, so
+                    without the inset the two text runs start 6px apart. On one
+                    line (sm+) the inset would just unbalance the divider gap. */}
                 <OpenNowBadge
                   locale={locale}
                   copy={openStatus}
-                  className="border-(--color-border-strong) bg-white/80 backdrop-blur"
+                  variant="text"
+                  className="ps-1.5 text-[0.75rem] font-bold uppercase tracking-[0.16em] sm:ps-0"
                 />
               </div>
             </Reveal>
@@ -93,7 +110,7 @@ export function HeroSection({
               {/* leading-[1.04], not the ~0.95 this size would take in English:
                   the Vietnamese headline stacks tone marks above and below, and
                   tighter leading collides them between lines. */}
-              <h1 className="mt-7 max-w-5xl font-display text-[length:var(--step-5)] font-extrabold leading-[1.04] tracking-[-0.03em] text-balance text-foreground">
+              <h1 className="mt-5 sm:mt-7 max-w-5xl font-display text-[length:var(--step-5)] font-extrabold leading-[1.04] tracking-[-0.03em] text-balance text-foreground">
                 {titlePrefix}{" "}
                 {/* The brand name gets a drawn underline rather than a gradient
                     fill. Gradient text was one more instance of the same green
@@ -120,13 +137,13 @@ export function HeroSection({
             </Reveal>
 
             <Reveal delay={130}>
-              <p className="mt-7 max-w-2xl text-pretty text-[length:var(--step-1)] leading-[1.65] text-(--color-text-muted)">
+              <p className="mt-5 sm:mt-7 max-w-2xl text-pretty text-[length:var(--step-1)] leading-[1.65] text-(--color-text-muted)">
                 {description}
               </p>
             </Reveal>
 
             <Reveal delay={190}>
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+              <div className="mt-7 sm:mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
                 <a
                   href={primaryHref}
                   className={buttonStyles({ variant: "primary", size: "lg", className: "w-full sm:w-auto" })}
@@ -157,12 +174,12 @@ export function HeroSection({
               as a spec bar, which is what makes the width to the right of the
               headline read as deliberate rather than as a gap. */}
           <Reveal delay={250}>
-            <dl className="mt-14 grid grid-cols-2 border-t border-(--color-border-strong) sm:mt-16 sm:grid-cols-4">
+            <dl className="mt-10 grid grid-cols-2 border-t border-(--color-border-strong) sm:mt-16 sm:grid-cols-4">
               {stats.map((stat, position) => (
                 <div
                   key={stat.label}
                   className={cn(
-                    "min-w-0 py-8 pr-6",
+                    "min-w-0 py-6 pr-6 sm:py-8",
                     // Hairlines between cells, but never on the cell that starts
                     // a row: at sm the row starts every 4th cell, below sm every
                     // 2nd. A rule on those would hang off the left edge.

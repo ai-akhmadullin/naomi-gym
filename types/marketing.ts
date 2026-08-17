@@ -17,13 +17,6 @@ export type PricingPlan = {
   features?: string[];
 };
 
-export type Benefit = {
-  id: string;
-  icon: IconName;
-  title: string;
-  description: string;
-};
-
 export type Trainer = {
   id: string;
   name: string;

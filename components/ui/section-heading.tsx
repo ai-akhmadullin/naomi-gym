@@ -41,7 +41,7 @@ export function SectionHeading({
   return (
     <div
       className={cn(
-        !flush && "mb-10 sm:mb-14",
+        !flush && "mb-8 sm:mb-14",
         align === "center" && "mx-auto max-w-3xl text-center",
         className,
       )}

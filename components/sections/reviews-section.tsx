@@ -201,6 +201,25 @@ export function ReviewsSection({
 
   const [featured, ...rest] = displayReviews;
 
+  const renderCard = (review: Review) => (
+    <Card key={review.id} hover className="flex h-full flex-col p-6">
+      <Stars rating={review.rating} />
+      <span className="sr-only">{starsLabelTemplate.replace("{rating}", String(review.rating))}</span>
+      <blockquote className="mt-4">
+        <ClampedQuote className="max-h-[11.5em] overflow-hidden text-pretty text-[0.98rem] leading-[1.65] text-(--color-text-muted)">
+          {review.quote}
+        </ClampedQuote>
+      </blockquote>
+      <div className="mt-auto pt-6">
+        <Attribution
+          review={review}
+          readOnGoogleLabel={readOnGoogleLabel}
+          googleReviewLabel={googleReviewLabel}
+        />
+      </div>
+    </Card>
+  );
+
   return (
     <SectionShell id="reviews" tone="paper" space="md">
       <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
@@ -237,8 +256,14 @@ export function ReviewsSection({
         </a>
       </div>
 
+      {/* The full-width featured quote is a desktop composition: there it is
+          visibly wider than the scroller cards beneath it, so it reads as a
+          pull-quote. On a phone every card is the same width, so a "featured"
+          card followed by identical-looking cards just reads as one review
+          weirdly outside the carousel — below md the featured review joins the
+          carousel as its first card instead. */}
       {featured ? (
-        <figure className="relative mt-12 overflow-hidden rounded-[var(--radius-xl)] border border-(--color-border) bg-white p-8 shadow-(--shadow-soft) sm:p-12">
+        <figure className="relative mt-12 hidden overflow-hidden rounded-[var(--radius-xl)] border border-(--color-border) bg-white p-8 shadow-(--shadow-soft) sm:p-12 md:block">
           <Icon
             name="quote"
             aria-hidden="true"
@@ -273,27 +298,18 @@ export function ReviewsSection({
         </figure>
       ) : null}
 
-      {rest.length > 0 ? (
-        <div className="mt-5">
+      {displayReviews.length > 0 ? (
+        <div className="mt-6 md:hidden">
           <HorizontalScroller ariaLabel={scrollerLabel} showScrollIndicator>
-            {rest.map((review) => (
-              <Card key={review.id} hover className="flex h-full flex-col p-6">
-                <Stars rating={review.rating} />
-                <span className="sr-only">{starsLabelTemplate.replace("{rating}", String(review.rating))}</span>
-                <blockquote className="mt-4">
-                  <ClampedQuote className="max-h-[11.5em] overflow-hidden text-pretty text-[0.98rem] leading-[1.65] text-(--color-text-muted)">
-                    {review.quote}
-                  </ClampedQuote>
-                </blockquote>
-                <div className="mt-auto pt-6">
-                  <Attribution
-                    review={review}
-                    readOnGoogleLabel={readOnGoogleLabel}
-                    googleReviewLabel={googleReviewLabel}
-                  />
-                </div>
-              </Card>
-            ))}
+            {displayReviews.map(renderCard)}
+          </HorizontalScroller>
+        </div>
+      ) : null}
+
+      {rest.length > 0 ? (
+        <div className="mt-5 hidden md:block">
+          <HorizontalScroller ariaLabel={scrollerLabel} showScrollIndicator>
+            {rest.map(renderCard)}
           </HorizontalScroller>
         </div>
       ) : null}

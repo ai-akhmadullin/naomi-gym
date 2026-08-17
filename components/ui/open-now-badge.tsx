@@ -74,8 +74,12 @@ export function OpenNowBadge({
           ? "text-(--color-brand)"
           : "text-amber-600";
 
+    // Size and weight come from the caller: the text variant sits inline in
+    // running layouts (hero spec line, location card) and has to match the
+    // metrics of whatever line it joins — a baked-in text-sm could only ever
+    // align with itself.
     return (
-      <span className={cn("inline-flex items-center gap-2 text-sm font-semibold", className)}>
+      <span className={cn("inline-flex items-center gap-2", className)}>
         {dot}
         <span className={statusColor}>{status.open ? copy.openNow : copy.closed}</span>
         <span className="font-normal text-(--color-text-muted)">· {detail}</span>

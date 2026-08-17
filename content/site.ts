@@ -1,7 +1,6 @@
 import { CONTACT_ADDRESS_LINES } from "@/lib/constants";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n";
 import type {
-  Benefit,
   FaqItem,
   GalleryImage,
   LocationInfo,
@@ -67,12 +66,6 @@ export type SiteDictionary = {
     ticker: {
       label: string;
       items: string[];
-    };
-    benefits: {
-      eyebrow: string;
-      title: string;
-      subtitle: string;
-      items: Benefit[];
     };
     pricing: {
       eyebrow: string;
@@ -299,55 +292,6 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
           "Free help with your form",
           "Squat racks & bumper plates",
           "Walk in, no booking",
-        ],
-      },
-      benefits: {
-        eyebrow: "The gym",
-        title: "What's on the two floors",
-        subtitle: "The equipment, the hours and the things worth knowing before you come.",
-        items: [
-          {
-            id: "benefit-floors",
-            icon: "layers",
-            title: "Two floors",
-            description:
-              "Free weights and machines on the ground floor. Legs machines and functional training upstairs.",
-          },
-          {
-            id: "benefit-kit",
-            icon: "dumbbell",
-            title: "Racks, platforms, bumper plates",
-            description:
-              "Squat racks, deadlift platforms, bumper plates, benches, cables and a heavy bag — all of it in working order.",
-          },
-          {
-            id: "benefit-value",
-            icon: "sparkles",
-            title: "No contract, no joining fee",
-            description:
-              "40k buys a day, 300k buys a month. You pay at the desk on the day, so there is nothing to sign and nothing to cancel.",
-          },
-          {
-            id: "benefit-coaching",
-            icon: "heart-handshake",
-            title: "Free help with your form",
-            description:
-              "The owner is usually on the floor and will talk you through a lift if you ask. There's no charge for it.",
-          },
-          {
-            id: "benefit-hours",
-            icon: "sunrise",
-            title: "Open early, seven days",
-            description:
-              "5 AM to 8:30 PM Monday to Saturday, so you can train before work. Sunday runs in two blocks, morning and afternoon.",
-          },
-          {
-            id: "benefit-space",
-            icon: "users",
-            title: "Rarely crowded",
-            description:
-              "Two floors means there's almost always a free rack or bench. Mornings and after 7:30 PM are the quietest.",
-          },
         ],
       },
       pricing: {
@@ -696,55 +640,6 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
           "Hướng dẫn kỹ thuật miễn phí",
           "Rack squat & tạ bumper",
           "Đến là tập, không cần đặt lịch",
-        ],
-      },
-      benefits: {
-        eyebrow: "Phòng tập",
-        title: "Hệ thống máy tập ở 2 tầng",
-        subtitle: "Thiết bị, giờ giấc và vài điều nên biết trước khi ghé.",
-        items: [
-          {
-            id: "benefit-floors",
-            icon: "layers",
-            title: "Hai tầng",
-            description:
-              "Tầng trệt là khu tạ rời và máy tập. Tầng trên có máy tập chân và khu functional.",
-          },
-          {
-            id: "benefit-kit",
-            icon: "dumbbell",
-            title: "Rack squat, sàn deadlift, tạ bumper",
-            description:
-              "Rack squat, sàn deadlift, tạ bumper, ghế đẩy, máy cáp và bao cát — thiết bị nào cũng dùng tốt.",
-          },
-          {
-            id: "benefit-value",
-            icon: "sparkles",
-            title: "Không hợp đồng, không phí gia nhập",
-            description:
-              "Vé ngày 40k, gói tháng 300k, thanh toán tại quầy. Không phải ký gì, cũng chẳng có gì để hủy.",
-          },
-          {
-            id: "benefit-coaching",
-            icon: "heart-handshake",
-            title: "Hướng dẫn kỹ thuật miễn phí",
-            description:
-              "Chủ phòng hầu như lúc nào cũng có mặt ở sàn tập, bạn cứ hỏi là được chỉ tận tình từng động tác — hoàn toàn miễn phí.",
-          },
-          {
-            id: "benefit-hours",
-            icon: "sunrise",
-            title: "Mở sớm, cả tuần không nghỉ",
-            description:
-              "Thứ Hai đến Thứ Bảy mở từ 5:00 đến 20:30, tha hồ tập trước giờ đi làm. Chủ Nhật mở hai khung sáng và chiều.",
-          },
-          {
-            id: "benefit-space",
-            icon: "users",
-            title: "Ít khi phải chờ máy",
-            description:
-              "Nhờ có hai tầng nên hầu như lúc nào cũng còn rack hoặc ghế trống. Vắng nhất là buổi sáng và sau 19:30.",
-          },
         ],
       },
       pricing: {

@@ -49,8 +49,8 @@
   --step-1: clamp(1.0625rem, 1.01rem + 0.28vw, 1.1875rem);
   --step-2: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
   --step-3: clamp(1.5rem, 1.32rem + 0.9vw, 2.125rem);
-  --step-4: clamp(2rem, 1.6rem + 2vw, 3.25rem);
-  --step-5: clamp(2.6rem, 1.75rem + 3.6vw, 4.5rem);
+  --step-4: clamp(1.75rem, 1.3rem + 2vw, 3.25rem);
+  --step-5: clamp(2.25rem, 1.5rem + 3.5vw, 4.5rem);
 
   /* ---- Radii ----
      Four steps with meaning: chips, controls, cards, panels. Previously every
@@ -255,29 +255,6 @@ iframe {
   );
 }
 
-/* ---- Scroll reveal ----
-   Fails open: visible by default. Only the JS-applied "armed" state hides the
-   element, and "shown" animates it back in. No JS == always visible. */
-.reveal[data-reveal="armed"] {
-  opacity: 0;
-  transform: translateY(22px);
-  will-change: opacity, transform;
-}
-.reveal[data-reveal="shown"] {
-  animation: reveal-up 0.72s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-}
-
-@keyframes reveal-up {
-  from {
-    opacity: 0;
-    transform: translateY(22px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
 @keyframes float-soft {
   0%,
   100% {
@@ -321,13 +298,6 @@ iframe {
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-  }
-  .reveal,
-  .reveal[data-reveal="armed"],
-  .reveal[data-reveal="shown"] {
-    animation: none;
-    opacity: 1;
-    transform: none;
   }
   .animate-float,
   .animate-marquee {

@@ -311,7 +311,11 @@ export function ContactSection({
               ))}
             </div>
 
-            <div className="mt-auto border-t border-white/10 pt-5">
+            {/* mt-auto only does something when the panel is stretched taller
+                than its content — i.e. on lg, next to the taller form card.
+                Stacked on mobile it computes to zero and the rule sat glued to
+                the action above it, so a real margin backs it up. */}
+            <div className="mt-7 border-t border-white/10 pt-5 lg:mt-auto">
               <OpenNowBadge locale={locale} copy={openStatus} tone="dark" />
             </div>
           </div>

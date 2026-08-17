@@ -68,14 +68,16 @@ export function FloatingContact({ copy }: { copy: FloatingContactCopy }) {
   return (
     <div
       ref={rootRef}
+      // Desktop-only: below lg the StickyJoinBar carries the same chat
+      // actions, and a fixed bubble on a phone-width screen is always
+      // covering some card's content.
+      //
       // pointer-events-none on the wrapper is load-bearing: the closed action
-      // list still occupies layout (it is only faded out), so this box is a
-      // ~200x300px invisible rectangle over the middle-right of a phone
-      // screen. As a plain hit-testable div it swallowed every touch in that
-      // area — on iOS that sent horizontal swipes on the carousels beneath it
-      // to the page's vertical scroller instead. Only the button and the open
-      // action list opt back in to receiving touches.
-      className="pointer-events-none fixed right-4 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-30 flex flex-col items-end gap-3 lg:right-6 lg:bottom-6"
+      // list still occupies layout (it is only faded out), so this box is an
+      // invisible rectangle over the bottom-right of the screen. As a plain
+      // hit-testable div it swallowed every click in that area. Only the
+      // button and the open action list opt back in to receiving input.
+      className="pointer-events-none fixed right-6 bottom-6 z-30 hidden flex-col items-end gap-3 lg:flex"
     >
       <div
         className={cn(

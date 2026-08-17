@@ -77,7 +77,7 @@ export function LocationSection({
                   {hoursLabel}
                 </h3>
                 <div className="mt-2">
-                  <OpenNowBadge locale={locale} copy={openStatus} variant="text" />
+                  <OpenNowBadge locale={locale} copy={openStatus} variant="text" className="text-sm font-semibold" />
                 </div>
                 <dl className="mt-5 space-y-3.5">
                   {location.openingHours.map((entry) => (

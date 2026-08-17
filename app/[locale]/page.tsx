@@ -2,7 +2,6 @@ import { FloatingContact } from "@/components/layout/floating-contact";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { StickyJoinBar } from "@/components/layout/sticky-join-bar";
-import { BenefitsSection } from "@/components/sections/benefits-section";
 import { ContactSection } from "@/components/sections/contact-section";
 import { FaqSection } from "@/components/sections/faq-section";
 import { GallerySection } from "@/components/sections/gallery-section";
@@ -49,16 +48,9 @@ export default async function LocalizedHomePage({ params }: PageProps) {
           stats={dictionary.home.hero.stats}
         />
         <TickerBand items={dictionary.home.ticker.items} label={dictionary.home.ticker.label} />
-        <BenefitsSection
-          eyebrow={dictionary.home.benefits.eyebrow}
-          index="01"
-          title={dictionary.home.benefits.title}
-          subtitle={dictionary.home.benefits.subtitle}
-          items={dictionary.home.benefits.items}
-        />
         <PricingSection
           eyebrow={dictionary.home.pricing.eyebrow}
-          index="02"
+          index="01"
           title={dictionary.home.pricing.title}
           subtitle={dictionary.home.pricing.subtitle}
           plans={dictionary.home.pricing.plans}
@@ -68,7 +60,7 @@ export default async function LocalizedHomePage({ params }: PageProps) {
         />
         <GallerySection
           eyebrow={dictionary.home.gallery.eyebrow}
-          index="03"
+          index="02"
           title={dictionary.home.gallery.title}
           subtitle={dictionary.home.gallery.subtitle}
           scrollerLabel={dictionary.home.gallery.scrollerLabel}
@@ -77,7 +69,7 @@ export default async function LocalizedHomePage({ params }: PageProps) {
         />
         <TrainersSection
           eyebrow={dictionary.home.trainers.eyebrow}
-          index="04"
+          index="03"
           title={dictionary.home.trainers.title}
           subtitle={dictionary.home.trainers.subtitle}
           scrollerLabel={dictionary.home.trainers.scrollerLabel}
@@ -88,7 +80,7 @@ export default async function LocalizedHomePage({ params }: PageProps) {
           locale={locale}
           openStatus={dictionary.openStatus}
           eyebrow={dictionary.home.location.eyebrow}
-          index="05"
+          index="04"
           title={dictionary.home.location.title}
           subtitle={dictionary.home.location.subtitle}
           addressLabel={dictionary.home.location.addressLabel}
@@ -99,7 +91,7 @@ export default async function LocalizedHomePage({ params }: PageProps) {
         />
         <ReviewsSection
           eyebrow={dictionary.home.reviews.eyebrow}
-          index="06"
+          index="05"
           title={dictionary.home.reviews.title}
           subtitle={dictionary.home.reviews.subtitle}
           scrollerLabel={dictionary.home.reviews.scrollerLabel}
@@ -112,14 +104,14 @@ export default async function LocalizedHomePage({ params }: PageProps) {
         />
         <FaqSection
           eyebrow={dictionary.home.faq.eyebrow}
-          index="07"
+          index="06"
           title={dictionary.home.faq.title}
           subtitle={dictionary.home.faq.subtitle}
           callLabel={dictionary.quickActions.callLabel}
           faqs={dictionary.home.faq.items}
         />
         <ContactSection
-          index="08"
+          index="07"
           copy={dictionary.home.contact}
           directionsUrl={dictionary.home.location.info.directionsUrl}
           locale={locale}
@@ -145,6 +137,7 @@ export default async function LocalizedHomePage({ params }: PageProps) {
         joinHref="#contact"
         joinLabel={dictionary.header.joinNow}
         callLabel={dictionary.quickActions.callLabel}
+        chat={dictionary.quickActions}
       />
       <FloatingContact copy={dictionary.quickActions} />
     </>

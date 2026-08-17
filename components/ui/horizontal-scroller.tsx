@@ -152,7 +152,11 @@ export function HorizontalScroller({
             <div
               key={index}
               className={cn(
-                "min-w-0 shrink-0 grow-0 basis-full snap-start md:basis-[calc((100%-1.5rem)/2)] lg:basis-[calc((100%-3rem)/3)]",
+                // Below md a card takes 86% of the viewport so the next one
+                // peeks in from the right — the peek is what tells a phone
+                // reader the row scrolls, and it caps how tall a full-bleed
+                // portrait image can get.
+                "min-w-0 shrink-0 grow-0 basis-[86%] snap-start md:basis-[calc((100%-1.5rem)/2)] lg:basis-[calc((100%-3rem)/3)]",
                 itemClassName,
               )}
             >

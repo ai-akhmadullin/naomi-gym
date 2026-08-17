@@ -48,8 +48,10 @@ describe("ReviewsSection", () => {
       />,
     );
 
-    expect(screen.getByText("Alice")).toBeInTheDocument();
-    expect(screen.queryByText("Bob")).not.toBeInTheDocument();
+    // A review renders twice: once in the desktop featured slot, once in the
+    // mobile carousel (the breakpoint chooses which is visible).
+    expect(screen.getAllByText("Alice").length).toBeGreaterThan(0);
+    expect(screen.queryAllByText("Bob")).toHaveLength(0);
 
     rerender(
       <ReviewsSection
@@ -65,7 +67,7 @@ describe("ReviewsSection", () => {
       />,
     );
 
-    expect(screen.queryByText("Alice")).not.toBeInTheDocument();
-    expect(screen.getByText("Bob")).toBeInTheDocument();
+    expect(screen.queryAllByText("Alice")).toHaveLength(0);
+    expect(screen.getAllByText("Bob").length).toBeGreaterThan(0);
   });
 });

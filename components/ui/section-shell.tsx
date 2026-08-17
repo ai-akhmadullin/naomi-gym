@@ -25,9 +25,9 @@ const TONE_CLASSES: Record<SectionTone, string> = {
 };
 
 const SPACE_CLASSES: Record<SectionSpace, string> = {
-  sm: "py-12 sm:py-14 lg:py-16",
-  md: "py-16 sm:py-20 lg:py-24",
-  lg: "py-20 sm:py-28 lg:py-36",
+  sm: "py-10 sm:py-14 lg:py-16",
+  md: "py-12 sm:py-20 lg:py-24",
+  lg: "py-16 sm:py-28 lg:py-36",
 };
 
 type SectionShellProps = PropsWithChildren<{
@@ -64,9 +64,9 @@ export function SectionShell({
         // What matters is the gap between the header's bottom edge and the first
         // line of content: gap = scroll-mt + section padding-top - header height.
         // These three values hold that at roughly 40-48px everywhere:
-        //   base  48 +  64 - 72 = 40    sm  48 + 80 - 80 = 48
+        //   base  64 +  48 - 72 = 40    sm  48 + 80 - 80 = 48
         //   lg    24 +  96 - 80 = 40
-        "relative scroll-mt-12 lg:scroll-mt-6",
+        "relative scroll-mt-16 sm:scroll-mt-12 lg:scroll-mt-6",
         TONE_CLASSES[tone],
         SPACE_CLASSES[space],
         showGrain && "grain",
