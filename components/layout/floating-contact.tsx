@@ -68,12 +68,19 @@ export function FloatingContact({ copy }: { copy: FloatingContactCopy }) {
   return (
     <div
       ref={rootRef}
-      className="fixed right-4 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-30 flex flex-col items-end gap-3 lg:right-6 lg:bottom-6"
+      // pointer-events-none on the wrapper is load-bearing: the closed action
+      // list still occupies layout (it is only faded out), so this box is a
+      // ~200x300px invisible rectangle over the middle-right of a phone
+      // screen. As a plain hit-testable div it swallowed every touch in that
+      // area — on iOS that sent horizontal swipes on the carousels beneath it
+      // to the page's vertical scroller instead. Only the button and the open
+      // action list opt back in to receiving touches.
+      className="pointer-events-none fixed right-4 bottom-[calc(5.5rem+env(safe-area-inset-bottom))] z-30 flex flex-col items-end gap-3 lg:right-6 lg:bottom-6"
     >
       <div
         className={cn(
           "flex flex-col items-end gap-2.5 transition-all duration-200",
-          open ? "opacity-100 translate-y-0" : "pointer-events-none translate-y-2 opacity-0",
+          open ? "pointer-events-auto opacity-100 translate-y-0" : "pointer-events-none translate-y-2 opacity-0",
         )}
       >
         {actions.map((action, index) => (
@@ -106,7 +113,7 @@ export function FloatingContact({ copy }: { copy: FloatingContactCopy }) {
         aria-label={open ? copy.closeLabel : copy.chatLabel}
         aria-expanded={open}
         onClick={() => setOpen((value) => !value)}
-        className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-(--color-brand) text-white shadow-(--shadow-brand) transition-transform duration-200 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-brand) focus-visible:ring-offset-2"
+        className="pointer-events-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-(--color-brand) text-white shadow-(--shadow-brand) transition-transform duration-200 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-brand) focus-visible:ring-offset-2"
       >
         <Icon name={open ? "close" : "message-circle"} className="h-7 w-7" />
       </button>
