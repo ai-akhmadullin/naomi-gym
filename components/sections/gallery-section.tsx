@@ -72,9 +72,10 @@ export function GallerySection({
   const active = activeIndex !== null ? images[activeIndex] : null;
 
   return (
-    /* The page's dark act. Six frames of flat graphic art sat on a light tinted
-       background before, where they read as broken images; on ink they read as
-       an art-directed strip. It also breaks a run of seven light sections. */
+    /* The page's dark act, and now more justified than when it held placeholder
+       art: the six photographs are all of a black-steel shed shot under strip
+       lights, so an ink ground continues the picture instead of framing it. It
+       also breaks a run of seven light sections. */
     <SectionShell id="gallery" tone="ink" space="md">
       <Reveal>
         <SectionHeading eyebrow={eyebrow} index={index} title={title} subtitle={subtitle} tone="dark" />
@@ -89,12 +90,22 @@ export function GallerySection({
               className="relative block w-full cursor-zoom-in overflow-hidden rounded-[var(--radius-lg)] border border-white/10 transition-[transform,border-color] duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-accent) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-ink) group-hover:-translate-y-1 group-hover:border-white/25"
               aria-label={image.alt}
             >
+              {/* Portrait frames, not the landscape ones the placeholder art
+                  used. The real photographs are phone shots of a tall, open
+                  shed — trusses, mezzanine, strip lights — and a 4:3 crop
+                  sliced off the ceiling in every one of them, which is the
+                  part that makes the room look big. 4:5 keeps the height and
+                  reads as a photo strip rather than a row of thumbnails.
+                  sizes matches the scroller's basis: 3 up at lg, 2 at md,
+                  1 below, so the browser never fetches a 1200px file for a
+                  380px card. */}
               <Image
                 src={image.src}
                 alt={image.alt}
-                width={680}
-                height={520}
-                className="aspect-4/3 h-auto w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+                width={1200}
+                height={1500}
+                sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                className="aspect-4/5 h-auto w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
               />
               <span
                 aria-hidden="true"
@@ -128,8 +139,14 @@ export function GallerySection({
                   alt={active.alt}
                   className="max-h-[78vh] w-auto max-w-[92vw] rounded-2xl object-contain shadow-2xl"
                 />
-                <p className="mt-4 max-w-2xl text-center text-sm text-white/85 sm:text-base">
-                  <span className="font-semibold text-white">{active.category}</span> · {active.alt}
+                {/* Category and position only. The alt text used to print here
+                    too, which meant a sighted reader got a sentence describing
+                    what was already on screen in front of them — alt is written
+                    for people who cannot see the photo, and it reads as filler
+                    once it is made visible. It still does its real job on the
+                    img above. */}
+                <p className="mt-4 text-center text-sm font-semibold text-white sm:text-base">
+                  {active.category}
                 </p>
                 <p className="mt-1 text-xs text-white/50">
                   {lightbox.counter
