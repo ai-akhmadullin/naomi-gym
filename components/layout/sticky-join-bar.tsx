@@ -29,9 +29,11 @@ type StickyJoinBarProps = {
 };
 
 /**
- * The phone's one fixed surface. Call, Join and the chat apps all live here —
- * the floating chat bubble is desktop-only (see FloatingContact), because on a
- * 390px screen a fixed bubble is always sitting on top of some card's text.
+ * The phone's one fixed surface. Call, Join and the chat apps all live here.
+ * Nothing floats over the page at any width: on a 390px screen a fixed bubble
+ * is always sitting on top of some card's text, and on a desktop it was always
+ * sitting on top of a photograph — so the desktop's copy of these actions is in
+ * the header (see HeaderChatMenu), not in the corner.
  *
  * The bar never hides. It used to slide away while the contact section was on
  * screen ("redundant next to the form"), but from the phone the effect was two

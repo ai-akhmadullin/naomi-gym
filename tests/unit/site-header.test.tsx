@@ -14,9 +14,11 @@ describe("SiteHeader", () => {
         currentPath="/en"
         navItems={dictionary.navItems}
         joinLabel={dictionary.header.joinNow}
+        chatLabel={dictionary.header.chat}
         primaryNavLabel={dictionary.header.primaryNavLabel}
         languageSwitcherLabel={dictionary.header.languageSwitcherLabel}
         localeNames={dictionary.localeNames}
+        chatCopy={dictionary.quickActions}
         mobileNavCopy={dictionary.mobileNav}
       />,
     );
@@ -34,9 +36,11 @@ describe("SiteHeader", () => {
         currentPath="/en/policies/privacy"
         navItems={dictionary.navItems}
         joinLabel={dictionary.header.joinNow}
+        chatLabel={dictionary.header.chat}
         primaryNavLabel={dictionary.header.primaryNavLabel}
         languageSwitcherLabel={dictionary.header.languageSwitcherLabel}
         localeNames={dictionary.localeNames}
+        chatCopy={dictionary.quickActions}
         mobileNavCopy={dictionary.mobileNav}
       />,
     );

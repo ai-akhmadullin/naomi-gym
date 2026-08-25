@@ -1,4 +1,4 @@
-import { CONTACT_ADDRESS_LINES } from "@/lib/constants";
+import { CONTACT_ADDRESS_LINES, GOOGLE_LISTING_URL } from "@/lib/constants";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/i18n";
 import type {
   FaqItem,
@@ -20,6 +20,8 @@ export type SiteDictionary = {
   header: {
     primaryNavLabel: string;
     joinNow: string;
+    /** Short trigger label for the desktop chat menu — see HeaderChatMenu. */
+    chat: string;
     languageSwitcherLabel: string;
   };
   mobileNav: {
@@ -59,6 +61,11 @@ export type SiteDictionary = {
       description: string;
       primaryCta: string;
       secondaryCta: string;
+      /**
+       * The one photograph above the fold. Desktop only — see HeroSection for
+       * why it does not stack onto the phone layout.
+       */
+      image: GalleryImage;
       /** Figure + caption pairs for the strip beneath the headline. */
       stats: Array<{ value: string; label: string }>;
     };
@@ -86,7 +93,7 @@ export type SiteDictionary = {
     gallery: {
       eyebrow: string;
       title: string;
-      subtitle: string;
+      subtitle?: string;
       scrollerLabel: string;
       images: GalleryImage[];
       lightbox: {
@@ -112,7 +119,6 @@ export type SiteDictionary = {
       subtitle: string;
       scrollerLabel: string;
       starsLabelTemplate: string;
-      readOnGoogle: string;
       googleReview: string;
       /** Label for the link out to the full Google listing. */
       allReviewsLabel: string;
@@ -171,11 +177,12 @@ export type SiteDictionary = {
 const SHARED_REVIEWS: Review[] = [
   {
     id: "review-alison-otoru",
-    memberName: "Alison Otoru [Ropp]",
+    memberName: "Alison Otoru",
     quote:
       "GREAT GYM!! we went around to quite a few gyms to pick the best one for us and this was definitely it! It is a little further out from where we are staying - a 30min walk, but worth it. We use the walk as our cardio anyway while getting in some sunshine before and after workout! You could easily bike here quicker if you have one. It's never too busy like other ones we went to, and the price is great for what you get! Huge bonus for me is there is a little monkey bar area and a boxing bag for my husband. Also room to do circuit training as well. It is 2 floors and all the weights and machines are in good condition. Wear and tear is normal, but we were happily surprised that everything is in good working condition. Some other gyms this was not the case. No AC but they have fans and open windows and door for ventilation. Helps you get a good sweat on anyway. It has never been unbearable for us! We got the monthly membership for a shocking 300k each! Totally worth it! Highly recommend this place!",
     rating: 5,
-    source: "local",
+    source: "google",
+    sourceUrl: GOOGLE_LISTING_URL,
   },
   {
     id: "review-vivian-bartz",
@@ -183,7 +190,8 @@ const SHARED_REVIEWS: Review[] = [
     quote:
       "Great value for money. Both the day pass and the monthly membership are very affordable. The gym is rarely overcrowded, and most of the equipment and machines do the job. Since the gym is spread over two floors, it doesn't feel cramped. I tried 2 or 3 other gyms in An Thuong before, but this one was my favorite. I highly recommend it if you're looking for a solid place to train - not just a spot where people go to shoot Instagram stories.",
     rating: 5,
-    source: "local",
+    source: "google",
+    sourceUrl: GOOGLE_LISTING_URL,
   },
   {
     id: "review-joey",
@@ -191,7 +199,8 @@ const SHARED_REVIEWS: Review[] = [
     quote:
       "Price was great at 40k for day pass 300k for 1 month I was paying 100k plus for a day pass at other gyms but this Gym was great compared to the other gyms around town I will come back again. no ac only fans you will sweat but they have a lot of equipment to use upstairs and ground floor.",
     rating: 5,
-    source: "local",
+    source: "google",
+    sourceUrl: GOOGLE_LISTING_URL,
   },
   {
     id: "review-karin-poravne",
@@ -199,7 +208,8 @@ const SHARED_REVIEWS: Review[] = [
     quote:
       "One of the best gyms I have ever been. It is 2 floor place, so well equipped, you have everything you can think of. I have been doing amazing workouts here because of the options they offer. The young man who is running the place is such a legend, always happy to help and give you instructions for free :) Always nice music, clean, good opening hours and the price is just a big bonus. We paid 300.000 for one month, drop in is 50.000 (smth like that). Amazing :) 5/5",
     rating: 5,
-    source: "local",
+    source: "google",
+    sourceUrl: GOOGLE_LISTING_URL,
   },
   {
     id: "review-curtis-griffith",
@@ -207,7 +217,8 @@ const SHARED_REVIEWS: Review[] = [
     quote:
       "Best gym I've been to in Da Nang so far. Bumper plates and great equipment. Only 40k for a day pass.",
     rating: 5,
-    source: "local",
+    source: "google",
+    sourceUrl: GOOGLE_LISTING_URL,
   },
 ];
 
@@ -224,8 +235,8 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
     siteTagline: "Two floors on Lê Văn Hiến, Đà Nẵng",
     navItems: [
       { label: "Home", href: "#home", kind: "section" },
-      { label: "Pricing", href: "#pricing", kind: "section" },
       { label: "Gallery", href: "#gallery", kind: "section" },
+      { label: "Pricing", href: "#pricing", kind: "section" },
       { label: "Location", href: "#location", kind: "section" },
       { label: "Reviews", href: "#reviews", kind: "section" },
       { label: "Contact", href: "#contact", kind: "section" },
@@ -233,6 +244,7 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
     header: {
       primaryNavLabel: "Primary",
       joinNow: "Join Now",
+      chat: "Chat",
       languageSwitcherLabel: "Language",
     },
     mobileNav: {
@@ -269,10 +281,22 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         eyebrow: "Da Nang · An Thượng & Mỹ Khê",
         titlePrefix: "Train stronger at",
         titleHighlight: "Naomi Gym",
+        /* The lede no longer restates the stat strip directly beneath it. The
+           prices, the floor count and the opening hour are all set in figures
+           six lines down; repeating them in prose here spent the one paragraph
+           a visitor actually reads on facts they were about to be given anyway.
+           What it says instead — walk in, pay at the desk — appears nowhere
+           else above the fold. */
         description:
-          "Two floors of free weights, racks and machines in Khuê Mỹ, open from 5 AM. A day pass is 40k and a month is 300k, paid at the desk — no contract and no joining fee.",
+          "Free weights, racks and machines over two floors in Khuê Mỹ. Walk in any time we're open, pay at the desk, train.",
         primaryCta: "Join Now",
         secondaryCta: "View Plans",
+        image: {
+          id: "hero-machine-floor",
+          src: "/images/hero/machine-floor.jpg",
+          alt: "The main floor, plate-loaded machines in yellow and black running back towards the racks and the mezzanine above",
+          category: "Ground floor",
+        },
         stats: [
           { value: "40k", label: "Day pass" },
           { value: "300k", label: "Per month" },
@@ -280,17 +304,21 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
           { value: "5 AM", label: "Doors open" },
         ],
       },
+      /* Nothing here is stated anywhere else above the fold.
+         The band used to run "Two floors · Day pass 40k · Month 300k · No
+         contract", every one of which is set in figures in the stat strip
+         immediately above it and again in the pricing cards immediately below
+         — so the one strip of the page that a scanner cannot miss was spending
+         itself on facts they had just read twice. These come out of the reviews
+         and the FAQ answers, where a scanner never reaches them. */
       ticker: {
         label: "What you get at Naomi Gym",
         items: [
-          "Open from 5 AM",
-          "Two floors",
-          "Day pass 40k",
-          "Month 300k",
-          "No contract",
-          "Free help with your form",
-          "Squat racks & bumper plates",
           "Walk in, no booking",
+          "Free help with your form",
+          "Monkey bars & heavy bag",
+          "Squat racks & bumper plates",
+          "Never too busy",
         ],
       },
       pricing: {
@@ -362,40 +390,57 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         ],
       },
       gallery: {
-        eyebrow: "Two floors",
+        /* No subtitle. The eyebrow names the section and the title says what
+           it is; a third line here has never had anything to add that the six
+           photographs underneath it do not say better. The version this
+           replaces restated "two floors" for the third time in two screens;
+           the one after that ("Shot on an ordinary week, not a launch day")
+           was worse — it answered a doubt nobody had arrived with, and planted
+           one instead. */
+        eyebrow: "The room",
         title: "Inside the gym",
-        subtitle: "A look at both floors and the equipment on them.",
         scrollerLabel: "Facility gallery",
+        /* The set maps the building rather than showing off: the two floors
+           first, so the rest has somewhere to sit, then what is on them. No two
+           neighbours are the same KIND of photograph — the earlier set was six
+           wide, mid-distance, empty room shots, which at card size read as one
+           picture printed six times. */
         images: [
           {
-            id: "gallery-first-floor",
+            id: "gallery-ground-floor",
             src: "/images/gallery/first-floor.jpg",
             alt: "The ground floor looking towards the back, machines on the left and treadmills on the right",
             category: "Ground floor",
           },
           {
-            id: "gallery-second-floor",
-            src: "/images/gallery/second-floor.jpg",
-            alt: "Upstairs, with plate-loaded machines down one side of the turf walkway",
+            id: "gallery-upstairs",
+            src: "/images/gallery/two-floors.jpg",
+            alt: "The upstairs walkway with the cardio row and the heavy bag, looking down over the ground floor",
             category: "Upstairs",
+          },
+          {
+            id: "gallery-boxing",
+            src: "/images/gallery/boxing.jpg",
+            alt: "A member working the heavy bag under the Fitter Healthier Happier wall",
+            category: "Boxing",
+          },
+          {
+            id: "gallery-functional",
+            src: "/images/gallery/functional-area.jpg",
+            alt: "Dumbbells, kettlebells and battle ropes along the turf strip, plate-loaded machines behind",
+            category: "Functional",
+            // The file is already cropped 250px in from the left, to lose the
+            // mirror at that edge and the photographer reflected in it. What is
+            // left starts at the dumbbell tower, so the 4:5 card takes its
+            // window from the left edge rather than the middle — centred, it
+            // would cut the tower and the kettlebells, which are the subject.
+            focus: "0% 50%",
           },
           {
             id: "gallery-squat-racks",
             src: "/images/gallery/squat-racks.jpg",
             alt: "Squat racks with loaded barbells and bumper plates on the rubber floor",
             category: "Racks",
-          },
-          {
-            id: "gallery-core-training",
-            src: "/images/gallery/core-training.jpg",
-            alt: "Benches, a rower and cable stations under the Fitter Healthier Happier wall",
-            category: "Functional",
-          },
-          {
-            id: "gallery-boxing-bag",
-            src: "/images/gallery/boxing-bag.jpg",
-            alt: "A heavy bag hanging over the turf beside the stairwell",
-            category: "Boxing",
           },
           {
             id: "gallery-treadmills",
@@ -433,7 +478,7 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
           ],
           mapEmbedUrl:
             "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3834.5703472270934!2d108.2444807!3d16.0358665!2m3!1f0!3f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3142174f8140feb9%3A0x97f5a939db82f73f!2sNaomi%20Gym!5e0!3m2!1sen!2s!4v1772186331990!5m2!1sen!2s",
-          directionsUrl: "https://maps.app.goo.gl/fKSy4mctAHiw6hqm6",
+          directionsUrl: GOOGLE_LISTING_URL,
         },
       },
       reviews: {
@@ -442,14 +487,17 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         subtitle: "Unedited Google reviews from people who train here.",
         scrollerLabel: "Member reviews",
         starsLabelTemplate: "{rating} out of 5 stars",
-        readOnGoogle: "Read on Google",
         googleReview: "Google review",
         allReviewsLabel: "See all reviews on Google",
         list: SHARED_REVIEWS,
       },
       faq: {
         eyebrow: "Before you come",
-        title: "Frequently Asked Questions",
+        /* Two words, not three. Set in caps at --step-4 in a 0.7fr column, the
+           long form wrapped to three lines and pushed the phone link so far
+           down the column that the heading side of the section read as a
+           column of air beside a full list. */
+        title: "Common Questions",
         subtitle: "The things people ask at the desk.",
         items: [
           {
@@ -562,8 +610,8 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
     siteTagline: "Phòng tập hai tầng trên đường Lê Văn Hiến, Đà Nẵng",
     navItems: [
       { label: "Trang chủ", href: "#home", kind: "section" },
-      { label: "Gói tập", href: "#pricing", kind: "section" },
       { label: "Hình ảnh", href: "#gallery", kind: "section" },
+      { label: "Gói tập", href: "#pricing", kind: "section" },
       { label: "Địa điểm", href: "#location", kind: "section" },
       { label: "Đánh giá", href: "#reviews", kind: "section" },
       { label: "Liên hệ", href: "#contact", kind: "section" },
@@ -571,6 +619,7 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
     header: {
       primaryNavLabel: "Điều hướng chính",
       joinNow: "Đăng ký ngay",
+      chat: "Nhắn tin",
       languageSwitcherLabel: "Ngôn ngữ",
     },
     mobileNav: {
@@ -608,9 +657,15 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         titlePrefix: "Khỏe hơn mỗi ngày cùng",
         titleHighlight: "Naomi Gym",
         description:
-          "Hai tầng đầy đủ tạ rời, rack và máy tập ở Khuê Mỹ, mở cửa từ 5 giờ sáng. Vé ngày 40k, gói tháng 300k, thanh toán tại quầy — không hợp đồng, không phí gia nhập.",
+          "Tạ rời, rack và máy tập trên hai tầng ở Khuê Mỹ. Cứ đến trong giờ mở cửa, thanh toán tại quầy rồi tập.",
         primaryCta: "Đăng ký ngay",
         secondaryCta: "Xem bảng giá",
+        image: {
+          id: "hero-machine-floor",
+          src: "/images/hero/machine-floor.jpg",
+          alt: "Sàn tập chính với dãy máy tạ đĩa vàng đen chạy về phía khu rack và gác lửng phía trên",
+          category: "Tầng trệt",
+        },
         stats: [
           { value: "40k", label: "Vé ngày" },
           { value: "300k", label: "Gói tháng" },
@@ -621,14 +676,11 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
       ticker: {
         label: "Tập ở Naomi Gym, bạn có",
         items: [
-          "Mở cửa từ 5 giờ sáng",
-          "Hai tầng rộng rãi",
-          "Vé ngày 40k",
-          "Gói tháng 300k",
-          "Không hợp đồng",
-          "Hướng dẫn kỹ thuật miễn phí",
-          "Rack squat & tạ bumper",
           "Đến là tập, không cần đặt lịch",
+          "Hướng dẫn kỹ thuật miễn phí",
+          "Xà đu & bao đấm",
+          "Rack squat & tạ bumper",
+          "Không bao giờ quá đông",
         ],
       },
       pricing: {
@@ -700,40 +752,40 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         ],
       },
       gallery: {
-        eyebrow: "Hai tầng tập",
+        eyebrow: "Không gian",
         title: "Bên trong phòng tập",
-        subtitle: "Dạo một vòng qua hai tầng và các khu tập.",
         scrollerLabel: "Hình ảnh phòng tập",
         images: [
           {
-            id: "gallery-first-floor",
+            id: "gallery-ground-floor",
             src: "/images/gallery/first-floor.jpg",
             alt: "Tầng trệt nhìn từ cửa vào, khu máy bên trái và dãy máy chạy bên phải",
             category: "Tầng trệt",
           },
           {
-            id: "gallery-second-floor",
-            src: "/images/gallery/second-floor.jpg",
-            alt: "Tầng hai với dãy máy tạ đĩa chạy dọc lối cỏ nhân tạo",
+            id: "gallery-upstairs",
+            src: "/images/gallery/two-floors.jpg",
+            alt: "Lối đi tầng trên với khu cardio và bao đấm, nhìn xuống tầng trệt phía dưới",
             category: "Tầng hai",
+          },
+          {
+            id: "gallery-functional",
+            src: "/images/gallery/functional-area.jpg",
+            alt: "Tạ tay, tạ ấm và dây thừng dọc dải cỏ nhân tạo, phía sau là dàn máy tạ đĩa",
+            category: "Functional",
+            focus: "0% 50%",
+          },
+          {
+            id: "gallery-boxing",
+            src: "/images/gallery/boxing.jpg",
+            alt: "Một hội viên tập với bao đấm dưới bức tường Fitter Healthier Happier",
+            category: "Boxing",
           },
           {
             id: "gallery-squat-racks",
             src: "/images/gallery/squat-racks.jpg",
             alt: "Giàn squat với thanh đòn và bánh tạ trên sàn cao su",
             category: "Giàn tạ",
-          },
-          {
-            id: "gallery-core-training",
-            src: "/images/gallery/core-training.jpg",
-            alt: "Ghế tập, máy chèo và khu cáp dưới bức tường Fitter Healthier Happier",
-            category: "Functional",
-          },
-          {
-            id: "gallery-boxing-bag",
-            src: "/images/gallery/boxing-bag.jpg",
-            alt: "Bao cát treo trên khu cỏ nhân tạo cạnh cầu thang",
-            category: "Boxing",
           },
           {
             id: "gallery-treadmills",
@@ -771,7 +823,7 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
           ],
           mapEmbedUrl:
             "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3834.5703472270934!2d108.2444807!3d16.0358665!2m3!1f0!3f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3142174f8140feb9%3A0x97f5a939db82f73f!2sNaomi%20Gym!5e0!3m2!1sen!2s!4v1772186331990!5m2!1sen!2s",
-          directionsUrl: "https://maps.app.goo.gl/fKSy4mctAHiw6hqm6",
+          directionsUrl: GOOGLE_LISTING_URL,
         },
       },
       reviews: {
@@ -780,7 +832,6 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         subtitle: "Đánh giá thật trên Google của khách đang tập tại đây.",
         scrollerLabel: "Đánh giá hội viên",
         starsLabelTemplate: "{rating} trên 5 sao",
-        readOnGoogle: "Xem trên Google",
         googleReview: "Đánh giá Google",
         allReviewsLabel: "Xem tất cả đánh giá trên Google",
         list: SHARED_REVIEWS,

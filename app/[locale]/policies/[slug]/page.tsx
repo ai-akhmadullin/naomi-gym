@@ -51,9 +51,11 @@ export default async function LocalizedPolicyPage({ params }: PageProps) {
         currentPath={getPolicyPath(locale, "privacy")}
         navItems={dictionary.navItems}
         joinLabel={dictionary.header.joinNow}
+        chatLabel={dictionary.header.chat}
         primaryNavLabel={dictionary.header.primaryNavLabel}
         languageSwitcherLabel={dictionary.header.languageSwitcherLabel}
         localeNames={dictionary.localeNames}
+        chatCopy={dictionary.quickActions}
         mobileNavCopy={dictionary.mobileNav}
       />
       <main className="min-h-[calc(100dvh-6rem)] bg-(--color-paper) py-16 sm:py-20">

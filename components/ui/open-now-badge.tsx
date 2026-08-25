@@ -82,7 +82,14 @@ export function OpenNowBadge({
       <span className={cn("inline-flex items-center gap-2", className)}>
         {dot}
         <span className={statusColor}>{status.open ? copy.openNow : copy.closed}</span>
-        <span className="font-normal text-(--color-text-muted)">· {detail}</span>
+        <span
+          className={cn(
+            "font-normal",
+            tone === "dark" ? "text-white/55" : "text-(--color-text-muted)",
+          )}
+        >
+          · {detail}
+        </span>
       </span>
     );
   }

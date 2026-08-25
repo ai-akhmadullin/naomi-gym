@@ -135,6 +135,15 @@ export function Icon({ name, className, ...props }: IconProps) {
           <path d="m12 5 7 7-7 7" />
         </>
       ) : null}
+      {/* The one icon that means "this leaves the site" — same 24-grid and
+          stroke as arrow-right, rotated to the diagonal that convention has
+          settled on for an outbound link. */}
+      {name === "arrow-up-right" ? (
+        <>
+          <path d="M7 17 17 7" />
+          <path d="M8 7h9v9" />
+        </>
+      ) : null}
       {name === "check" ? <path d="M20 6 9 17l-5-5" /> : null}
       {name === "quote" ? (
         <path

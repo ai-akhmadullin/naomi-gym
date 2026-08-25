@@ -24,7 +24,7 @@ type GallerySectionProps = {
   eyebrow?: string;
   index?: string;
   title: string;
-  subtitle: string;
+  subtitle?: string;
   scrollerLabel: string;
   images: GalleryImage[];
   lightbox: GalleryLightboxCopy;
@@ -105,6 +105,7 @@ export function GallerySection({
                 width={1200}
                 height={1500}
                 sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                style={image.focus ? { objectPosition: image.focus } : undefined}
                 className="aspect-4/5 h-auto w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
               />
               <span

@@ -37,6 +37,12 @@ export type GalleryImage = {
   src: string;
   alt: string;
   category: string;
+  /**
+   * CSS object-position for the 4:5 gallery frame. Only needed on landscape
+   * sources, where a centred crop can cut the subject out — a wide shot of a
+   * room rarely has its subject in the middle. Defaults to centre.
+   */
+  focus?: string;
 };
 
 export type OpeningHoursEntry = {
@@ -87,6 +93,7 @@ export type IconName =
   | "users"
   | "shield-check"
   | "arrow-right"
+  | "arrow-up-right"
   | "check"
   | "quote"
   | "send"

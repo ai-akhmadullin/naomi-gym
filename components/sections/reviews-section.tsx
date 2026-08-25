@@ -18,7 +18,6 @@ type ReviewsSectionProps = {
   subtitle: string;
   scrollerLabel: string;
   starsLabelTemplate: string;
-  readOnGoogleLabel: string;
   googleReviewLabel: string;
   allReviewsLabel: string;
   allReviewsUrl: string;
@@ -89,16 +88,55 @@ function Stars({ rating, className }: { rating: number; className?: string }) {
   );
 }
 
-function Attribution({
+/**
+ * A quote clipped by ClampedQuote has to end somewhere a reader can go, or the
+ * fade reads as a bug rather than as an excerpt. Two things do that here: a
+ * rule, which turns the clip into an edge rather than a failure, and the
+ * "Google review" attribution, which says the cut text is a real thing living
+ * somewhere else.
+ *
+ * There is deliberately no link. Every review in the set carries the SAME
+ * sourceUrl — the gym's Google listing — so a per-review link printed one
+ * destination four or five times across a row, and keeping it on the featured
+ * quote alone still put two links to one page within a screen of each other.
+ * The section heading's "See all reviews on Google" is the single way out, and
+ * it is the one that reads honestly: the listing is a listing, not this quote.
+ */
+function ReviewFooter({
   review,
-  readOnGoogleLabel,
   googleReviewLabel,
   size = "md",
+  className,
 }: {
   review: Review;
-  readOnGoogleLabel: string;
   googleReviewLabel: string;
   size?: "md" | "lg";
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "border-t border-(--color-border)",
+        size === "lg" ? "pt-7" : "pt-5",
+        className,
+      )}
+    >
+      <Attribution review={review} googleReviewLabel={googleReviewLabel} size={size} />
+    </div>
+  );
+}
+
+function Attribution({
+  review,
+  googleReviewLabel,
+  size = "md",
+  subline,
+}: {
+  review: Review;
+  googleReviewLabel: string;
+  size?: "md" | "lg";
+  /** Replaces the default "Google review" line beneath the name. */
+  subline?: ReactNode;
 }) {
   const avatarSize = size === "lg" ? "h-12 w-12" : "h-10 w-10";
 
@@ -125,25 +163,19 @@ function Attribution({
         </span>
       )}
       <div className="min-w-0">
-        <p className={cn("font-semibold text-foreground", size === "lg" ? "text-[1.05rem]" : "text-[0.95rem]")}>
+        <p
+          className={cn(
+            "truncate font-semibold text-foreground",
+            size === "lg" ? "text-[1.05rem]" : "text-[0.95rem]",
+          )}
+        >
           {review.memberName}
         </p>
-        {review.source === "google" ? (
-          <p className="text-[0.8rem] text-(--color-text-faint)">
-            {review.sourceUrl ? (
-              <a
-                href={review.sourceUrl}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="link-underline hover:text-(--color-brand)"
-              >
-                {readOnGoogleLabel}
-              </a>
-            ) : (
-              googleReviewLabel
-            )}
-          </p>
-        ) : null}
+        {subline ?? (
+          review.source === "google" ? (
+            <p className="text-[0.8rem] text-(--color-text-faint)">{googleReviewLabel}</p>
+          ) : null
+        )}
       </div>
     </div>
   );
@@ -156,7 +188,6 @@ export function ReviewsSection({
   subtitle,
   scrollerLabel,
   starsLabelTemplate,
-  readOnGoogleLabel,
   googleReviewLabel,
   allReviewsLabel,
   allReviewsUrl,
@@ -205,18 +236,15 @@ export function ReviewsSection({
     <Card key={review.id} hover className="flex h-full flex-col p-6">
       <Stars rating={review.rating} />
       <span className="sr-only">{starsLabelTemplate.replace("{rating}", String(review.rating))}</span>
-      <blockquote className="mt-4">
+      <blockquote className="mt-4 mb-6">
         <ClampedQuote className="max-h-[11.5em] overflow-hidden text-pretty text-[0.98rem] leading-[1.65] text-(--color-text-muted)">
           {review.quote}
         </ClampedQuote>
       </blockquote>
-      <div className="mt-auto pt-6">
-        <Attribution
-          review={review}
-          readOnGoogleLabel={readOnGoogleLabel}
-          googleReviewLabel={googleReviewLabel}
-        />
-      </div>
+      {/* mt-auto only — cn is a plain joiner, so a second margin utility here
+          would not override this one, it would race it in stylesheet order. The
+          gap above the rule is the blockquote's mb-6. */}
+      <ReviewFooter review={review} googleReviewLabel={googleReviewLabel} className="mt-auto" />
     </Card>
   );
 
@@ -287,12 +315,7 @@ export function ReviewsSection({
               </ClampedQuote>
             </blockquote>
             <figcaption className="mt-8">
-              <Attribution
-                review={featured}
-                readOnGoogleLabel={readOnGoogleLabel}
-                googleReviewLabel={googleReviewLabel}
-                size="lg"
-              />
+              <ReviewFooter review={featured} googleReviewLabel={googleReviewLabel} size="lg" />
             </figcaption>
           </div>
         </figure>

@@ -32,7 +32,13 @@ export function StickyHeaderShell({ children }: PropsWithChildren) {
       className={cn(
         "sticky top-0 z-40 transition-[background-color,box-shadow,border-color,backdrop-filter] duration-300 ease-out",
         scrolled
-          ? "border-b border-(--color-border) bg-white/85 shadow-[0_1px_0_rgba(8,30,19,0.03),0_10px_30px_-22px_rgba(8,30,19,0.35)] backdrop-blur-xl"
+          ? // 94%, not 85%. The scrolled header passes over two ink sections
+            // (the gallery and the footer), and at 85% enough very dark green
+            // came through to turn the bar dishwater grey — it read as an
+            // unstyled overlay rather than as the site's own chrome. The blur
+            // still does the work that makes it feel like glass; the extra 9%
+            // only stops the tint underneath from choosing its colour.
+            "border-b border-(--color-border) bg-white/94 shadow-[0_1px_0_rgba(8,30,19,0.03),0_10px_30px_-22px_rgba(8,30,19,0.35)] backdrop-blur-xl"
           : // Paper, not transparent. A sticky header occupies layout space, so
             // "transparent" shows the body background through it — a white strip
             // above a bone-coloured hero. Every page in the site opens on paper,

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { DesktopNavLinks } from "@/components/layout/desktop-nav-links";
+import { HeaderChatMenu } from "@/components/layout/header-chat-menu";
 import { LocaleSwitcher } from "@/components/layout/locale-switcher";
 import { MobileNavDrawer } from "@/components/layout/mobile-nav-drawer";
 import { StickyHeaderShell } from "@/components/layout/sticky-header-shell";
@@ -16,9 +17,17 @@ type SiteHeaderProps = {
   currentPath: string;
   navItems: NavItem[];
   joinLabel: string;
+  chatLabel: string;
   primaryNavLabel: string;
   languageSwitcherLabel: string;
   localeNames: Record<Locale, string>;
+  chatCopy: {
+    chatLabel: string;
+    callLabel: string;
+    zaloLabel: string;
+    whatsappLabel: string;
+    messengerLabel: string;
+  };
   mobileNavCopy: {
     openLabel: string;
     closeLabel: string;
@@ -51,9 +60,11 @@ export function SiteHeader({
   currentPath,
   navItems,
   joinLabel,
+  chatLabel,
   primaryNavLabel,
   languageSwitcherLabel,
   localeNames,
+  chatCopy,
   mobileNavCopy,
 }: SiteHeaderProps) {
   const navLinks = resolveLinks(locale, currentPath, navItems);
@@ -95,7 +106,21 @@ export function SiteHeader({
           </div>
         </nav>
 
-        <div className="hidden shrink-0 items-center lg:flex">
+        <div className="hidden shrink-0 items-center gap-3 lg:flex">
+          {/* The chat channels, which used to be a fixed bubble floating over
+              the page. See HeaderChatMenu.
+              xl and up only, and that is a measurement rather than a taste: at
+              lg the three columns already come to 928px of the 944 available in
+              Vietnamese, so anything added here does not shrink the nav, it
+              overlaps it — the centre column is justify-self-center inside a
+              minmax(0,1fr) track, so an overflow spills over both neighbours
+              instead of clipping. Between lg and xl the header is exactly what
+              it was, and the same four channels are two clicks away in the
+              contact section. */}
+          <div className="hidden items-center gap-3 xl:flex">
+            <HeaderChatMenu label={chatLabel} copy={chatCopy} />
+            <span aria-hidden="true" className="h-5 w-px bg-(--color-border-strong)" />
+          </div>
           {/* Plain anchor: in-page hash scrolling is more reliable than next/link
               for same-page anchors, and still navigates correctly from subpages. */}
           <a

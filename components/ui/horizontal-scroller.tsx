@@ -156,7 +156,14 @@ export function HorizontalScroller({
                 // peeks in from the right — the peek is what tells a phone
                 // reader the row scrolls, and it caps how tall a full-bleed
                 // portrait image can get.
-                "min-w-0 shrink-0 grow-0 basis-[86%] snap-start md:basis-[calc((100%-1.5rem)/2)] lg:basis-[calc((100%-3rem)/3)]",
+                // The trailing fraction is the whole point of these numbers: at
+                // every breakpoint the track is sized so the NEXT card is
+                // partly visible. Phones already did this (86%); md and lg were
+                // set to exactly two and three across, which lands the last card
+                // flush with the right edge and leaves nothing to suggest the
+                // row scrolls at all — on a six-item gallery that hid half the
+                // photographs behind a 3px progress bar.
+                "min-w-0 shrink-0 grow-0 basis-[86%] snap-start md:basis-[calc((100%-2.25rem)/2.35)] lg:basis-[calc((100%-4.5rem)/3.35)]",
                 itemClassName,
               )}
             >
