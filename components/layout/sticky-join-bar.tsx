@@ -149,16 +149,32 @@ export function StickyJoinBar({ joinHref, joinLabel, callLabel, chat }: StickyJo
       </div>
 
       <div className="flex items-center gap-2.5 border-t border-(--color-border) bg-white/95 px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-[0_-8px_24px_-16px_rgba(8,30,19,0.35)] backdrop-blur-md">
+        {/* elevation="flat" on both: this bar is already a floating surface
+            with its own upward shadow and a hairline, so a shadow on a child
+            inside it is a second elevation with nowhere to fall. The green one
+            was the visible offender — the bar is 12px taller than the button
+            and the brand shadow reaches 32px, so it painted a haze across the
+            white strip underneath rather than lifting anything. */}
         <a
           href={`tel:${CONTACT_PHONE_RAW}`}
-          className={buttonStyles({ variant: "secondary", size: "md", className: "flex-1" })}
+          className={buttonStyles({
+            variant: "secondary",
+            size: "md",
+            elevation: "flat",
+            className: "flex-1",
+          })}
         >
           <Icon name="phone" className="h-5 w-5" />
           {callLabel}
         </a>
         <a
           href={joinHref}
-          className={buttonStyles({ variant: "primary", size: "md", className: "flex-[1.6]" })}
+          className={buttonStyles({
+            variant: "primary",
+            size: "md",
+            elevation: "flat",
+            className: "flex-[1.6]",
+          })}
         >
           {joinLabel}
           <Icon name="arrow-right" className="h-5 w-5" />
@@ -175,8 +191,8 @@ export function StickyJoinBar({ joinHref, joinLabel, callLabel, chat }: StickyJo
             "inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors duration-200 sm:h-12 sm:w-12",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-brand) focus-visible:ring-offset-2",
             open
-              ? "bg-(--color-brand) text-white shadow-(--shadow-brand)"
-              : "border border-(--color-border-strong) bg-white text-(--color-brand) shadow-(--shadow-soft)",
+              ? "bg-(--color-brand) text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]"
+              : "border border-(--color-border-strong) bg-white text-(--color-brand)",
           )}
         >
           <Icon name={open ? "close" : "message-circle"} className="h-5.5 w-5.5" />

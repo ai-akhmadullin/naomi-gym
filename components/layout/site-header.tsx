@@ -122,12 +122,19 @@ export function SiteHeader({
             <span aria-hidden="true" className="h-5 w-px bg-(--color-border-strong)" />
           </div>
           {/* Plain anchor: in-page hash scrolling is more reliable than next/link
-              for same-page anchors, and still navigates correctly from subpages. */}
+              for same-page anchors, and still navigates correctly from subpages.
+              elevation="flat" for the same reason as the phone's bottom bar: a
+              button living inside a persistent bar casts a shadow the bar then
+              clips at its own bottom edge. Once scrolled, the header is glass
+              over whatever is passing underneath and the green shadow read as a
+              smear across it; even at the top of the page, where the header is
+              paper, the shadow was being cut off 18px down. */}
           <a
             href={joinHref}
             className={buttonStyles({
               variant: "primary",
               size: "md",
+              elevation: "flat",
               className: "whitespace-nowrap",
             })}
           >
