@@ -10,7 +10,6 @@ import { TickerBand } from "@/components/sections/ticker-band";
 import { LocationSection } from "@/components/sections/location-section";
 import { PricingSection } from "@/components/sections/pricing-section";
 import { ReviewsSection } from "@/components/sections/reviews-section";
-import { TrainersSection } from "@/components/sections/trainers-section";
 import { getDictionary } from "@/content/site";
 import { assertLocale, getLocalePath, getPolicyPath } from "@/lib/i18n";
 
@@ -67,20 +66,13 @@ export default async function LocalizedHomePage({ params }: PageProps) {
           images={dictionary.home.gallery.images}
           lightbox={dictionary.home.gallery.lightbox}
         />
-        <TrainersSection
-          eyebrow={dictionary.home.trainers.eyebrow}
-          index="03"
-          title={dictionary.home.trainers.title}
-          subtitle={dictionary.home.trainers.subtitle}
-          scrollerLabel={dictionary.home.trainers.scrollerLabel}
-          experienceLabel={dictionary.home.trainers.experienceLabel}
-          trainers={dictionary.home.trainers.list}
-        />
+        {/* Trainers section temporarily removed — re-add TrainersSection here and
+            restore the "#trainers" nav item in content/site.ts to bring it back. */}
         <LocationSection
           locale={locale}
           openStatus={dictionary.openStatus}
           eyebrow={dictionary.home.location.eyebrow}
-          index="04"
+          index="03"
           title={dictionary.home.location.title}
           subtitle={dictionary.home.location.subtitle}
           addressLabel={dictionary.home.location.addressLabel}
@@ -91,7 +83,7 @@ export default async function LocalizedHomePage({ params }: PageProps) {
         />
         <ReviewsSection
           eyebrow={dictionary.home.reviews.eyebrow}
-          index="05"
+          index="04"
           title={dictionary.home.reviews.title}
           subtitle={dictionary.home.reviews.subtitle}
           scrollerLabel={dictionary.home.reviews.scrollerLabel}
@@ -104,14 +96,14 @@ export default async function LocalizedHomePage({ params }: PageProps) {
         />
         <FaqSection
           eyebrow={dictionary.home.faq.eyebrow}
-          index="06"
+          index="05"
           title={dictionary.home.faq.title}
           subtitle={dictionary.home.faq.subtitle}
           callLabel={dictionary.quickActions.callLabel}
           faqs={dictionary.home.faq.items}
         />
         <ContactSection
-          index="07"
+          index="06"
           copy={dictionary.home.contact}
           directionsUrl={dictionary.home.location.info.directionsUrl}
           locale={locale}

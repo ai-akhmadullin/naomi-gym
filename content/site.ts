@@ -226,7 +226,6 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
       { label: "Home", href: "#home", kind: "section" },
       { label: "Pricing", href: "#pricing", kind: "section" },
       { label: "Gallery", href: "#gallery", kind: "section" },
-      { label: "Trainers", href: "#trainers", kind: "section" },
       { label: "Location", href: "#location", kind: "section" },
       { label: "Reviews", href: "#reviews", kind: "section" },
       { label: "Contact", href: "#contact", kind: "section" },
@@ -363,7 +362,7 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         ],
       },
       gallery: {
-        eyebrow: "The space",
+        eyebrow: "Two floors",
         title: "Inside the gym",
         subtitle: "A look at both floors and the equipment on them.",
         scrollerLabel: "Facility gallery",
@@ -413,7 +412,7 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         },
       },
       location: {
-        eyebrow: "Find us",
+        eyebrow: "Directions",
         title: "Visit Us",
         subtitle: "We're on Lê Văn Hiến in Khuê Mỹ, south of An Thượng.",
         addressLabel: "Address",
@@ -449,7 +448,7 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         list: SHARED_REVIEWS,
       },
       faq: {
-        eyebrow: "Good to know",
+        eyebrow: "Before you come",
         title: "Frequently Asked Questions",
         subtitle: "The things people ask at the desk.",
         items: [
@@ -458,15 +457,6 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
             question: "What membership options do you offer?",
             answer:
               "We keep it simple: a day pass (40,000 VND/day) and a monthly membership (300,000 VND/month). No joining fee and no contract.",
-          },
-          {
-            /* Two of the five reviews on this page raise the lack of air
-               conditioning. Answering it here costs nothing and stops it being
-               a surprise on someone's first visit. */
-            id: "faq-air-con",
-            question: "Is there air conditioning?",
-            answer:
-              "No — the gym runs on fans with the windows and doors open. You will sweat, so bring water.",
           },
           {
             id: "faq-hours",
@@ -490,12 +480,12 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
             id: "faq-first-visit",
             question: "What should I bring on my first visit?",
             answer:
-              "Bring comfortable workout clothes, clean indoor shoes, and water. Just turn up during opening hours — our team will help you get started.",
+              "Bring comfortable workout clothes, clean indoor shoes, and water (or buy it at the desk when you arrive). Just turn up during opening hours — our team will help you get started.",
           },
         ],
       },
       contact: {
-        eyebrow: "Join us",
+        eyebrow: "Start training",
         title: "Ready to train? Come say hi.",
         subtitle:
           "Walk in any time we're open — you don't need to book. Or send a message and we'll reply.",
@@ -574,7 +564,6 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
       { label: "Trang chủ", href: "#home", kind: "section" },
       { label: "Gói tập", href: "#pricing", kind: "section" },
       { label: "Hình ảnh", href: "#gallery", kind: "section" },
-      { label: "Huấn luyện viên", href: "#trainers", kind: "section" },
       { label: "Địa điểm", href: "#location", kind: "section" },
       { label: "Đánh giá", href: "#reviews", kind: "section" },
       { label: "Liên hệ", href: "#contact", kind: "section" },
@@ -711,7 +700,7 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         ],
       },
       gallery: {
-        eyebrow: "Không gian",
+        eyebrow: "Hai tầng tập",
         title: "Bên trong phòng tập",
         subtitle: "Dạo một vòng qua hai tầng và các khu tập.",
         scrollerLabel: "Hình ảnh phòng tập",
@@ -797,7 +786,7 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
         list: SHARED_REVIEWS,
       },
       faq: {
-        eyebrow: "Có thể bạn muốn biết",
+        eyebrow: "Trước khi đến",
         title: "Câu hỏi thường gặp",
         subtitle: "Những câu khách hay hỏi tại quầy.",
         items: [
@@ -806,12 +795,6 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
             question: "Phòng gym có những gói tập nào?",
             answer:
               "Chỉ có hai lựa chọn: vé ngày 40.000đ và gói tháng 300.000đ. Không phí gia nhập, không hợp đồng.",
-          },
-          {
-            id: "faq-air-con",
-            question: "Phòng tập có máy lạnh không?",
-            answer:
-              "Không có — phòng dùng quạt và mở cửa cho thoáng. Tập sẽ ra mồ hôi nhiều, bạn nhớ mang theo nước nhé.",
           },
           {
             id: "faq-hours",
@@ -835,7 +818,7 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
             id: "faq-first-visit",
             question: "Lần đầu đến tập cần mang theo gì?",
             answer:
-              "Chỉ cần đồ tập thoải mái, giày sạch để mang trong phòng và nước uống. Cứ ghé trong giờ mở cửa, sẽ có người hướng dẫn bạn ngay.",
+              "Chỉ cần đồ tập thoải mái, giày sạch để mang trong phòng và nước uống (quầy cũng có bán nước nếu bạn quên). Cứ ghé trong giờ mở cửa, sẽ có người hướng dẫn bạn ngay.",
           },
         ],
       },

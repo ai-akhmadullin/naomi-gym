@@ -47,33 +47,36 @@ export function SectionHeading({
       )}
     >
       {eyebrow ? (
+        // A stamped plate, not a hairline rule. The old treatment — a thin
+        // number, a 1px rule and letterspaced grey caps — is boutique-hotel
+        // typography: every element in it was the lightest possible version of
+        // itself. Here the number sits in a solid ink chip with the lime on top
+        // of it, and the label carries full text colour at heavy weight, so the
+        // spine of the page reads like signage bolted to a wall.
         <div
           className={cn(
-            "mb-5 flex items-center gap-3",
+            "mb-4 flex items-center gap-2.5 sm:mb-5",
             align === "center" && "justify-center",
           )}
         >
           {index ? (
             <span
               className={cn(
-                "font-mono text-[0.7rem] font-medium tabular-nums",
-                isDark ? "text-(--color-accent)" : "text-(--color-brand)",
+                // leading-none + fixed height, so the box is sized by the chip
+                // and not by the mono font's line box.
+                "inline-flex h-[1.35rem] items-center rounded-[var(--radius-xs)] px-1.5 font-mono text-[0.68rem] font-bold leading-none tabular-nums",
+                isDark
+                  ? "bg-(--color-accent) text-(--color-accent-ink)"
+                  : "bg-(--color-ink) text-(--color-accent)",
               )}
             >
               {index}
             </span>
           ) : null}
           <span
-            aria-hidden="true"
             className={cn(
-              "h-px w-8",
-              isDark ? "bg-white/25" : "bg-(--color-border-strong)",
-            )}
-          />
-          <span
-            className={cn(
-              "text-[0.7rem] font-bold uppercase tracking-[0.18em]",
-              isDark ? "text-white/65" : "text-(--color-text-muted)",
+              "text-[0.72rem] font-extrabold uppercase tracking-[0.16em]",
+              isDark ? "text-white" : "text-foreground",
             )}
           >
             {eyebrow}
@@ -83,11 +86,16 @@ export function SectionHeading({
 
       <h2
         className={cn(
+          // Set in caps. A gym headline is signage — the word on the wall, the
+          // plate on the rack — and caps at this weight is the only thing on the
+          // page that sounds like the room it is describing.
+          //
           // Leading is set for Vietnamese, not English. VI stacks marks both
-          // above and below the letter (ườ, ặ, ỏ), so the tighter leading that
-          // suits the EN headings puts a descender mark from one line into the
-          // ascender mark of the next.
-          "font-display text-balance text-[length:var(--step-4)] font-extrabold leading-[1.08]",
+          // above and below the letter, and caps make that worse rather than
+          // better: the mark on Ộ sits above cap height while its dot still
+          // hangs below the baseline, so the two lines need more room between
+          // them than the same headline in sentence case.
+          "font-display text-balance text-[length:var(--step-4)] font-extrabold uppercase leading-[1.14] tracking-[-0.015em]",
           isDark ? "text-white" : "text-foreground",
         )}
       >
