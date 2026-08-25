@@ -140,11 +140,21 @@ export function HeroSection({
             />
           </div>
 
-          {/* 45% against the panel's 50% leaves a 5% channel of paper between
-              the last character and the cut, which is what a hard edge needs to
-              read as deliberate rather than as a collision. Everything below lg
-              is full width — there is no photograph there to avoid. */}
-          <div className="relative z-10 min-w-0 lg:max-w-[45%]">
+          {/* Against the panel's fixed 50% cut, this leaves a channel of paper
+              between the last character and the edge — which is what a hard cut
+              needs to read as deliberate rather than as a collision.
+              47% between lg and xl rather than 45%, because that band is where
+              the column is tightest: at 1024 it is 425px at 45%, and the
+              Vietnamese headline's longest line wants 431px at the size the
+              fluid scale gives it there. Six pixels short is enough to force a
+              third line, and text-balance then splits it 152 / 267 / 335 — a
+              two-syllable orphan on top. Two more percent buys the line back.
+              Measured from the longest rendered line rather than the column's
+              full width, the channel never falls below 41px between 1024 and
+              1920 in either language.
+              Everything below lg is full width; there is no photograph there
+              to avoid. */}
+          <div className="relative z-10 min-w-0 lg:max-w-[47%] xl:max-w-[45%]">
           <Reveal>
             {/* Typeset, not chipped: these were two white pills, which is the
                 most template-looking element a hero can open with — and their

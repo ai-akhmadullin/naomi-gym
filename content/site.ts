@@ -654,7 +654,16 @@ const SITE_CONTENT: Record<Locale, SiteDictionary> = {
     home: {
       hero: {
         eyebrow: "Đà Nẵng · An Thượng & Mỹ Khê",
-        titlePrefix: "Khỏe hơn mỗi ngày cùng",
+        /* Two lines, not three. At the hero's 72px the column is 540px wide —
+           45% of the container, set so the photograph's cut lands on the spec
+           bar's centre divider — and "Khỏe hơn mỗi ngày" measures 664px there,
+           so the old prefix could only ever break as 474 / 364 / 403: the
+           shortest line in the middle, which is the worst rag of the three.
+           It also made the Vietnamese hero 75px taller than the English one,
+           enough to push the spec bar's captions below the fold on a 1512x860
+           laptop. Dropping "mỗi ngày" also brings the line back in step with
+           the English, which never claimed "every day" either. */
+        titlePrefix: "Khỏe hơn cùng",
         titleHighlight: "Naomi Gym",
         description:
           "Tạ rời, rack và máy tập trên hai tầng ở Khuê Mỹ. Cứ đến trong giờ mở cửa, thanh toán tại quầy rồi tập.",
